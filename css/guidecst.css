@@ -1,0 +1,23 @@
+.footer-link {
+	display: block;
+	color: #7285e8;
+	text-decoration: none;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.footer-link {
+		transition: none;
+	}
+}
+
+.footer-link:hover,
+.nav-link:focus {
+	color: #1abc9c;
+}
+
+.footer-info {
+	font-size: 0.9em;
+	font-weight: 300;
+	margin-bottom: 0.5em;
+}

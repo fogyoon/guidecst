@@ -1,0 +1,70 @@
+/* A            A A                 :                   A                   :                   A                   :                   A                   :                   */
+   #Full_Division_iconSlide
+                { width             : 100%;             height              : auto;             text-align          : center;           position            : relative; 
+                  padding           : clamp(20px,5vw,30px) 15px; z-index	: 1;																								}  
+   #Full_Division_iconSlide .sectionWrap
+                { width             : 100%;             height              : auto;             max-width           : 1600px;           display             : flex;
+                  margin            : 0 auto;     } 
+   #Full_Division_iconSlide .sectionWrap .iconSlide
+                { width             : 95%;              max-width           : 1400px;                                                                                            }
+   #Full_Division_iconSlide .sectionWrap .swiper-slide a
+                { width             : 100%;             height              : clamp(50px,5vw,60px); display         : inline-block;} 
+   #Full_Division_iconSlide .sectionWrap .swiper-slide img
+                { width             : 100%;              height             : 100%;             object-fit          : contain;                                                   }            
+   #Full_Division_iconSlide .sectionWrap .prevWrap
+                { width             : auto;              position           : relative;         display             : flex;             align-items             : center;
+                  justify-content   : flex-start;        margin-right       : clamp(18px,2vw,30px);                                                                             }                              
+   #Full_Division_iconSlide .sectionWrap .nextWrap
+                { width             : auto;              position           : relative;         display             : flex;             align-items             : center;
+                  justify-content   : flex-end;          margin-left        : clamp(18px,2vw,30px);                                                                             }
+   
+   #Full_Division_iconSlide .sectionWrap .prevWrap .swiper-button-prev.iconSlidePrev
+                { left              : 0;                opacity             : 0;                color               : #3EAA97;            border                : 2px solid #3EAA97;
+                   border-radius    : 50px;             width               : clamp(30px,3vw,40px); height          : clamp(30px,3vw,40px); 
+                   font-size        : clamp(15px,2vw,20px); margin-top      : 0;                top                 : 0;                  position              : relative;     }
+   #Full_Division_iconSlide .sectionWrap .prevWrap .swiper-button-prev.iconSlidePrev:hover
+                { background        : #3EAA97;          color               : #fff;             transition          : .3s;                                                      }            
+                   
+   #Full_Division_iconSlide .sectionWrap .prevWrap .swiper-button-prev.iconSlidePrev::after
+                { display: none;                                                                                                                                                }
+   #Full_Division_iconSlide .sectionWrap:hover .prevWrap .swiper-button-prev.iconSlidePrev
+                { opacity           : 1;                transition          : .3s;                                                                                              }
+   
+   
+   #Full_Division_iconSlide .sectionWrap .nextWrap .swiper-button-next.iconSlideNext
+                { right              : 0;                opacity            : 0;                color               : #3EAA97;            border                : 2px solid #3EAA97;
+                   border-radius    : 50px;              width              : clamp(30px,3vw,40px); height          : clamp(30px,3vw,40px); 
+                   font-size        : clamp(15px,2vw,20px); margin-top      : 0;                top                 : 0;                  position              : relative;     }
+   #Full_Division_iconSlide .sectionWrap .nextWrap .swiper-button-next.iconSlideNext:hover
+                { background        : #3EAA97;          color               : #fff;             transition          : .3s;                                                      }            
+                   
+   #Full_Division_iconSlide .sectionWrap .nextWrap .swiper-button-next.iconSlideNext::after
+                { display: none;                                                                                                                                                }
+   #Full_Division_iconSlide .sectionWrap:hover .nextWrap .swiper-button-next.iconSlideNext
+                { opacity           : 1;                transition          : .3s;                                                                                              }
+   
+   
+ @media (max-width:1024px) {
+  
+
+/* **************************************************************************************************************************************************************************** */
+/*                                                                                                                                                                              */
+/*                                                                                                                                                                              */
+/*                                                                             1단 배경 Fixed                                                                                   */
+/*                                                                                                                                                                              */
+/*                                                                                                                                                                              */
+/* **************************************************************************************************************************************************************************** */
+/* A            A A                 :                   A                   :                   A                   :                   A                   :                   */  
+   #Full_Division_iconSlide .sectionWrap .prevWrap .swiper-button-prev.iconSlidePrev,
+   #Full_Division_iconSlide .sectionWrap .nextWrap .swiper-button-next.iconSlideNext               
+                { opacity           : 1;            }
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                      

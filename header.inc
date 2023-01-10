@@ -33,9 +33,13 @@
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
 	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+	<!-- Gmarketsans fonts-->
+	<link href="https://webfontworld.github.io/gmarket/GmarketSans.css" rel="stylesheet">
 	<!-- Core theme CSS (includes Bootstrap)-->
+	<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 	<link href="css/styles.css" rel="stylesheet" />
 	<link href="css/guidecst.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 	<!-- We may no need jquery
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"> </script>
@@ -59,14 +63,11 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ms-auto">
-					<li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == "company.php") echo "active";?>" href="company.php">회사소개</a></li>
-					<li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == "license.php") echo "active";?>" href="license.php">면허등록기준</a></li>
-					<li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == "transfer.php") echo "active";?>" href="transfer.php">양도양수</a></li>
-					<li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == "diagnosis.php") echo "active";?>" href="diagnosis.php">기업진단</a></li>
-					<li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == "relatedinfo.php") echo "active";?>" href="relatedinfo.php">건설관련정보</a></li>
-					<li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == "settlement.php") echo "active";?>" href="settlement.php">연말결산/잔고증명</a></li>
+					<?php foreach ($config['page_files'] as $page_name => $page_file) : ?>
+						<li class="nav-item mx-0 mx-lg-1 my_img"><a class="nav-link py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == $page_file) echo "active"; ?>" href="<?= $page_file ?>"><?= $page_name ?></a></li>
+					<?php endforeach; ?>
 				</ul>
-				<button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+				<button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#inquirykModal">
 					<span class="d-flex align-items-center"><i class="bi-chat-text-fill me-2"></i>상담 문의</span>
 				</button>
 			</div>

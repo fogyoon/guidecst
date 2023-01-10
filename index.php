@@ -28,16 +28,17 @@ include("header.inc");
 			<i class="fas fa-star"></i>
 			<i class="fas fa-star"></i>
 		</div>
-		<h1 class="masthead-heading text-uppercase mb-0">! Best of Best !</h1>
-
-
+		<h1 class="masthead-heading text-uppercase mb-0 sr-icon-1">! Best of Best !</h1>
 
 		<!-- Masthead Subheading-->
-		<p class="masthead-subheading font-weight-light mb-0" style="margin-top:1%;"><b>가이드컨설팅</b>에서는 가능성의 문을 열어갑니다.</p>
+		<p class="masthead-subheading font-weight-light sr-icon-4" style="margin-top:1%; margin-bottom:10%;"><b>가이드컨설팅</b>에서는 <b>가능성의 문</b>을 열어갑니다.</p>
+
 		<!-- Masthead Avatar Image-->
-		<p style="margin-top:17%;"><img  class="my_img portfolio-item mx-auto" src="assets/img/slideTagImg1.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<img class="my_img" src="assets/img/slideTagImg2.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<img class="my_img" src="assets/img/slideTagImg3.png"></p>
+		<div class="row justify-content-md-center gy-3 mt-md-5">
+			<div class="col"><a href="<?= $config['page_files']['양도양수'] ?>"><img class="my_img" src="assets/img/go1.svg"></a></div>
+			<div class="col"><a href="<?= $config['page_files']['면허등록기준'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
+			<div class="col d-none d-md-block" data-bs-toggle="modal" data-bs-target="#inquirykModal"><img class="my_img" src="assets/img/go3.svg"></div>
+		</div>
 
 		<!-- Masthead Heading-->
 	</div>
@@ -46,7 +47,7 @@ include("header.inc");
 <section class="page-section portfolio" id="portfolio">
 	<div class="container">
 		<!-- Portfolio Section Heading-->
-		<h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Portfolio</h2>
+		<h2 class="page-section-heading text-center text-uppercase text-secondary mb-0 sr-icon-1">WHAT WE DO</h2>
 		<!-- Icon Divider-->
 		<div class="divider-custom">
 			<div class="divider-custom-line"></div>
@@ -116,7 +117,7 @@ include("header.inc");
 <section class="page-section bg-primary text-white mb-0" id="about">
 	<div class="container">
 		<!-- About Section Heading-->
-		<h2 class="page-section-heading text-center text-uppercase text-white">About</h2>
+		<h2 class="page-section-heading text-center text-uppercase text-white sr-icon-1">VISION OF US</h2>
 		<!-- Icon Divider-->
 		<div class="divider-custom divider-light">
 			<div class="divider-custom-line"></div>
@@ -141,79 +142,7 @@ include("header.inc");
 		</div>
 	</div>
 </section>
-<!-- Contact Section-->
-<section class="page-section" id="contact">
-	<div class="container">
-		<!-- Contact Section Heading-->
-		<h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Contact Me</h2>
-		<!-- Icon Divider-->
-		<div class="divider-custom">
-			<div class="divider-custom-line"></div>
-			<div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-			<div class="divider-custom-line"></div>
-		</div>
-		<!-- Contact Section Form-->
-		<div class="row justify-content-center">
-			<div class="col-lg-8 col-xl-7">
-				<!-- * * * * * * * * * * * * * * *-->
-				<!-- * * SB Forms Contact Form * *-->
-				<!-- * * * * * * * * * * * * * * *-->
-				<!-- This form is pre-integrated with SB Forms.-->
-				<!-- To make this form functional, sign up at-->
-				<!-- https://startbootstrap.com/solution/contact-forms-->
-				<!-- to get an API token!-->
-				<form id="contactForm" data-sb-form-api-token="API_TOKEN">
-					<!-- Name input-->
-					<div class="form-floating mb-3">
-						<input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
-						<label for="name">Full name</label>
-						<div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
-					</div>
-					<!-- Email address input-->
-					<div class="form-floating mb-3">
-						<input class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
-						<label for="email">Email address</label>
-						<div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
-						<div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
-					</div>
-					<!-- Phone number input-->
-					<div class="form-floating mb-3">
-						<input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
-						<label for="phone">Phone number</label>
-						<div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.</div>
-					</div>
-					<!-- Message input-->
-					<div class="form-floating mb-3">
-						<textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
-						<label for="message">Message</label>
-						<div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
-					</div>
-					<!-- Submit success message-->
-					<!---->
-					<!-- This is what your users will see when the form-->
-					<!-- has successfully submitted-->
-					<div class="d-none" id="submitSuccessMessage">
-						<div class="text-center mb-3">
-							<div class="fw-bolder">Form submission successful!</div>
-							To activate this form, sign up at
-							<br />
-							<a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
-						</div>
-					</div>
-					<!-- Submit error message-->
-					<!---->
-					<!-- This is what your users will see when there is-->
-					<!-- an error submitting the form-->
-					<div class="d-none" id="submitErrorMessage">
-						<div class="text-center text-danger mb-3">Error sending message!</div>
-					</div>
-					<!-- Submit Button-->
-					<button class="btn btn-primary btn-xl disabled" id="submitButton" type="submit">Send</button>
-				</form>
-			</div>
-		</div>
-	</div>
-</section>
+
 <!-- Portfolio Modals-->
 <!-- Portfolio Modal 1-->
 <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" aria-labelledby="portfolioModal1" aria-hidden="true">
@@ -407,6 +336,65 @@ include("header.inc");
 		</div>
 	</div>
 </div>
+
+
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<!-- * *                               SB Forms JS                               * *-->
+<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+
+<script src="js/scrollreveal.min.js"></script>
+
+<script>
+	(function($) {
+		"use strict"; // Start of use strict
+
+		// Scroll reveal calls
+		window.sr = ScrollReveal();
+
+		sr.reveal('.sr-icon-1', {
+			delay: 200,
+			scale: 0
+		});
+		sr.reveal('.sr-icon-2', {
+			delay: 300,
+			scale: 0
+		});
+		sr.reveal('.sr-icon-3', {
+			delay: 400,
+			scale: 0
+		});
+		sr.reveal('.sr-icon-4', {
+			delay: 500,
+			scale: 0
+		});
+		sr.reveal('.sr-button', {
+			delay: 200,
+			distance: '15px',
+			origin: 'bottom',
+			scale: 0.8
+		});
+		sr.reveal('.sr-contact-1', {
+			delay: 200,
+			scale: 0
+		});
+		sr.reveal('.sr-contact-2', {
+			delay: 400,
+			scale: 0
+		});
+
+	})(jQuery); // End of use strict
+</script>
+
+
 
 
 <?php

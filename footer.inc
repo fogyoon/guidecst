@@ -118,26 +118,28 @@
 				<a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-dribbble"></i></a>
 			</div>
 		</div>
-		<div class="row justify-content-center">
-			<div class="col col-lg-auto footer-info"><span class="fw-bolder">상호</span>: <?= $config['company_kr_name'] ?></div>
-			<div class="col col-lg-auto footer-info"><span class="fw-bolder">주소</span>: <?= $config['company_address'] ?></div>
-			<div class="col col-lg-auto footer-info"><span class="fw-bolder">전화</span>: <?= $config['company_tel'] ?></div>
-			<div class="col col-lg-auto footer-info"><span class="fw-bolder">사업자등록번호</span>: <?= $config['company_license'] ?></div>
-			<div class="col col-lg-auto footer-info"><span class="fw-bolder">팩스</span>: <?= $config['company_fax'] ?></div>
-			<div class="col col-lg-auto footer-info"><span class="fw-bolder">이메일</span>: <?= $config['company_fax'] ?></div>
-			<div class="col col-lg-auto footer-info"><span class="fw-bolder">개인정보처리담당자</span>: <?= $config['company_privacy_manager'] ?></div>
-		</div>
+		<nav style="--bs-breadcrumb-divider: '|';" aria-label="breadcrumb">
+			<ol class="breadcrumb justify-content-center mb-0">
+				<li class="breadcrumb-item footer-info"><span class="fw-bolder">상호</span>: <?= $config['company_kr_name'] ?></li>
+				<li class="breadcrumb-item footer-info"><span class="fw-bolder">주소</span>: <?= $config['company_address'] ?></li>
+				<li class="breadcrumb-item footer-info"><span class="fw-bolder">전화</span>: <?= $config['company_tel'] ?></li>
+				<li class="breadcrumb-item footer-info"><span class="fw-bolder">사업자등록번호</span>: <?= $config['company_license'] ?></li>
+				<li class="breadcrumb-item footer-info"><span class="fw-bolder">팩스</span>: <?= $config['company_fax'] ?></li>
+				<li class="breadcrumb-item footer-info"><span class="fw-bolder">이메일</span>: <?= $config['company_fax'] ?></li>
+				<li class="breadcrumb-item footer-info"><span class="fw-bolder">개인정보처리담당자</span>: <?= $config['company_privacy_manager'] ?></li>
+			</ol>
+		</nav>
 	</div>
 </footer>
 <!-- Copyright Section-->
 <div class="copyright py-4 text-center text-white">
 	<div class="container">
 		<small>Copyright &copy; 2022 <?= $config['company_en_name'] ?>. ALL RIGHT RESERVED
-		<div class="row justify-content-center mt-2">
-			<div class="col col-lg-2 col-md-4"><a class="footer-link" id="PrivacyPlicy_link" class="footer_link" data-bs-toggle="modal" data-bs-target="#PrivacyPlicy">개인정보처리방침</a></div>
-			|
-			<div class="col col-lg-2 col-md-4"><a class="footer-link" id="emailCollectionReject_link" class="footer_link" data-bs-toggle="modal" data-bs-target="#emailCollectionReject">이메일무단수집거부</a></div>
-		</div>
+			<div class="row justify-content-center mt-2">
+				<div class="col col-lg-2 col-md-4"><a class="footer-link" id="PrivacyPlicy_link" class="footer_link" data-bs-toggle="modal" data-bs-target="#PrivacyPlicy">개인정보처리방침</a></div>
+				|
+				<div class="col col-lg-2 col-md-4"><a class="footer-link" id="emailCollectionReject_link" class="footer_link" data-bs-toggle="modal" data-bs-target="#emailCollectionReject">이메일무단수집거부</a></div>
+			</div>
 		</small>
 	</div>
 </div>
@@ -159,7 +161,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<?=$privacypolicy?>
+				<?= $privacypolicy ?>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -175,7 +177,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<?=$emailcollectionreject?>
+				<?= $emailcollectionreject ?>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -185,28 +187,51 @@
 </div>
 
 <!-- 문의하기 modal -->
-<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog">
-		<div class="modal-content">
+<div class="modal fade" id="inquirykModal" tabindex="-1" aria-labelledby="inquirykModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content" id="inquirykModalContent">
 			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="feedbackModalLabel">상담 문의</h1>
+				<h1 class="modal-title fs-5" id="inquirykModalLabel">상담 문의</h1>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form>
-					<div class="mb-3">
-						<label for="recipient-name" class="col-form-label">Recipient:</label>
-						<input type="text" class="form-control" id="recipient-name">
+				<form id="inquiryForm" action="<?= $thispage_filename ?>" method="post">
+					<!-- 상담 내용 선택 -->
+					<div class="form-floating mb-3">
+						<select name="inquiryClassfication" class="form-select" id="Select" type="text" placeholder="상담 문의 내용 선택" required>
+							<option value=""></option>
+							<?php foreach ($config['inquiry_classfication'] as $inqiry_class) : ?>
+								<option value="<?= $inqiry_class ?>"><?= $inqiry_class ?></option>
+							<?php endforeach; ?>
+						</select>
+						<label for="Select">상담 구분</label>
 					</div>
-					<div class="mb-3">
-						<label for="message-text" class="col-form-label">Message:</label>
-						<textarea class="form-control" id="message-text"></textarea>
+					<!-- Name input-->
+					<div class="form-floating mb-3">
+						<input name="inquiryName" class="form-control" id="inquiryname" type="text" placeholder="신청자명..." required />
+						<label for="inquiryname">신청자명 or 회사명</label>
 					</div>
+					<!-- Phone number input-->
+					<div class="form-floating mb-3">
+						<input name="" class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" required />
+						<label for="phone">전화번호</label>
+					</div>
+					<!-- Email address input-->
+					<div class="form-floating mb-3">
+						<input name="inquiryEmail" class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" required />
+						<label for="email">이메일 주소</label>
+					</div>
+					<!-- Message input-->
+					<div class="form-floating mb-3">
+						<textarea name="inquiryMessage" class="form-control" id="message" type="text" placeholder="문의 내용..." style="height: 10rem" required></textarea>
+						<label for="message">문의 내용</label>
+					</div>
+					<!-- Submit Button-->
+					<button class="btn btn-primary" id="submitButton" type="submit">문의 내용 보내기</button>
 				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-				<button type="button" class="btn btn-primary">문의하기</button>
 			</div>
 		</div>
 	</div>

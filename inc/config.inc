@@ -26,6 +26,7 @@ $config = array(
 	'company_fax' => "02-4321-4321",
 	'company_fax' => "email@email.com",
 	'company_privacy_manager' => "홍길동",
+	'inquiry_classfication' => array('면허등록', '양도양수', '기업진단'. '실태조사', '잔고증명', '기타'), // 문의 구분
 	'constructor_type_filter' => array('조경', '토목', '건축', '토목건축', '산업환경설비'), //종합건설 필터링
 	'new_constructor_type_filter' => array('건축', '토목', '전문'), //신규면허 필터링
 	'pro_constructor_type_filter' => array( // 전문건설 필터링
@@ -43,6 +44,14 @@ $config = array(
 		'승강기·삭도공사업' => array('승강기', '식도'),
 		'기계가스설비공사' => array('기계설비', '가스1종'),
 		'시설물' => array('시설물')
+	),
+	'page_files' => array(
+		'회사소개' => "company.php",
+		'면허등록기준' => "license.php",
+		'양도양수' => "transfer.php",
+		'기업진단' => "diagnosis.php",
+		'건설관련정보' => "relatedinfo.php",
+		'연말결산/잔고증명' => "settlement.php"
 	)
 );
 ?>

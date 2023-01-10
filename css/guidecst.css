@@ -21,3 +21,113 @@
 	font-weight: 300;
 	margin-bottom: 0.5em;
 }
+
+.mb-5 {
+	margin-bottom: 3rem !important;
+}
+
+.masthead .masthead-heading {
+	font-family: var(--bs-font-gmarket-sans-kr);
+}
+
+.masthead .masthead-subheading {
+	font-family: var(--bs-font-gmarket-sans-kr);
+}
+
+.my_img {
+	overflow: hidden;
+	zoom: 1;
+	position: relative;
+	transform: scale(1);
+	-webkit-transform: scale(1);
+	-moz-transform: scale(1);
+	-ms-transform: scale(1);
+	-o-transform: scale(1);
+	transition: all 0.3s ease-in-out;
+	z-index: 1;
+}
+
+.my_img:hover {
+	z-index: 4;
+
+	transform: scale(1.2);
+	-webkit-transform: scale(1.2);
+	-moz-transform: scale(1.2);
+	-ms-transform: scale(1.2);
+	-o-transform: scale(1.2);
+}
+
+.mastheadcarousel {
+	padding-top: calc(39rem + 74px);
+	padding-bottom: 6rem;
+	position: relative;
+	/* background-image: url("../assets/img/Main01.jpg");
+	background-position: center;
+	background-size: cover; */
+	color: #2c3e50;
+}
+
+.masthead-heading {
+	font-family: var(--bs-font-gmarket-sans-kr);
+	font-size: 3.3rem;
+	line-height: 2.75rem;
+	color: #2c3e50;
+}
+
+.masthead-subheading {
+	font-family: var(--bs-font-gmarket-sans-kr);
+	font-size: 1.25rem;
+	color: #2c3e50;
+}
+
+.masthead-avatar {
+	width: 15rem;
+}
+
+@media (min-width: 992px) {
+	.mastheßadcarousel {
+		padding-top: calc(35rem + 104px);
+		padding-bottom: 6rem;
+	}
+
+	.masthead-heading {
+		font-size: 4.5rem;
+		line-height: 3.5rem;
+	}
+
+	.masthead-subheading {
+		font-size: 1.5rem;
+	}
+}
+
+.carouselimg {
+	background-position: center;
+	background-size: cover;
+}
+
+.back-img01 {
+	background-image: url("../assets/img/Main01.jpg");
+	background-position: center;
+	background-size: cover;
+	color: #2c3e50;
+}
+
+.carousel-caption {
+	bottom: 5.25rem;
+}
+
+/* @media (min-width: 992px) {
+	.carousel-caption {
+		padding-bottom: 6rem;
+	}
+
+	.carousel-caption .masthead-heading {
+		font-size: 4.5rem;
+		line-height: 3.5rem;
+	}
+
+	.carousel-caption .masthead-subheading {
+		font-size: 1.5rem;
+	}
+}
+ */

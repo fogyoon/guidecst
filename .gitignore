@@ -5,6 +5,7 @@ development_tools/
 image_working/
 *.[oa]
 .vscode/
+phperror.log
 .DS_Store
 *.log
 *.apk

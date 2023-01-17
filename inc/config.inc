@@ -1,4 +1,25 @@
 <?php
+
+/*
+Bootsrap 찾아보기
+
+1. col 취치 설정
+https://getbootstrap.com/docs/5.3/utilities/flex/
+
+2. 아이템 겹치기 z-index
+https://getbootstrap.com/docs/5.3/utilities/z-index/
+
+3. 백그라운드
+https://getbootstrap.com/docs/5.3/utilities/background/
+
+4. 경계 border
+https://getbootstrap.com/docs/5.3/utilities/borders/
+
+5. Sizing
+https://getbootstrap.com/docs/5.3/utilities/sizing/
+
+*/
+
 // 주요 설정 들
 
 $homeip = getenv('HTTP_CLIENT_IP') ?:
@@ -12,20 +33,34 @@ $homeip = trim($homeip);
 $thispage_filename = str_replace("/", "", $_SERVER['SCRIPT_NAME']);
 $browserlang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 
+// 테스트 단계
+$for_test = true;
+
+// 실적 기준 년
+$thisYear = date("Y");
+$thisMonth = date("m");
+if ($thisMonth > 3) {
+	$performance_from_year = $thisYear -1;
+} else {
+	$performance_from_year = $thisYear -2;
+}
+
+
 $config = array(
 	'home_url' => "guideconsulting.co.kr",
 	'home_ip' => "183.111.199.212",
 	'db_user' => "guidecst",
 	'db_password' => "dbstjdqh6551~",
-	'company_kr_name' => "가이드컨설팅",
+	'db_name' => "guidecst",
+	'company_kr_name' => "주식회사 가이드",
 	'company_en_name' => "Guide Consulting",
-	'company_address' => "서울 어디구 어디가 12223-45 5층 501호",
-	'company_tel' => "02-1234-1234",
+	'company_address' => "강원도 원주시 판부면 내동막길 51-40",
+	'company_tel' => "032-209-1422",
 	'company_hp' => "010-1234-1234",
-	'company_license' => "000-00-00000",
-	'company_fax' => "02-4321-4321",
-	'company_fax' => "email@email.com",
-	'company_privacy_manager' => "홍길동",
+	'company_license' => "678-86-02009",
+	'company_fax' => "032-209-1423",
+	'company_email' => "email@email.com",
+	'company_privacy_manager' => "현숙",
 	'inquiry_classfication' => array('면허등록', '양도양수', '기업진단'. '실태조사', '잔고증명', '기타'), // 문의 구분
 	'constructor_type_filter' => array('조경', '토목', '건축', '토목건축', '산업환경설비'), //종합건설 필터링
 	'new_constructor_type_filter' => array('건축', '토목', '전문'), //신규면허 필터링
@@ -45,6 +80,8 @@ $config = array(
 		'기계가스설비공사' => array('기계설비', '가스1종'),
 		'시설물' => array('시설물')
 	),
+	'transfer_tag_array' => array("추천", "인기", "긴급"),
+	'transfer_max_col' => 2,
 	'page_files' => array(
 		'회사소개' => "company.php",
 		'면허등록기준' => "license.php",

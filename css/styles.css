@@ -57,6 +57,7 @@
 	--bs-font-sans-serif: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 	--bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 	--bs-font-noto-sans-kr: 'Noto Sans KR', sans-serif;
+	--bs-font-nanum-gothic-kr: 'Nanum Gothic', sans-serif;
 	--bs-font-gmarket-sans-kr: 'GmarketSans';
 	--bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
 	--bs-body-font-family: var(--bs-font-noto-sans-kr);
@@ -2832,7 +2833,7 @@ textarea.form-control-lg {
 
 .form-floating>.form-control,
 .form-floating>.form-select {
-	height: calc(3.5rem + 2px);
+	height: calc(3.5rem + 11px);
 	line-height: 1.5;
 }
 
@@ -2892,7 +2893,7 @@ textarea.form-control-lg {
 }
 
 .form-floating>.form-select {
-	padding-top: 1.625rem;
+	padding-top: 0.625rem;
 	padding-bottom: 0.625rem;
 }
 
@@ -3276,8 +3277,8 @@ fieldset:disabled .btn {
 
 .btn-primary:hover {
 	color: #fff;
-	background-color: #5f8ed0;
-	border-color: #5f8ed0;
+	background-color: #00285f;
+	border-color: #ffd900;
 }
 
 .btn-check:focus+.btn-primary,
@@ -3285,7 +3286,7 @@ fieldset:disabled .btn {
 	color: #fff;
 	background-color: #5f8ed0;
 	border-color: #5f8ed0;
-	box-shadow: 0 0 0 0.25rem rgba(60, 198, 171, 0.5);
+	box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.5);
 }
 
 .btn-check:checked+.btn-primary,
@@ -5211,6 +5212,9 @@ fieldset:disabled .btn {
 
 .card-title {
 	margin-bottom: 0.5rem;
+	font-family: var(--bs-font-nanum-gothic-kr);
+	font-size: 1.7rem;
+	font-weight: 800;
 }
 
 .card-subtitle {
@@ -6367,7 +6371,7 @@ fieldset:disabled .btn {
 	align-items: center;
 	justify-content: space-between;
 	padding: 1rem 1rem;
-	border-bottom: 0.125rem solid #dee2e6;
+	/* border-bottom: 0.125rem solid #dee2e6; */
 	border-top-left-radius: 0.625rem;
 	border-top-right-radius: 0.625rem;
 }
@@ -6395,7 +6399,7 @@ fieldset:disabled .btn {
 	align-items: center;
 	justify-content: flex-end;
 	padding: 0.75rem;
-	border-top: 0.125rem solid #dee2e6;
+	/* border-top: 0.125rem solid #dee2e6; */
 	border-bottom-right-radius: 0.625rem;
 	border-bottom-left-radius: 0.625rem;
 }
@@ -7078,14 +7082,25 @@ fieldset:disabled .btn {
 
 .carousel-caption {
 	position: absolute;
+	right: 5%;
+	bottom: 1.25rem;
+	left: 5%;
+	padding-top: 1.25rem;
+	padding-bottom: 5rem;
+	color: #fff;
+	text-align: center;
+}
+
+/*
+.carousel-caption {
+	position: absolute;
 	right: 15%;
 	bottom: 1.25rem;
 	left: 15%;
 	padding-top: 1.25rem;
 	padding-bottom: 1.25rem;
 	color: #fff;
-	text-align: center;
-}
+*/
 
 .carousel-dark .carousel-control-prev-icon,
 .carousel-dark .carousel-control-next-icon {
@@ -12247,6 +12262,7 @@ html {
 
 .page-section {
 	padding: 6rem 0;
+	padding-bottom: 6rem 0;
 }
 
 .page-section .page-section-heading {

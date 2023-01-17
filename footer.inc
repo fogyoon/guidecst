@@ -105,6 +105,50 @@
 	});
 </script>
 
+<script src="js/scripts.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="js/scrollreveal.min.js"></script>
+<script>
+	(function($) {
+		"use strict"; // Start of use strict
+
+		// Scroll reveal calls
+		window.sr = ScrollReveal();
+
+		sr.reveal('.sr-icon-1', {
+			delay: 200,
+			scale: 0
+		});
+		sr.reveal('.sr-icon-2', {
+			delay: 300,
+			scale: 0
+		});
+		sr.reveal('.sr-icon-3', {
+			delay: 400,
+			scale: 0
+		});
+		sr.reveal('.sr-icon-4', {
+			delay: 500,
+			scale: 0
+		});
+		sr.reveal('.sr-button', {
+			delay: 200,
+			distance: '15px',
+			origin: 'bottom',
+			scale: 0.8
+		});
+		sr.reveal('.sr-contact-1', {
+			delay: 200,
+			scale: 0
+		});
+		sr.reveal('.sr-contact-2', {
+			delay: 400,
+			scale: 0
+		});
+
+	})(jQuery); // End of use strict
+</script>
+
 
 <!-- Footer-->
 <footer class="footer text-center">
@@ -125,7 +169,7 @@
 				<li class="breadcrumb-item footer-info"><span class="fw-bolder">전화</span>: <?= $config['company_tel'] ?></li>
 				<li class="breadcrumb-item footer-info"><span class="fw-bolder">사업자등록번호</span>: <?= $config['company_license'] ?></li>
 				<li class="breadcrumb-item footer-info"><span class="fw-bolder">팩스</span>: <?= $config['company_fax'] ?></li>
-				<li class="breadcrumb-item footer-info"><span class="fw-bolder">이메일</span>: <?= $config['company_fax'] ?></li>
+				<li class="breadcrumb-item footer-info"><span class="fw-bolder">이메일</span>: <?= $config['company_email'] ?></li>
 				<li class="breadcrumb-item footer-info"><span class="fw-bolder">개인정보처리담당자</span>: <?= $config['company_privacy_manager'] ?></li>
 			</ol>
 		</nav>
@@ -143,14 +187,6 @@
 		</small>
 	</div>
 </div>
-
-<!-- Bootstrap core JS-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Core theme JS-->
-<script src="js/scripts.js"></script>
-
-<!-- 아래 form.js는 필요 없을 듯합니다. -->
-<!-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> -->
 
 <!-- 개인정보취급방침 이메일무단수집거부 modal -->
 <div class="modal fade" id="PrivacyPlicy" tabindex="-1" aria-labelledby="PrivacyPlicyLabel" aria-hidden="true">
@@ -188,23 +224,22 @@
 
 <!-- 문의하기 modal -->
 <div class="modal fade" id="inquirykModal" tabindex="-1" aria-labelledby="inquirykModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content" id="inquirykModalContent">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content px-md-3 px-lg-5 py-3" id="inquirykModalContent">
 			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="inquirykModalLabel">상담 문의</h1>
+				<h1 class="modal-title fs-5" id="inquirykModalLabel">문의하실 내용을 입력해 보내주시면 연락 드리겠습니다.</h1>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
 				<form id="inquiryForm" action="<?= $thispage_filename ?>" method="post">
-					<!-- 상담 내용 선택 -->
-					<div class="form-floating mb-3">
-						<select name="inquiryClassfication" class="form-select" id="Select" type="text" placeholder="상담 문의 내용 선택" required>
-							<option value=""></option>
+					<div class="mb-3">
+						<select name="inquiryClassfication" class="form-select" id="Select" style="height: calc(3.5rem + 2px);" type="text" placeholder="상담 문의 내용 선택" required>
+							<option value="">문의사항 분류를 선택해 주세요.</option>
 							<?php foreach ($config['inquiry_classfication'] as $inqiry_class) : ?>
 								<option value="<?= $inqiry_class ?>"><?= $inqiry_class ?></option>
 							<?php endforeach; ?>
 						</select>
-						<label for="Select">상담 구분</label>
+						<!-- <label for="Select">상담 구분</label> -->
 					</div>
 					<!-- Name input-->
 					<div class="form-floating mb-3">
@@ -227,7 +262,7 @@
 						<label for="message">문의 내용</label>
 					</div>
 					<!-- Submit Button-->
-					<button class="btn btn-primary" id="submitButton" type="submit">문의 내용 보내기</button>
+					<button class="btn btn-primary" style="display: block; margin-left: auto; margin-right: auto;" id="submitButton" type="submit">문의 내용 보내기</button>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -237,6 +272,14 @@
 	</div>
 </div>
 
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>  -->
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+
+<!-- 아래 form.js는 필요 없을 듯합니다. -->
+<!-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> -->
 
 
 <!-- Global site tag (gtag.js) - Google Ads: 10927073323 -->

@@ -21,7 +21,7 @@ include("header.inc");
 <header class="subhead text-center transfer-bg-img">
 	<div class="container">
 		<h1 class="subhead-heading">회사소개</h1>
-		<p class="subhead-subheading">회사소개 페이지입니다.</p>
+		<p class="subhead-subheading">최상의 서비스 & 앞선 컨설팅</p>
 	</div>
 </header>
 
@@ -62,9 +62,8 @@ include("header.inc");
                     </div>
                     <div class="col-lg-6">
                         <div class="p-4">
-                            <h2 class="display-4 text-M sr-icon-4">건설업의 앞선 컨설팅</h2>
-							<p class="text-L">가이드컨설팅은 빠르게 변화하는 건설업에서 다년간의 경험과 축적된 노하
-기준, 경영운영의 전반에 걸친 정확하고 믿을수 있는 맞춤형정보로 앞선 컨설팅을 해드립니다.                        
+                            <h2 class="display-4 text-M sr-icon-4">사업영역</h2>
+							<p class="text-L">양도양수(M&A), 면허신규등록, 면허추가등록, 법인설립, 합병 및 분할, 기업진단, 건설업 실태조사 자문 컨설팅, 관련법규 및 회계상담, 운영관련 행정업무 상담, 연말결산 등 건설업만의 경영컨설팅을 제공해드립니다.                         
 						</div>
                     </div>
                 </div>
@@ -79,23 +78,30 @@ include("header.inc");
                     </div>
                     <div class="col-lg-6 order-lg-1">
                         <div class="p-4">
-                            <h2 class="display-4 text-M sr-icon-4">건설업의 앞선 컨설팅</h2>
-							<p class="text-L">가이드컨설팅은 빠르게 변화하는 건설업에서 다년간의 경험과 축적된 노하
-기준, 경영운영의 전반에 걸친 정확하고 믿을수 있는 맞춤형정보로 앞선 컨설팅을 해드립니다.                        
+                            <h2 class="display-4 text-M sr-icon-4">최상의 서비스</h2>
+							<p class="text-L">저희 가이드컨설팅은 축적된 경험과 노하우로 고객분들께 정확하고 최상의 서비스를 지원하여 성공적인 성장의 원동력이 되겠습니다. 고객의 입장에서 함께 노력할것을 약속드립니다.                       
 						</div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <br>
 
+<section class="page-section portfolio" id="portfolio">
+	<div class="container">
+		<!-- Portfolio Section Heading-->
+		<h2 class="page-section-heading text-center text-uppercase text-secondary mb-0 sr-icon-1">Location</h2>
+		<!-- Icon Divider-->
+		<div class="divider-custom">
+			<div class="divider-custom-line"></div>
+			<div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+			<div class="divider-custom-line"></div>
+		</div>
+        <iframe class="border" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3173.9967755170646!2d127.9466139155593!3d37.29521024737737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3563766f2e6747bf%3A0xa0f3569bb0073123!2z6rCV7JuQ64-EIOybkOyjvOyLnCDtjJDrtoDrqbQg7ISc6rOh66asIDE1NjQtMg!5e0!3m2!1sko!2skr!4v1673932564989!5m2!1sko!2skr" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
-
-
-<br>
-
-
-
+    </div>
+</section>
 
 
 

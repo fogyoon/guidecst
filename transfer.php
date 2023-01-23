@@ -11,15 +11,28 @@ $title = "양도양수";
 $description = "건설업 양도 양수";
 $keywords = "건설업, 양도양수";
 
-//make_test_environments();
+// pagination START
+$page = 1;
+if (isset($_POST['page'])) {
+	$page = $_POST['page'];  
+}
+$page_first_result = ($page-1) * $config['transfer_max_col'];
+// pagination END
 
-$filters_array = array('need_filter' => false, 'new_licensed' => false);
+$show_filter_array = false; // 테스트 시 $filters_array 확인 용
+$filters_array = array('need_filter' => false, 'new_licensed' => false, 'offset' => $page_first_result);
 $sector_filter = array();
+$other_sectors = array();
+$total_count = 0;
+$transfer_list_array = array();
 $pre_searchType = "sector";
 
 if ($_POST) {
-	$pre_searchType = $_POST['searchType'];
-	if ($_POST['searchType'] == "sector") { 
+	if (isset($_POST['searchType'])) {
+		$pre_searchType = $_POST['searchType'];
+	}
+	if ($pre_searchType == "sector") { 
+		$filters_array['searchType'] = "sector";
 		if (isset($_POST['checked_new_sectors'])) {
 			if (count($_POST['checked_new_sectors']) > 0) {
 				$sector_filter = array_values($_POST['checked_new_sectors']);
@@ -36,10 +49,16 @@ if ($_POST) {
 			$filters_array['need_filter'] = true;
 			$filters_array['sectors'] = $sector_filter;
 		}
-	} else if ($_POST['searchType'] == "reg_number" && isset($_POST['reg_number'])) {
+	} else if ($pre_searchType == "reg_number" && isset($_POST['reg_number'])) {
+		$filters_array['searchType'] = "reg_number";
 		$filters_array['need_filter'] = true;
 		$filters_array['reg_number'] = $_POST['reg_number'];
 		$pre_reg_number = $_POST['reg_number'];
+	} else if ($pre_searchType == "company_name" && isset($_POST['company_name'])) {
+		$filters_array['searchType'] = "company_name";
+		$filters_array['need_filter'] = true;
+		$filters_array['company_name'] = $_POST['company_name'];
+		$pre_company_name = $_POST['company_name'];
 	}
 }
 
@@ -50,19 +69,19 @@ if (!check_connect_dbserver()) {
 } else {
 	$pro_constructor_sectors = get_pro_sectors();
 	$other_sectors = get_other_sectors();
+	$total_count = count_transfer_list($filters_array);
 	$transfer_list_array = get_transfer_list($filters_array);
-	if (!$transfer_list_array)
+	if (!$transfer_list_array) {
 		$error_log = read_log();
+		$transfer_list_array = array();
+	} elseif ($transfer_list_array == "no_result") {
+		$transfer_list_array = array();
+	}
 }
 
-// pagination
-if (!isset ($_GET['page']) ) {  
-	$page = 1;  
-} else {  
-	$page = $_GET['page'];  
-}
-$results_per_page = $config['transfer_max_col'];
-$page_first_result = ($page-1) * $results_per_page;  
+// pagination: 몇개의 page가 필요한지 결정 START
+$no_pages = ceil($total_count / $config['transfer_max_col']);
+// pagination: 몇개의 page가 필요한지 결정 END
 
 
 //head와 로고, navbar는 아래 파일에서 수정하세요.
@@ -124,8 +143,11 @@ function other_constructor_check(checkAll)  {
 <?php else:?>
 <section class="page-section pb-4 pt-5">
 	<div class="container">
-		<?php if($for_test) print_r($filters_array);?>
-		<form action="<?= $thispage_filename ?>" method="post">
+		<div class="clearfix mb-3">
+			<button type="button" class="btn btn-warning float-end" onclick="location.href='<?=$config['page_other_files']['양도양수절차']?>'">양도양수 절차 확인</button>
+		</div>
+		<?php if($for_test && $show_filter_array) print_r($filters_array);?>
+		<form action="<?= $thispage_filename ?>" method="post" name="fiter_form">
 			<?php $sector_no = 0;?>
 			<div class="row border">
 				<div class="col-3 col-md-2 p-3 border-end bg-dark-subtle">종합건설</div>
@@ -199,16 +221,21 @@ function other_constructor_check(checkAll)  {
 							<input type="checkbox" class="form-check-input" name="<?=$idname?>checllAll" id="<?=$idname?>checkAll" onclick='<?=$idname?>check(this)'>
 							<label class="form-check-label text-primary" for="<?=$idname?>checllAll">모두 선택</label>
 						</div>
+					<?php if (is_array($other_sectors) && count(($other_sectors)) > 0):?>
 					<?php $checki = 0; foreach($other_sectors as $efilter_check):?>
 						<div class="col col-6 col-md-4 col-lg-2 form-check">
 							<input type="checkbox" class="form-check-input" name="checked_sectors[<?=$sector_no?>]]" id="<?=$idname.$checki?>" value="<?=$efilter_check?>" <?php if(isset($pre_checked_sectors[$sector_no])) echo "checked";?>>
 							<label class="form-check-label" for="<?=$idname.$checki?>"><?=$efilter_check?></label>
 						</div>
 					<?php $checki++; $sector_no++; endforeach;?>
+					<?php endif;?>
 					</div>
 				</div>
 			</div>
 			<div class="row mt-3 d-flex align-items-center justify-content-end">
+				<?php if($filters_array['need_filter']):?>
+					<div class="col-3 col-lg-2 p-3"><a class="btn btn-secondary" role="button" href="<?=$thispage_filename?>">검색 초기화</a></div>
+				<?php endif;?>
 				<div class="col col-md-4 col-lg-3 form-check">
 					<input class="form-check-input" type="radio" name="searchType" id="searchType1" value="sector" <?php if($pre_searchType == "sector") echo "checked";?>>
 					<label class="form-check-label" for="searchType1">선택한 업종 검색</label>
@@ -220,10 +247,16 @@ function other_constructor_check(checkAll)  {
 				<div class="col-3 col-lg-2">
 					<input type="text" class="form-control" name="reg_number" id="reg_number" aria-describedby="등록번호" value="<?php if(isset($pre_reg_number)) echo $pre_reg_number;?>">
 				</div>
-				<div class="col-3 col-lg-2 p-3"><button type="submit" class="btn btn-primary">검색</button></div>
-				<?php if($filters_array['need_filter']):?>
-				<div class="col-3 col-lg-2 p-3"><a class="btn btn-secondary" role="button" href="<?=$thispage_filename?>">검색 초기화</a></div>
+				<?php if($userlogin):?>
+				<div class="col col-md-auto form-check">
+					<input class="form-check-input" type="radio" name="searchType" id="searchType3" value="company_name" <?php if($pre_searchType == "company_name") echo "checked";?>>
+					<label class="form-check-label" for="searchType3">회사명으로 검색</label>
+				</div>
+				<div class="col-3 col-lg-2">
+					<input type="text" class="form-control" name="company_name" id="company_name" aria-describedby="회사명" value="<?php if(isset($pre_company_name)) echo $pre_company_name;?>">
+				</div>
 				<?php endif;?>
+				<div class="col-3 col-lg-2 p-3"><button type="submit" name="search" class="btn btn-primary px-3"><i class="bi bi-search"></i> 검색</button></div>
 			</div>
 		</form>
 	</div>
@@ -234,10 +267,18 @@ function other_constructor_check(checkAll)  {
 <!-- List table Section-->
 <section class="page-section pt-4" id="listtable">
 	<div class="container overflow-auto">
+		<?php if($userlogin):?>
+		<div class="clearfix mb-3">
+			<button type="button" class="btn btn-info float-start" onclick="location.href='<?=$config['page_other_files']['양도양수수정']?>'">양도 매물 추가</button>
+		</div>
+		<?php endif;?>
 		<table class="table table-hover table-bordered align-middle text-center">
 			<thead class="table-light">
 				<tr class="align-middle text-center">
 					<th scope="col" rowspan="2">등록 NO</th>
+					<?php if($userlogin):?>
+						<th scope="col" rowspan="2">회사명</th>
+					<?php endif;?>
 					<th scope="col" rowspan="2">상태</th>
 					<th scope="col" rowspan="2">업종</th>
 					<th scope="col" rowspan="2">법인년도</th>
@@ -253,13 +294,14 @@ function other_constructor_check(checkAll)  {
 					<th scope="col">5년실적</th>
 				</tr>
 			</thead>
+		<?php if (count($transfer_list_array) > 0):?>
 			<tbody>
 				<?php $sn = 0;
 				foreach ($transfer_list_array as $eachtransfer) : ?>
-					<tr onClick="location.href='transfer_edit.php'" style="cursor:pointer;" data-bs-container="body" data-bs-toggle="popover" data-bs-custom-class="custom-popover" data-bs-trigger="hover focus" data-bs-html="true" data-bs-content="<?= $eachtransfer['note'] ?>" data-bs-placement="<?php if ($sn < 1) echo "bottom"; else echo "top"; ?>">
+					<tr onClick="location.href='transfer_info.php?reg_number=<?= $eachtransfer['reg_number'] ?>'" style="cursor:pointer;" data-bs-container="body" data-bs-toggle="popover" data-bs-custom-class="custom-popover" data-bs-trigger="hover focus" data-bs-html="true" data-bs-content="<?= $eachtransfer['note'] ?>" data-bs-placement="<?php if ($sn < 1) echo "bottom"; else echo "top"; ?>">
 						<td><?= $eachtransfer['reg_number'] ?>
 							<?php
-							if ($eachtransfer['sales_five_ar'] == "") echo "<br><span class=\"text-primary\">신규</span>";
+							if ($eachtransfer['sales_five_ar'] == 0) echo "<br><span class=\"text-primary\">신규</span>";
 							if ($eachtransfer['tag']) {
 								if ($eachtransfer['tag'] == "추천") {
 									echo "<br><span class=\"badge bg-info\">" . $eachtransfer['tag'] . "</span>";
@@ -271,6 +313,9 @@ function other_constructor_check(checkAll)  {
 							}
 							?>
 						</td>
+						<?php if ($userlogin):?>
+							<td><?=$eachtransfer['company_name']?></td>
+						<?php endif;?>
 						<td><?php if ($eachtransfer['status']) echo "계약가능";
 							else echo "계약불능"; ?>
 						</td>
@@ -335,36 +380,87 @@ function other_constructor_check(checkAll)  {
 							}
 							?>
 						</td>
-						<td class="text-danger"><?php echo print_money($eachtransfer['transfer_price']); ?></td>
-						<td><?php echo date("Y-m-d", strtotime($eachtransfer['modfied_date'])); ?></td>
+						<td class="text-danger"><?php if($eachtransfer['transfer_price'] == 0) echo "협의"; else echo print_money($eachtransfer['transfer_price']); ?></td>
+						<td><?php echo date2ymd($eachtransfer['modfied_date']); ?></td>
 					</tr>
 				<?php $sn++;
 				endforeach; ?>
 			</tbody>
+		<?php endif;?>
 		</table>
 		
 		<!-- Pagination -->
-		<?php 
-
-		?>
-		<?php if (count($transfer_list_array) > $config['transfer_max_col']): ?>
-		<nav aria-label="Page navigation">
-			<ul class="pagination justify-content-center">
-				<li class="page-item">
-					<a class="page-link" href="#" aria-label="Previous">
-					<span aria-hidden="true">&laquo;</span>
-				</a>
-				</li>
-				<li class="page-item"><a class="page-link" href="#">1</a></li>
-				<li class="page-item"><a class="page-link" href="#">2</a></li>
-				<li class="page-item"><a class="page-link" href="#">3</a></li>
-				<li class="page-item">
-					<a class="page-link" href="#" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
-				</a>
-				</li>
-			</ul>
-		</nav>
+		<?php if ($no_pages > 1): ?>
+		<form action="<?= $thispage_filename ?>" method="post" name="page_form">
+			<input type="hidden" name="searchType" value="<?=$pre_searchType?>">
+			<?php if ($pre_searchType == "reg_number"):?>
+				<?php if (isset($pre_reg_number)):?>
+					<input type="hidden" name="reg_number" value="<?=$pre_reg_number?>">
+				<?php endif;?>
+			<?php elseif($pre_searchType == "company_name"):?>
+				<input type="hidden" name="company_name" value="<?=$pre_company_name?>">
+			<?php else:?>
+				<?php if (isset($pre_checked_new_sectors)):?>
+					<?php foreach($pre_checked_new_sectors as $sector_key => $sector_value):?>
+						<input type="hidden" name="checked_new_sectors[<?=$sector_key?>]" value="<?=$sector_value?>">
+					<?php endforeach;?>
+				<?php elseif (isset($pre_checked_sectors)):?>
+					<?php foreach($pre_checked_sectors as $sector_key => $sector_value):?>
+						<input type="hidden" name="checked_sectors[<?=$sector_key?>]" value="<?=$sector_value?>">
+					<?php endforeach;?>
+				<?php endif;?>
+			<?php endif;?>
+			<nav aria-label="Page navigation">
+				<ul class="pagination justify-content-center">
+					<li class="page-item">
+						<button type="submit" class="page-link" name="page" value="1" aria-label="처음"><span aria-hidden="true">&laquo;</span></button>
+					</li>
+					<?php if ($no_pages > $config['transfer_max_pages']):?>
+						<?php $prev_page = ((floor(($page - 1) / $config['transfer_max_pages']) - 1) * $config['transfer_max_pages']) + 1;
+						/*
+						 2 : 1 floor (2-1)/10 = 0 -1 = 0 *10 = 0 +1 = 1
+						 10 : 1 floor (10-1)/10 = 0 -1 = 0 *10 = 0 +1 = 1 
+						 11 : 1 floor (11-1)/10 = 1 -1 = 0 *10 = 0 +1 = 1 
+						 12 : 1 floor (12-1)/10 = 1 -1 = 0 *10 = 0 +1 = 1 
+						 19 : 1 floor (19-1)/10 = 1 -1 = 0 *10 = 0 +1 = 1 
+						 20 : 1 floor (20-1)/10 = 1 -1 = 0 *10 = 10 +1 = 1
+						 21 : 11 floor (21-1)/10 = 2 -1 = 1 *10 = 10 +1 = 11
+						 22 : 11 floor (22-1)/10 = 2 -1 = 1 *10 = 10 +1 = 11
+						 30 : 11 floor (30-1)/10 = 2 -1 = 1 *10 = 10 +1 = 11
+						 31 : 21 floor (31-1)/10 = 3 -1 = 2 *10 = 20 +1 = 21
+						*/
+						?>
+						<li class="page-item">
+							<button type="submit" class="page-link" name="page" value="<?=$prev_page?>" aria-label="이전"><span aria-hidden="true">&lt;</span></button>
+						</li>
+					<?php endif;?>
+					<?php for($i=1; $i<=$no_pages; $i++):?>
+						<li class="page-item <?php if($page == $i) echo "active";?>" <?php if($page == $i) echo "aria-current=\"page\"";?>><button type="submit" class="page-link" name="page" value="<?=$i?>"><?=$i?></button></li>
+					<?php endfor;?>
+					<?php if ($no_pages > $config['transfer_max_pages']):?>
+						<?php $next_page = ((floor($page / $config['transfer_max_pages']) + 1) * $config['transfer_max_pages']) + 1;
+						/*
+						 2 : 11 floor (2)/10 = 0 +1 = 1 *10 = 10 +1 = 11
+						 10 : 21 floor (10)/10 = 1 +1 = 2 *10 = 20 +1 = 21 
+						 11 : 21 floor (11)/10 = 1 +1 = 2 *10 = 20 +1 = 21 
+						 19 : 21 floor (19)/10 = 1 +1 = 2 *10 = 20 +1 = 21 
+						 20 : 31 floor (20)/10 = 2 +1 = 3 *10 = 30 +1 = 31
+						 21 : 11 floor (21)/10 = 2 +1 = 3 *10 = 30 +1 = 31
+						 22 : 11 floor (22)/10 = 2 +1 = 3 *10 = 30 +1 = 31
+						 30 : 11 floor (30)/10 = 3 +1 = 4 *10 = 40 +1 = 41
+						 31 : 21 floor (31)/10 = 3 +1 = 4 *10 = 40 +1 = 41
+						*/
+						?>
+						<li class="page-item">
+							<button type="submit" class="page-link" name="page" value="<?=$next_page?>" aria-label="이전"><span aria-hidden="true">&gt;</span></button>
+						</li>
+					<?php endif;?>
+					<li class="page-item">
+						<button type="submit" class="page-link" name="page" value="<?=$no_pages?>" aria-label="맨끝"><span aria-hidden="true">&raquo;</span></button>
+					</li>
+				</ul>
+			</nav>
+		</form>
 		<?php endif;?>
 
 	</div>

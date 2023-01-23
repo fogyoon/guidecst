@@ -1,5 +1,28 @@
 <?php
 // head와 로고, navbar는 여기서 수정하세요.
+
+require_once("inc/utils.inc");
+
+// 로그인 결과
+if (isset($_POST['signinresult'])){
+	$signinresult = $_POST['signinresult'];
+} else {
+	$signinresult = false;
+}
+
+// 상당문의 이메일 보내기
+$now_send_inquiry = false;
+$send_inquiry_result= false;
+if (isset($_POST['send_inquiry'])) {
+	$now_send_inquiry = true;
+	if (isset($_POST['transferNo'])) {
+		$transferNo = isset($_POST['transferNo']);
+	} else {
+		$transferNo = "";
+	}
+	$send_inquiry_result = send_inquiry($_POST['inquiryClassfication'], $_POST['inquiryName'], $_POST['inquiryPhone'], $_POST['inquiryEmail'], $_POST['inquiryMessage'], $transferNo = "");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +38,7 @@
 	<meta property="og:title" content="<?= $title ?>">
 	<meta property="og:description" content="<?= $description ?>">
 	<meta property="og:image" content="http://www.guideconsulting.co.kr/assets/img/G_Logo.svg">
-	<meta property="og:url" content="http://<?= $config['home_url'] ?><?php echo $_SERVER['PHP_SELF']; ?>">
+	<meta property="og:url" content="<?= $config['full_url'] ?><?php echo $_SERVER['PHP_SELF']; ?>">
 	<meta name="naver-site-verification" content="" />
 	<meta name="msvalidate.01" content="" />
 	<link rel="apple-touch-icon" href="assects/apple-touch-icon.png" />
@@ -24,7 +47,7 @@
 	<!-- Favicon-->
 	<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 	<!-- bootstrap icons -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 	<!-- Font Awesome icons (free version)-->
 	<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 	<!-- Google fonts-->
@@ -65,12 +88,15 @@
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ms-auto">
 					<?php foreach ($config['page_files'] as $page_name => $page_file) : ?>
-						<li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == $page_file) echo "active"; ?>" href="<?= $page_file ?>"><?= $page_name ?></a></li>
+						<li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == $page_file || (($thispage_filename == $config['page_other_files']['양도양수정보'] || $thispage_filename == $config['page_other_files']['양도양수수정'] || $thispage_filename == $config['page_other_files']['양도양수절차']) && $page_file == $config['page_files']['양도양수'])) echo "active"; ?>" href="<?= $page_file ?>"><?= $page_name ?></a></li>
 					<?php endforeach; ?>
 				</ul>
-				<button class="btn btn-primary rounded-pill px-3 ms-lg-3 mt-3 mt-md-0 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#inquirykModal">
+				<button class="btn btn-primary rounded-pill px-3 ms-lg-3 mt-3 mt-md-0 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#inquiryModal">
 					<span class="d-flex align-items-center"><i class="bi-chat-text-fill me-2"></i>상담문의</span>
 				</button>
+				<?php if ($userlogin):?>
+					<button class="btn btn-warning btn-sm ms-2" onclick="location.href='loginprocess.php?signout&retpage=<?=$thispage_filename?>'">로그아웃</button>
+				<?php endif;?>
 			</div>
 		</div>
 	</nav>

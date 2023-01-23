@@ -7,27 +7,31 @@ include("inc/text.inc");
 //include("inc/utils.inc"); //그외 functions 
 //include("inc/sql.inc"); //mysql 관련 functions
 
-$title = "회사소개";
-$description = "건설업 회사소개";
-$keywords = "건설업, 회사소개";
+$title = "양도양수 절차";
+$description = "건설업 양도양수 절차";
+$keywords = "건설업, 양도양수, 양도양수 절차";
 
 //head와 로고, navbar는 아래 파일에서 수정하세요.
-include("header.inc");
+include("header.inc"); // header에서 로그인 상태 확인합니다.
 // 모든 파일의 상단에 반드시 포함해야 할 사향:: 끝
 
 ?>
 
 <!-- Masthead-->
-<header class="subhead text-center transfer-bg-img">
+<header class="subhead text-center transfer-bg-img2">
 	<div class="container">
-		<h1 class="subhead-heading">회사소개</h1>
-		<p class="subhead-subheading">회사소개 페이지입니다.</p>
+		<h1 class="subhead-heading">양도양수 절차</h1>
+		<p class="subhead-subheading">양도양수 절차 페이지입니다.</p>
 	</div>
 </header>
 
 <!-- Portfolio Section-->
 <section class="page-section portfolio" id="portfolio">
 	<div class="container">
+		<div class="clearfix mb-3">
+			<button type="button" class="btn btn-warning float-end" onclick="location.href='<?=$config['page_files']['양도양수']?>'">양도양수 매물 확인</button>
+		</div>
+
 		<!-- Portfolio Section Heading-->
 		<h2 class="page-section-heading text-center text-uppercase text-secondary mb-0 sr-icon-1">WHAT WE DO</h2>
 		<!-- Icon Divider-->
@@ -118,7 +122,7 @@ include("header.inc");
 		</div>
 		<!-- About Section Button-->
 		<div class="text-center mt-4">
-			<a class="btn btn-xl btn-outline-light" href="https://startbootstrap.com/theme/freelancer/">
+			<a class="btn btn-xl btn-outline-light" href="#">
 				<i class="fas fa-download me-2"></i>
 				Free Download!
 			</a>

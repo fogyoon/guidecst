@@ -13,7 +13,7 @@ https://techblog-history-younghunjo1.tistory.com/149
 
 $need_logging = true;
 
-$dbserver = $config['home_url'];
+$dbserver = $config['db_server'];
 $dbuser = $config['db_user'];
 $dbpassword = $config['db_password'];
 $dbname = $config['db_name'];
@@ -159,7 +159,7 @@ function create_tables($test = false)
 
 	// drop the existed tales to make test environments
 	if ($test) {
-		$tables = array("transfer", "performance");
+		$tables = array("transfer", "performance", "finstatements", "users", "loginlog");
 		foreach ($tables as $table_name) {
 			if (!drop_table($table_name))
 				return $retval;
@@ -168,7 +168,7 @@ function create_tables($test = false)
 
 	$qly_transfer = "
 CREATE TABLE transfer (
-sn int(16) NOT NULL auto_increment,
+sn int(16) unsigned NOT NULL auto_increment,
 reg_number int(16) NOT NULL,
 company_name varchar(32) NULL,
 company_type varchar(16) NULL,
@@ -189,6 +189,7 @@ tag varchar(16) NULL,
 note varchar(500) NULL,
 created_date datetime,
 modfied_date datetime,
+homeip varchar(32),
 PRIMARY KEY (sn),
 KEY (reg_number)
 )";
@@ -204,8 +205,65 @@ annual_sales int(12),
 year year,
 created_date datetime,
 modfied_date datetime,
+homeip varchar(32),
 PRIMARY KEY (sn),
 KEY (reg_number)
+)";
+
+	$qly_finstatements = "
+CREATE TABLE finstatements (
+sn int(16) unsigned NOT NULL auto_increment,
+reg_number int(16) NOT NULL,
+debt_ratio int(12),
+fixed_debt int(12),
+current_ratio int(12),
+fixed_assets int(12),
+total_capital int(12),
+revenue int(12),
+operating_profit int(12),
+income_after_tax int(12),
+debt_equity int(12),
+created_date datetime,
+modfied_date datetime,
+homeip varchar(32),
+PRIMARY KEY (sn),
+KEY (reg_number)
+)";
+
+/*
+reg_number 등록번호
+debt_ratio 부채비율 %
+fixed_debt 고정부채
+current_ratio 유동비율 %
+fixed_assets 고정자산
+total_capital 자본총계
+revenue 매출액
+operating_profit 영업손익
+income_after_tax 법인세차감손익
+debt_equity 부채와자본총계
+*/
+
+$qly_users = "
+CREATE TABLE users (
+sn int(16) unsigned NOT NULL auto_increment,
+username varchar(32) NOT NULL,
+password varchar(200) NOT NULL,
+role varchar(32),
+created_date datetime,
+modfied_date datetime,
+homeip varchar(32),
+PRIMARY KEY (sn),
+KEY (username)
+)";
+
+$qly_loginlog = "
+CREATE TABLE loginlog (
+sn int(32) unsigned NOT NULL auto_increment,
+date datetime,
+username varchar(32) NOT NULL,
+homeip varchar(32),
+PRIMARY KEY (sn),
+KEY (username)
 )";
 
 	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
@@ -217,6 +275,12 @@ KEY (reg_number)
 		$stmt = $pdo->prepare($qly_transfer);
 		$stmt->execute();
 		$stmt = $pdo->prepare($qly_performance);
+		$stmt->execute();
+		$stmt = $pdo->prepare($qly_finstatements);
+		$stmt->execute();
+		$stmt = $pdo->prepare($qly_users);
+		$stmt->execute();
+		$stmt = $pdo->prepare($qly_loginlog);
 		$stmt->execute();
 	} catch (PDOException $e) {
 		$error_message = $e->getMessage();
@@ -284,6 +348,7 @@ BEGIN
 	DECLARE saleSum INT;
 	DECLARE i INT;
 	DECLARE byYear INT;
+	SET SalebyYear = 0;
 	SET SaleSum = 0;
 	SET i = 0;
 	SET byYear = StandardYear;
@@ -292,6 +357,7 @@ BEGIN
 		SET SaleSum = SaleSum + SalebyYear;
 		SET byYear = byYear - 1;
 		SET i = i + 1;
+		SET SalebyYear = 0;
 	END WHILE;
 	RETURN SaleSum;
 END
@@ -344,7 +410,7 @@ END
 
 function add_transfer_list($reg_number, $company_name, $company_type, $year_founded, $year_corporation, $capital, $deposit_bill, $remaining_amount, $join_association, $region, $construction_in_progress, $transfer_price, $status, $consultant, $phone, $mobile, $tag, $note)
 {
-	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $homeip;
 	$retval = false;
 	$error_message = false;
 	try {
@@ -373,6 +439,7 @@ function add_transfer_list($reg_number, $company_name, $company_type, $year_foun
 ,'" . $note . "'
 ,now()
 ,now()
+,'" . $homeip . "'
 )";
 		//write_log("sql.inc: add_transfer_list(), ".$sql);
 		$stmt = $pdo->prepare($sql);
@@ -391,23 +458,26 @@ function add_transfer_list($reg_number, $company_name, $company_type, $year_foun
 
 function add_performance_list($reg_number, $sector, $year_licensed, $construction_ability, $annual_sales, $year)
 {
-	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $homeip;
 	$retval = false;
 	$error_message = false;
+	$annual_sales = !empty($annual_sales) ? "'$annual_sales'" : "NULL";
+	$year = !empty($year) ? "'$year'" : "NULL";
 	try {
 		$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
 		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
 		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$sql = "INSERT INTO performance VALUES (0
-,'" . $reg_number . "'
-,'" . $sector . "'
-,'" . $year_licensed . "'
-,'" . $construction_ability . "'
-,'" . $annual_sales . "'
-,'" . $year . "'
+,'{$reg_number}'
+,'{$sector}'
+,'{$year_licensed}'
+,'{$construction_ability}'
+,{$annual_sales}
+,{$year}
 ,now()
 ,now()
+,'{$homeip}'
 )";
 		//write_log("sql.inc: add_performance_list() , query:".$sql);
 		$stmt = $pdo->prepare($sql);
@@ -424,8 +494,177 @@ function add_performance_list($reg_number, $sector, $year_licensed, $constructio
 	return $retval;
 }
 
+/*
+$reg_number, $debt_ratio, $fixed_debt, $current_ratio, $fixed_assets, $total_capital, $revenue, $operating_profit, $income_after_tax, $debt_equity
+*/
+
+function add_finstatements($reg_number, $debt_ratio, $fixed_debt, $current_ratio, $fixed_assets, $total_capital, $revenue, $operating_profit, $income_after_tax, $debt_equity)
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $homeip;
+	$retval = false;
+	$error_message = false;
+	$debt_ratio = !empty($debt_ratio) ? "'$debt_ratio'" : "NULL";
+	$fixed_debt = !empty($fixed_debt) ? "'$fixed_debt'" : "NULL";
+	$current_ratio = !empty($current_ratio) ? "'$current_ratio'" : "NULL";
+	$fixed_assets = !empty($fixed_assets) ? "'$fixed_assets'" : "NULL";
+	$total_capital = !empty($total_capital) ? "'$total_capital'" : "NULL";
+	$revenue = !empty($revenue) ? "'$revenue'" : "NULL";
+	$operating_profit = !empty($operating_profit) ? "'$operating_profit'" : "NULL";
+	$income_after_tax = !empty($income_after_tax) ? "'$income_after_tax'" : "NULL";
+	$debt_equity = !empty($debt_equity) ? "'$debt_equity'" : "NULL";
+	$sql = "INSERT INTO finstatements VALUES (0
+,{$reg_number}
+,{$debt_ratio}
+,{$fixed_debt}
+,{$current_ratio}
+,{$fixed_assets}
+,{$total_capital}
+,{$revenue}
+,{$operating_profit}
+,{$income_after_tax}
+,{$debt_equity}
+,now()
+,now()
+,'{$homeip}'
+)";
+	if ($need_logging)
+		write_log("sql.inc - add_finstatements() - sql: ".$sql);
+	try {
+		$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: add_finstatements(), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = true;
+
+	return $retval;
+}
+
+function add_user_info($username, $password, $role = "")
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $homeip;
+	$retval = false;
+	$error_message = false;
+	if (is_auser_exist($username))
+		return $retval;
+	$password_encrypted = password_hash($password, PASSWORD_DEFAULT);
+	try {
+		$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "INSERT INTO users VALUES (0
+,'" . $username . "'
+,'" . $password_encrypted . "'
+,'" . $role . "'
+,now()
+,now()
+,'" . $homeip . "'
+)";
+		//write_log("sql.inc: add_user_info() , query:".$sql);
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: add_user_info(), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = true;
+
+	return $retval;
+}
+
+function is_auser_exist($username) {
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	$retval = false;
+	$error_message = false;
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "SELECT count(username) FROM users WHERE username = ?";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(array($username));
+		$result = $stmt->fetchColumn();
+		if ($result > 0)
+			$retval = true;
+	} catch(PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: is_auser_exist(), " . $error_message);
+	}
+	$pdo = null;
+	return $retval;
+}
+
+function is_atransfer_exist($company_name) {  // 같은 이름의 상호가 있는지 확인
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	$retval = false;
+	$error_message = false;
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "SELECT reg_number FROM transfer WHERE company_name = ?";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(array($company_name));
+		$result = $stmt->fetchColumn();
+	} catch(PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: is_auser_exist(), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = $result;
+	return $retval;
+}
+
+function add_login_log($username)
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $homeip;
+	$retval = false;
+	$error_message = false;
+	try {
+		$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "INSERT INTO users VALUES (0
+,now()
+,'" . $username . "'
+,'" . $homeip . "'
+)";
+		//write_log("sql.inc: add_user_info() , query:".$sql);
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: add_user_info(), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = true;
+
+	return $retval;
+}
+
 function make_test_environments()
 {
+	global $need_logging;
 	$retval = false;
 	if (check_connect_dbserver()) {
 		if (create_tables(true)) {
@@ -483,7 +722,13 @@ function make_test_environments()
 			}
 			if (!$add_error)
 				$retval = true;
+		} else {
+			if ($need_logging)
+				write_log("sql.inc: create_tables(), Failed to create tables.");
 		}
+	} else {
+		if ($need_logging)
+			write_log("sql.inc: create_tables(), Failed to connect db server.");
 	}
 	return $retval;
 }
@@ -493,6 +738,7 @@ function get_transfer_list($filters_array)
 	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $performance_from_year, $need_logging, $config;
 	$retval = false;
 	$error_message = false;
+	$result_list = array();
 	/* 
 	[필터링 할 것 들]
 	업종: sector from performance table
@@ -500,7 +746,9 @@ function get_transfer_list($filters_array)
 	업종 포함 또는 해당 업종만
 	$fiters_array = (
 		'need_filter' => true or false, // 필터가 필요하지 않는 경우 모두로 처리
+		'searchType' => sector, reg_number or company_name,
 		'reg_number' => false or reg_number,
+		'company_name' => company_name,
 		'sectors' => array("업종a", "업종b"),
 		'new_licensed' => true or false,
 		'offset' => number, // page 시작점
@@ -517,14 +765,35 @@ function get_transfer_list($filters_array)
 		$limit = $config['transfer_max_col'];
 
 		if (!$filters_array['need_filter']) { // 필터링 없이 모두
-			$sql = "SELECT *, getSectors(reg_number) as sector_ar, getLicensedYears(reg_number) as licensed_ar, getPerformanceConcat(reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(reg_number, 5, {$performance_from_year}) as sales_five_ar, getAbility(reg_number) as ablility_ar FROM transfer GROUP BY reg_number ORDER BY reg_number DESC";
+			$sql = "SELECT *, getSectors(reg_number) as sector_ar, getLicensedYears(reg_number) as licensed_ar, getPerformanceConcat(reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(reg_number, 5, {$performance_from_year}) as sales_five_ar, getAbility(reg_number) as ablility_ar FROM transfer GROUP BY reg_number ORDER BY reg_number DESC LIMIT {$offset}, {$limit}";
 			if ($need_logging)
-				write_log("query: " . $sql);
-		} else if (isset($filters_array['reg_number']) && $filters_array['reg_number']) { // reg_number 필터링
-			$sql = "SELECT *, getSectors(reg_number) as sector_ar, getLicensedYears(reg_number) as licensed_ar, getPerformanceConcat(reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(reg_number, 5, {$performance_from_year}) as sales_five_ar, getAbility(reg_number) as ablility_ar FROM transfer WHERE reg_number = '{$filters_array['reg_number']}' GROUP BY reg_number ORDER BY reg_number DESC";
+				write_log("sql.inc - get_transfer_list() - query: " . $sql);
+		} else if ($filters_array['searchType'] == "reg_number" && isset($filters_array['reg_number']) && $filters_array['reg_number']) { // reg_number 필터링
+			$sql = "SELECT *, getSectors(reg_number) as sector_ar, getLicensedYears(reg_number) as licensed_ar, getPerformanceConcat(reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(reg_number, 5, {$performance_from_year}) as sales_five_ar, getAbility(reg_number) as ablility_ar FROM transfer WHERE reg_number = '{$filters_array['reg_number']}' GROUP BY reg_number ORDER BY reg_number DESC LIMIT {$offset}, {$limit}";
 			if ($need_logging)
-				write_log("query: " . $sql);
+				write_log("sql.inc - get_transfer_list() - query: " . $sql);
+		} else if ($filters_array['searchType'] == "company_name" && isset($filters_array['company_name']) && $filters_array['company_name']) { // reg_number 필터링
+			$sql = "SELECT *, getSectors(reg_number) as sector_ar, getLicensedYears(reg_number) as licensed_ar, getPerformanceConcat(reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(reg_number, 5, {$performance_from_year}) as sales_five_ar, getAbility(reg_number) as ablility_ar FROM transfer WHERE company_name LIKE '%{$filters_array['company_name']}%' GROUP BY reg_number ORDER BY reg_number DESC LIMIT {$offset}, {$limit}";
+			if ($need_logging)
+				write_log("sql.inc - get_transfer_list() - query: " . $sql);
 		} else if (is_array($filters_array['sectors']) && count($filters_array['sectors']) > 0) { // Sector 필터링
+			if ($filters_array['new_licensed'] && in_array("전문", $filters_array['sectors'])) {
+				$all_pro_sector = get_pro_sectors();
+				$new_sector_array = array();
+				$newi = 0;
+				foreach ($filters_array['sectors'] as $esector) {
+					if ($esector != "전문") {
+						$new_sector_array[$newi] =  $esector;
+						$newi++;
+					}
+				}
+				foreach ($all_pro_sector as $esector) {
+					$new_sector_array[$newi] =  $esector;
+					$newi++;
+				}
+				unset($filters_array['sectors']);
+				$filters_array['sectors'] = $new_sector_array;
+			}
 			$sql_filter = "AND (";
 			for ($i = 0; $i < count($filters_array['sectors']); $i++) {
 				$sql_filter .= "t2.sector = '" . $filters_array['sectors'][$i] . "'";
@@ -534,12 +803,12 @@ function get_transfer_list($filters_array)
 			}
 			$sql_filter .= ")";
 			if ($filters_array['new_licensed']) {  // 신규만 검색하는 경우 (신규는 5년간 실적이 없는 경우)
-				$sql = "SELECT t1.*, getSectors(t1.reg_number) as sector_ar, getLicensedYears(t1.reg_number) as licensed_ar, getPerformanceConcat(t1.reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) as sales_five_ar, getAbility(t1.reg_number) as ablility_ar FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) AND getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) IS NULL GROUP BY t1.reg_number ORDER BY t1.reg_number DESC";
+				$sql = "SELECT t1.*, getSectors(t1.reg_number) as sector_ar, getLicensedYears(t1.reg_number) as licensed_ar, getPerformanceConcat(t1.reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) as sales_five_ar, getAbility(t1.reg_number) as ablility_ar FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) AND getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) = 0 GROUP BY t1.reg_number ORDER BY t1.reg_number DESC LIMIT {$offset}, {$limit}";
 				// sector를 제외한 다른 것들은 모두 t1 으로 해야한다. 
 				if ($need_logging)
-					write_log("query: " . $sql);
+					write_log("sql.inc - get_transfer_list() - query: " . $sql);
 			} else { // 신규와 실적이 있는 것 모두
-				$sql = "SELECT t1.*, getSectors(t1.reg_number) as sector_ar, getLicensedYears(t1.reg_number) as licensed_ar, getPerformanceConcat(t1.reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) as sales_five_ar, getAbility(t1.reg_number) as ablility_ar FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) GROUP BY t1.reg_number ORDER BY t1.reg_number DESC";
+				$sql = "SELECT t1.*, getSectors(t1.reg_number) as sector_ar, getLicensedYears(t1.reg_number) as licensed_ar, getPerformanceConcat(t1.reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) as sales_five_ar, getAbility(t1.reg_number) as ablility_ar FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) GROUP BY t1.reg_number ORDER BY t1.reg_number DESC LIMIT {$offset}, {$limit}";
 				// sector를 제외한 다른 것들은 모두 t1 으로 해야한다. 
 	
 				/* 
@@ -550,7 +819,7 @@ function get_transfer_list($filters_array)
 				*/
 				//$sql = "SELECT t1.*, getSectors(t1.reg_number) as sector_ar, getLicensedYears(t1.reg_number) as licensed_ar, getPerformanceConcat(t1.reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) as sales_five_ar, getAbility(t1.reg_number) as ablility_ar FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} GROUP BY t1.reg_number ORDER BY t1.reg_number";
 				if ($need_logging)
-					write_log("query: " . $sql);
+					write_log("sql.inc - get_transfer_list() - query: " . $sql);
 			}
 		} else { // sector 가 array이 오지 않는 경우 오류 로그와 return false
 			if ($need_logging)
@@ -573,9 +842,13 @@ function get_transfer_list($filters_array)
 			write_log("sql.inc: get_transfer_list(), " . $error_message);
 	}
 	$pdo = null;
-	if (!$error_message)
-		$retval = $result_list;
-
+	if (!$error_message) {
+		if (is_array($result_list) && count($result_list) > 0) {
+			$retval = $result_list;
+		} else {
+			$retval = "no_result";
+		}
+	}
 	return $retval;
 }
 
@@ -587,8 +860,29 @@ function count_transfer_list($filters_array)
 	if (!is_array($filters_array) || !$filters_array['need_filter']) { // 필터링 없이 모두
 		$sql = "SELECT count(sn) FROM transfer";
 		if ($need_logging)
-			write_log("query: " . $sql);
-	} else if (is_array($filters_array['sectors']) && count($filters_array['sectors']) > 0) { // 필터링 필요
+			write_log("sql.inc - count_transfer_list() - query: " . $sql);
+	} else if ($filters_array['searchType'] == "reg_number" && isset($filters_array['reg_number']) && $filters_array['reg_number']) { // reg_number 필터 
+		$sql = "SELECT COUNT(sn) FROM transfer WHERE reg_number = '{$filters_array['reg_number']}'";
+	} else if ($filters_array['searchType'] == "company_name" && isset($filters_array['company_name']) && $filters_array['company_name']) { // company_name 필터
+		$sql = "SELECT COUNT(sn) FROM transfer WHERE company_name LIKE '%{$filters_array['company_name']}%' ";
+	} else if (is_array($filters_array['sectors']) && count($filters_array['sectors']) > 0) { // sectro 필터
+		if ($filters_array['new_licensed'] && in_array("전문", $filters_array['sectors'])) {
+			$all_pro_sector = get_pro_sectors();
+			$new_sector_array = array();
+			$newi = 0;
+			foreach ($filters_array['sectors'] as $esector) {
+				if ($esector != "전문") {
+					$new_sector_array[$newi] =  $esector;
+					$newi++;
+				}
+			}
+			foreach ($all_pro_sector as $esector) {
+				$new_sector_array[$newi] =  $esector;
+				$newi++;
+			}
+			unset($filters_array['sectors']);
+			$filters_array['sectors'] = $new_sector_array;
+		}
 		$sql_filter = "AND (";
 		for ($i = 0; $i < count($filters_array['sectors']); $i++) {
 			$sql_filter .= "t2.sector = '" . $filters_array['sectors'][$i] . "'";
@@ -598,17 +892,17 @@ function count_transfer_list($filters_array)
 		}
 		$sql_filter .= ")";
 		if ($filters_array['new_licensed']) {  // 신규만 검색하는 경우 (신규는 5년간 실적이 없는 경우)
-			$sql = "SELECT COUNT(DISTINCT t1.sn) FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) AND getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) IS NULL";
+			$sql = "SELECT COUNT(DISTINCT t1.sn) FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) AND getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) = 0";
 			if ($need_logging)
-				write_log("query: " . $sql);
+				write_log("sql.inc - count_transfer_list() - query: " . $sql);
 		} else { // 신규와 실적이 있는 것 모두
 			$sql = "SELECT COUNT(DISTINCT t1.sn) FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance)";
 			if ($need_logging)
-				write_log("query: " . $sql);
+				write_log("sql.inc - count_transfer_list() - query: " . $sql);
 		}
 	} else { // sector 가 array이 오지 않는 경우 오류 로그와 return false
 		if ($need_logging)
-			write_log("sql.inc: get_transfer_list(), Need array filter.");
+			write_log("sql.inc: count_transfer_list(), Need array filter.");
 		return $retval;
 	}
 	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
@@ -622,7 +916,7 @@ function count_transfer_list($filters_array)
 	} catch (PDOException $e) {
 		$error_message = $e->getMessage();
 		if ($need_logging)
-			write_log("sql.inc: get_transfer_list(), " . $error_message);
+			write_log("sql.inc: count_transfer_list(), " . $error_message);
 	}
 	$pdo = null;
 	if (!$error_message)
@@ -667,7 +961,7 @@ function get_transfer_info($reg_number = "")
 
 function get_performance_info($reg_number = "")
 {
-	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $performance_from_year, $need_logging;
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $performance_from_year, $performance_last_yesr, $need_logging;
 	$retval = false;
 	$error_message = false;
 
@@ -676,13 +970,13 @@ function get_performance_info($reg_number = "")
 			write_log("sql.inc: get_performance_info({$reg_number}), Need reg_number");
 		return $retval;
 	}
-
+	// SELECT * FROM performance WHERE reg_number = 10004 AND (year > 2022 - 6 AND year <= 2022);
 	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
 	try {
 		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
 		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sql = "SELECT * FROM performance WHERE reg_number = ? AND (year > {$performance_from_year} - 5 AND year <= {$performance_from_year})";
+		$sql = "SELECT * FROM performance WHERE reg_number = ? AND (year > {$performance_last_yesr} - 6 AND year <= {$performance_last_yesr})";
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute(array($reg_number));
 		$userinfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -698,9 +992,170 @@ function get_performance_info($reg_number = "")
 	return $retval;
 }
 
-function modify_transfer_info($modify_info_array = array())
+function remove_performance_info($reg_number)
 {
 	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	$retval = false;
+	$error_message = false;
+
+	if ($reg_number == "") {
+		if ($need_logging)
+			write_log("sql.inc: remove_performance_info(), Need reg_number");
+		return $retval;
+	}
+	// DELETE FROM performance WHERE reg_number = 10004;
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "DELETE FROM performance WHERE reg_number = ?";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(array($reg_number));
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: remove_performance_info({$reg_number}), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = true;
+
+	return $retval;
+}
+
+function remove_finstatements($reg_number)
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	$retval = false;
+	$error_message = false;
+
+	if ($reg_number == "") {
+		if ($need_logging)
+			write_log("sql.inc: remove_finstatements(), Need reg_number");
+		return $retval;
+	}
+	// DELETE FROM performance WHERE reg_number = 10004;
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "DELETE FROM finstatements WHERE reg_number = ?";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(array($reg_number));
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: remove_finstatements({$reg_number}), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = true;
+
+	return $retval;
+}
+
+function remove_transfer($reg_number)
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	$retval = false;
+	$error_message = false;
+
+	if ($reg_number == "") {
+		if ($need_logging)
+			write_log("sql.inc: remove_transfer(), Need reg_number");
+		return $retval;
+	}
+	// DELETE FROM performance WHERE reg_number = 10004;
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "DELETE FROM transfer WHERE reg_number = ?";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(array($reg_number));
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: remove_transfer({$reg_number}), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = true;
+
+	return $retval;
+}
+
+function get_finstatements($reg_number = "")
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	$retval = false;
+	$error_message = false;
+
+	if ($reg_number == "") {
+		if ($need_logging)
+			write_log("sql.inc: get_finstatements({$reg_number}), Need reg_number");
+		return $retval;
+	}
+
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "SELECT * FROM finstatements WHERE reg_number = ?";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(array($reg_number));
+		$userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: get_finstatements({$reg_number}), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = $userinfo;
+
+	return $retval;
+}
+
+function get_user_info($username)
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $performance_from_year, $performance_last_yesr, $need_logging;
+	$retval = false;
+	$error_message = false;
+	if ($username == "") {
+		if ($need_logging)
+			write_log("sql.inc: get_user_info({$username}), Need username");
+		return $retval;
+	}
+	// SELECT * FROM performance WHERE username = 10004 AND (year > 2022 - 6 AND year <= 2022);
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "SELECT * FROM users WHERE username = ?";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(array($username));
+		$userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: get_user_info({$username}), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = $userinfo;
+
+	return $retval;
+}
+
+function modify_transfer_info($modify_info_array = array())
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $homeip;
 	$retval = false;
 	$error_message = false;
 	/*
@@ -748,7 +1203,8 @@ phone = '" . $modify_info_array['phone'] . "',
 mobile = '" . $modify_info_array['mobile'] . "',
 tag = '" . $modify_info_array['tag'] . "',
 note = '" . $modify_info_array['note'] . "',
-modfied_date = now()
+modfied_date = now(),
+homeip = '" . $homeip . "'
 WHERE reg_number = '" . $modify_info_array['reg_number'] . "'";
 
 		$stmt = $pdo->prepare($sql);
@@ -767,7 +1223,7 @@ WHERE reg_number = '" . $modify_info_array['reg_number'] . "'";
 
 function modify_performance_info($modify_info_array = array())
 {
-	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $homeip;
 	$retval = false;
 	$error_message = false;
 	/*
@@ -792,7 +1248,8 @@ year_licensed = '" . $modify_info_array['year_licensed'] . "',
 construction_ability = '" . $modify_info_array['construction_ability'] . "',
 annual_sales = '" . $modify_info_array['annual_sales'] . "',
 year = '" . $modify_info_array['year'] . "',
-modfied_date = now()
+modfied_date = now(),
+homeip = '" . $homeip . "'
 WHERE sn = '" . $modify_info_array['sn'] . "' AND reg_number = '" . $modify_info_array['reg_number'] . "'";
 
 		//write_log("sql.inc: add_performance_list() , query:".$sql);
@@ -802,6 +1259,90 @@ WHERE sn = '" . $modify_info_array['sn'] . "' AND reg_number = '" . $modify_info
 		$error_message = $e->getMessage();
 		if ($need_logging)
 			write_log("sql.inc: add_performance_list(), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = true;
+
+	return $retval;
+}
+
+function modify_finstatements($modify_info_array = array())
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $homeip;
+	$retval = false;
+	$error_message = false;
+	/*
+	$modify_info_array = (
+	'reg_number' => $reg_number,
+	'debt_ratio' => $debt_ratio,
+	'fixed_debt' => $fixed_debt,
+	'current_ratio' => $current_ratio,
+	'fixed_assets' => $fixed_assets,
+	'total_capital' => $total_capital,
+	'revenue' => $revenue,
+	'operating_profit' => $operating_profit,
+	'income_after_tax' => $income_after_tax,
+	'debt_equity' => $debt_equity
+	)
+	*/
+	try {
+		$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "UPDATE finstatements SET
+debt_ratio = '" . $modify_info_array['debt_ratio'] . "',
+fixed_debt = '" . $modify_info_array['fixed_debt'] . "',
+current_ratio = '" . $modify_info_array['current_ratio'] . "',
+fixed_assets = '" . $modify_info_array['fixed_assets'] . "',
+total_capital = '" . $modify_info_array['total_capital'] . "',
+revenue = '" . $modify_info_array['revenue'] . "',
+operating_profit = '" . $modify_info_array['operating_profit'] . "',
+income_after_tax = '" . $modify_info_array['income_after_tax'] . "',
+debt_equity = '" . $modify_info_array['debt_equity'] . "',
+modfied_date = now(),
+homeip = '" . $homeip . "'
+WHERE reg_number = '" . $modify_info_array['reg_number'] . "'";
+
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: modify_finstatements(), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = true;
+
+	return $retval;
+}
+
+function modify_user_info($username, $password, $role = "")
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $homeip;
+	$retval = false;
+	$error_message = false;
+	$password_encrypted = password_hash($password, PASSWORD_DEFAULT);
+	try {
+		$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "UPDATE users SET
+password = '" . $password_encrypted . "',
+role = '" . $role . "',
+modfied_date = now(),
+homeip = '" . $homeip . "'
+WHERE username = '" . $username . "'";
+
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: modify_finstatements(), " . $error_message);
 	}
 	$pdo = null;
 	if (!$error_message)
@@ -827,22 +1368,29 @@ function get_other_sectors() {
 	$retval = false;
 	$error_message = false;
 	$pro_constructor = get_pro_sectors();
-	$all_sectors = array_merge($config['constructor_type_filter'], $config['new_constructor_type_filter'], $pro_constructor);
-	$all_unique_sectors = array_unique($all_sectors);
+	$all_sectors_array = array();
+	$sectori = 0;
+	foreach($config['constructor_type_filter'] as $esector) {
+		$all_sectors_array[$sectori] = $esector;
+		$sectori++;
+	}
+	foreach($pro_constructor as $esector) {
+		$all_sectors_array[$sectori] = $esector;
+		$sectori++;
+	}
+	//$all_sectors_array = array_unique($all_sectors_array);
 	$exits_sectors = "(";
-	for ($i = 0; $i < count($all_unique_sectors); $i++) {
-		if (isset($all_unique_sectors[$i])) {
-			$exits_sectors .= "'" . $all_unique_sectors[$i] . "'";
-			if ($i < (count($all_unique_sectors) - 1)) {
-				$exits_sectors .= ", ";
-			}
+	for ($i = 0; $i < count($all_sectors_array); $i++) {
+		$exits_sectors .= "'" . $all_sectors_array[$i] . "'";
+		if ($i < (count($all_sectors_array) - 1)) {
+			$exits_sectors .= ", ";
 		}
 	}
 	$exits_sectors .= ")";
 
-	$sql = "SELECT sector FROM performance WHERE sector NOT IN ".$exits_sectors;
+	$sql = "SELECT DISTINCT sector FROM performance WHERE sector NOT IN ".$exits_sectors;
 	if ($need_logging)
-	write_log("sql: " . $sql);
+		write_log("sql.inc - get_other_sectors() - sql: " . $sql);
 
 	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
 	try {
@@ -851,7 +1399,7 @@ function get_other_sectors() {
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
-		$other_sectors = $stmt->fetch(PDO::FETCH_ASSOC);
+		$other_sectors = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 	} catch (PDOException $e) {
 		$error_message = $e->getMessage();
 		if ($need_logging)
@@ -861,6 +1409,100 @@ function get_other_sectors() {
 	if (!$error_message)
 		$retval = $other_sectors;
 
+	return $retval;
+}
+
+/* 
++----+------------+--------+---------------+----------------------+--------------+------+---------------------+---------------------+
+| sn | reg_number | sector | year_licensed | construction_ability | annual_sales | year | created_date        | modfied_date        |
++----+------------+--------+---------------+----------------------+--------------+------+---------------------+---------------------+
+|  1 |      10001 | 건축   |          2006 |                 4500 |          456 | 2022 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+|  2 |      10001 | 건축   |          2006 |                 4500 |          300 | 2021 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+|  3 |      10001 | 건축   |          2006 |                 4500 |          250 | 2020 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+|  4 |      10001 | 건축   |          2006 |                 4500 |          200 | 2019 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+|  5 |      10001 | 건축   |          2006 |                 4500 |          150 | 2018 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+|  6 |      10001 | 건축   |          2006 |                 4500 |          200 | 2017 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+| 12 |      10001 | 토목   |          2007 |                 6500 |          240 | 2017 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+| 11 |      10001 | 토목   |          2007 |                 6500 |          300 | 2018 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+| 10 |      10001 | 토목   |          2007 |                 6500 |          110 | 2019 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+|  9 |      10001 | 토목   |          2007 |                 6500 |          400 | 2020 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+|  8 |      10001 | 토목   |          2007 |                 6500 |          300 | 2021 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+|  7 |      10001 | 토목   |          2007 |                 6500 |          256 | 2022 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
+| 13 |      10001 | 토목   |          2007 |                 6500 |          190 | 2016 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
++----+------------+--------+---------------+----------------------+--------------+------+---------------------+---------------------+
+*/
+
+function transfer_info_per_sector($performance_info_array)
+{
+	global $performance_from_year, $need_logging;
+	$retval = false;
+	if (!is_array($performance_info_array)) {
+		if ($need_logging)
+			write_log("sql.inc: performance_sum_per_sector({$performance_info_array}), Need reg_number");
+		return $retval;
+	}
+	$transfer_sector_array = array();
+	$pre_sector = "";
+	$sectori = -1;
+	$for_three_year_sum = 0;
+	$for_five_year_sum = 0;
+	foreach($performance_info_array as $eperformance) {
+		if ($eperformance['sector'] != $pre_sector) {
+			$for_three_year_sum = 0;
+			$for_five_year_sum = 0;
+			$sectori++;
+			$pre_sector = $eperformance['sector'];
+			$transfer_sector_array[$sectori]['sector'] = $eperformance['sector'];
+			$transfer_sector_array[$sectori]['year_licensed'] = $eperformance['year_licensed'];
+			$transfer_sector_array[$sectori]['construction_ability'] = $eperformance['construction_ability'];
+			$transfer_sector_array[$sectori]['sales'][$eperformance['year']] = $eperformance['annual_sales'];
+			if ($eperformance['year'] <= $performance_from_year && $eperformance['year'] > $performance_from_year - 5) {
+				$for_five_year_sum = $for_five_year_sum + $eperformance['annual_sales'];
+				$transfer_sector_array[$sectori]['five_year'] = $for_five_year_sum;
+			}
+			if ($eperformance['year'] <= $performance_from_year && $eperformance['year'] > $performance_from_year - 3) {
+				$for_three_year_sum = $for_three_year_sum + $eperformance['annual_sales'];
+				$transfer_sector_array[$sectori]['three_year'] = $for_three_year_sum;
+			}
+		} else {
+			$transfer_sector_array[$sectori]['sales'][$eperformance['year']] = $eperformance['annual_sales'];
+			if ($eperformance['year'] <= $performance_from_year && $eperformance['year'] > $performance_from_year - 5) {
+				$for_five_year_sum = $for_five_year_sum + $eperformance['annual_sales'];
+				$transfer_sector_array[$sectori]['five_year'] = $for_five_year_sum;
+			}
+			if ($eperformance['year'] <= $performance_from_year && $eperformance['year'] > $performance_from_year - 3) {
+				$for_three_year_sum = $for_three_year_sum + $eperformance['annual_sales'];
+				$transfer_sector_array[$sectori]['three_year'] = $for_three_year_sum;
+			}
+		}
+	}
+	if (count($transfer_sector_array) > 0) {
+		$retval = $transfer_sector_array;
+	}
+	return $retval;
+}
+
+function get_new_regnumber() {
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	$retval = false;
+	$error_message = false;
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "SELECT MAX(reg_number) FROM transfer;";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchColumn();
+		if ($result)
+			$retval = $result + 1; 
+	} catch(PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: get_new_regnumber(), " . $error_message);
+	}
+	$pdo = null;
 	return $retval;
 }
 

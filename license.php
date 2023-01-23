@@ -18,7 +18,7 @@ include("header.inc");
 ?>
 
 <!-- Masthead-->
-<header class="subhead text-center transfer-bg-img2">
+<header class="subhead text-center transfer-bg-img2 text-secondary">
 	<div class="container">
 		<h1 class="subhead-heading">건설업 면허 등록 기준</h1>
 		<p class="subhead-subheading">면허 등록 기준 페이지입니다.</p>
@@ -110,7 +110,7 @@ include("header.inc");
 		<!-- About Section Content-->
 		<div class="row">
 			<div class="col-lg-4 ms-auto">
-				<p class="lead">Freelancer is a free bootstrap theme created by Start Bootstrap. The download includes the complete source files including HTML, CSS, and JavaScript as well as optional SASS stylesheets for easy customization.</p>
+				<p class="lead">Freelancer is a free printdesign theme created by Start printdesign. The download includes the complete source files including HTML, CSS, and JavaScript as well as optional SASS stylesheets for easy customization.</p>
 			</div>
 			<div class="col-lg-4 me-auto">
 				<p class="lead">You can create your own custom avatar for the masthead, change the icon in the dividers, and add your email address to the contact form to make it fully functional!</p>
@@ -118,7 +118,7 @@ include("header.inc");
 		</div>
 		<!-- About Section Button-->
 		<div class="text-center mt-4">
-			<a class="btn btn-xl btn-outline-light" href="https://startbootstrap.com/theme/freelancer/">
+			<a class="btn btn-xl btn-outline-light" href="#">
 				<i class="fas fa-download me-2"></i>
 				Free Download!
 			</a>

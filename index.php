@@ -18,14 +18,14 @@ include("header.inc");
 ?>
 
 <!-- Masthead-->
-<div id="carouselMasthead" class="carousel slide" data-bs-ride="carousel" data-bs-pause="none">
+<div id="carouselMasthead" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-pause="none">
 	<div class="carousel-indicators">
 		<button type="button" data-bs-target="#carouselMasthead" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
 		<button type="button" data-bs-target="#carouselMasthead" data-bs-slide-to="1" aria-label="Slide 2"></button>
 		<button type="button" data-bs-target="#carouselMasthead" data-bs-slide-to="2" aria-label="Slide 3"></button>
 	</div>
 	<div class="carousel-inner">
-		<header class="carousel-item active mastheadcarousel back-img01" data-bs-interval="4000">
+		<header class="carousel-item active mastheadcarousel back-img01" data-bs-interval="6000">
 			<div class="carousel-caption d-flex align-items-center flex-column">
 				<!-- <div class="d-flex align-items-center flex-column"> -->
 				<!-- Icon Divider-->
@@ -45,15 +45,13 @@ include("header.inc");
 				<div class="row justify-content-md-center gy-3 mt-md-5">
 					<div class="col"><a href="<?= $config['page_files']['양도양수'] ?>"><img class="my_img" src="assets/img/go1.svg"></a></div>
 					<div class="col"><a href="<?= $config['page_files']['면허등록기준'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
-					<?php
-					// <div class="col d-none d-md-block" data-bs-toggle="modal" data-bs-target="#inquirykModal"><img class="my_img" src="assets/img/go3.svg"></div> 
-					?>
-					<div class="col d-none d-md-block"><a href="/contact.php"><img class="my_img" src="assets/img/go3.svg"></a></div>
+					<div class="col d-none d-md-block" data-bs-toggle="modal" data-bs-target="#inquiryModal"><img class="my_img" src="assets/img/go3.svg"></div> 
+					<?php //<div class="col d-none d-md-block"><a href="/contact.php"><img class="my_img" src="assets/img/go3.svg"></a></div>?>
 				</div>
 				<!-- </div> -->
 			</div>
 		</header>
-		<header class="carousel-item mastheadcarousel back-img02" data-bs-interval="4000">
+		<header class="carousel-item mastheadcarousel back-img02" data-bs-interval="6000">
 			<div class="carousel-caption d-flex align-items-center flex-column">
 				<!-- <div class="d-flex align-items-center flex-column"> -->
 				<!-- Icon Divider-->
@@ -73,12 +71,12 @@ include("header.inc");
 				<div class="row justify-content-md-center gy-3 mt-md-5">
 					<div class="col"><a href="<?= $config['page_files']['양도양수'] ?>"><img class="my_img" src="assets/img/go1.svg"></a></div>
 					<div class="col"><a href="<?= $config['page_files']['면허등록기준'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
-					<div class="col d-none d-md-block"><a href="/contact.php"><img class="my_img" src="assets/img/go3.svg"></a></div>
+					<div class="col d-none d-md-block" data-bs-toggle="modal" data-bs-target="#inquiryModal"><img class="my_img" src="assets/img/go3.svg"></div> 
 				</div>
 				<!-- </div> -->
 			</div>
 		</header>
-		<header class="carousel-item mastheadcarousel back-img03" data-bs-interval="4000">
+		<header class="carousel-item mastheadcarousel back-img03" data-bs-interval="6000">
 			<div class="carousel-caption d-flex align-items-center flex-column">
 				<!-- <div class="d-flex align-items-center flex-column"> -->
 				<!-- Icon Divider-->
@@ -98,7 +96,7 @@ include("header.inc");
 				<div class="row justify-content-md-center gy-3 mt-md-5">
 					<div class="col"><a href="<?= $config['page_files']['양도양수'] ?>"><img class="my_img" src="assets/img/go1.svg"></a></div>
 					<div class="col"><a href="<?= $config['page_files']['면허등록기준'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
-					<div class="col d-none d-md-block"><a href="/contact.php"><img class="my_img" src="assets/img/go3.svg"></a></div>
+					<div class="col d-none d-md-block" data-bs-toggle="modal" data-bs-target="#inquiryModal"><img class="my_img" src="assets/img/go3.svg"></div> 
 				</div>
 				<!-- </div> -->
 			</div>

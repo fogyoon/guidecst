@@ -5,6 +5,10 @@
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
 
+.copyright {
+    font-size: 0.9rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.footer-link {
 		transition: none;
@@ -229,6 +233,7 @@
 
 .transfer-bg-img2 {
 	background-image: url("../assets/img/transfer_header02.jpg");
+	
 }
 
 .transfer-bg-img3 {
@@ -303,6 +308,27 @@
 
 .select-table {
 	font-size: 0.9rem;
+}
+
+.transfer-border {
+	border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #7d8d9d;
+    border-color: #7d8d9d;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    color: #848f99;
+    text-decoration: none;
+    background-color: #fff;
+    border: 0.125rem solid #dee2e6;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 /* fransfer table END */

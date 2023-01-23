@@ -36,7 +36,8 @@
 	--bs-gray-900: #212529;
 	--bs-primary: #a5dbff;
 	--bs-secondary: #2c3e50;
-	--bs-success: #5f8ed0;
+	/* --bs-success: #5f8ed0; */
+	--bs-success: #198754;
 	--bs-info: #0dcaf0;
 	--bs-warning: #ffc107;
 	--bs-danger: #dc3545;
@@ -6424,6 +6425,11 @@ fieldset:disabled .btn {
 
 	.modal-sm {
 		max-width: 300px;
+	}
+
+	.modal-lg,
+	.modal-xl {
+		max-width: 620px;
 	}
 }
 

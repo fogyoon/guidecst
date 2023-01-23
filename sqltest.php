@@ -11,6 +11,9 @@ $error_log = false;
 if (!check_connect_dbserver()) {
 	$error_log = read_log();
 } else {
+	//create_my_function();
+	//make_test_environments();
+
 	//$en_result = make_test_environments();
 	/* 
 	$fiters_array = (
@@ -20,13 +23,15 @@ if (!check_connect_dbserver()) {
 		'includeOronly' =>  true or false // 이거는 필요 없을 듯
 	)
 	$filters_array = array('need_filter' => true, 'sectors' => array("토목","조경"), 'new_licensed' => false);
-	$result = get_transfer_list($filters_array);
+	$result_array = get_transfer_list($filters_array);
 	 */
-	$filters_array = array('need_filter' => true, 'sectors' => array("토목","건축"), 'new_licensed' => false);
+	//$filters_array = array('need_filter' => false, 'sectors' => array("토목","건축"), 'new_licensed' => false, 'offset' => 1);
 	//$reg_number = "10001";
 	$no_col = count_transfer_list($filters_array);
-	$result = get_transfer_list($filters_array);
-	$error_log = read_log();
+	//$result_array = get_transfer_list($filters_array);
+	//$error_log = read_log();
+	add_user_info("uoneinfo", "u8rt*gn30", "admin");
+
 }
 
 //head와 로고, navbar는 아래 파일에서 수정하세요.
@@ -45,7 +50,7 @@ include("header.inc");
 <?php if ($error_log) : ?>
 	<section>
 		<div class="container">
-			<h3><?php echo $result; ?></h3>
+			<p><?php print_r($result_array); ?></p>
 			<p><?php echo $error_log; ?></p>
 		</div>
 	</section>
@@ -54,10 +59,10 @@ include("header.inc");
 <!-- Portfolio Section-->
 <section class="page-section portfolio" id="portfolio">
 	<div class="container">
-		<h1>Total: <?=$no_col?></h1>
+		<h1>Total: <?=$no_col?> (homeip: <?=$homeip?>)</h1>
 		<?php
-		if (is_array($result) && count($result) > 0) {
-			foreach ($result as $eachar) {
+		if (is_array($result_array) && count($result_array) > 0) {
+			foreach ($result_array as $eachar) {
 				foreach ($eachar as $key => $value) {
 					echo $key . "^" . $value . " ";
 				}

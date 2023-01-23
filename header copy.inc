@@ -15,7 +15,7 @@
 	<meta property="og:title" content="<?= $title ?>">
 	<meta property="og:description" content="<?= $description ?>">
 	<meta property="og:image" content="http://www.guideconsulting.co.kr/assets/img/G_Logo.svg">
-	<meta property="og:url" content="http://<?= $config['home_url'] ?><?php echo $_SERVER['PHP_SELF']; ?>">
+	<meta property="og:url" content="<?= $config['full_url'] ?><?php echo $_SERVER['PHP_SELF']; ?>">
 	<meta name="naver-site-verification" content="" />
 	<meta name="msvalidate.01" content="" />
 	<link rel="apple-touch-icon" href="assects/apple-touch-icon.png" />

@@ -6,6 +6,7 @@ image_working/
 *.[oa]
 .vscode/
 phperror.log
+test.php
 .DS_Store
 *.log
 *.apk

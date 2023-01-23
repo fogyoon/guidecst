@@ -24,107 +24,107 @@ include("header.inc");
 		<p class="subhead-subheading">연말 정산 / 잔고 증명 페이지입니다.</p>
 	</div>
 </header>
-
 <!-- Portfolio Section-->
-<section class="page-section portfolio" id="portfolio">
+<section class="page-section portfolio mb-0" id="portfolio">
 	<div class="container">
 		<!-- Portfolio Section Heading-->
-		<h2 class="page-section-heading text-center text-uppercase text-secondary mb-0 sr-icon-1">WHAT WE DO</h2>
-		<!-- Icon Divider-->
-		<div class="divider-custom">
-			<div class="divider-custom-line"></div>
-			<div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-			<div class="divider-custom-line"></div>
-		</div>
-		<!-- Portfolio Grid Items-->
-		<div class="row justify-content-center">
-			<!-- Portfolio Item 1-->
-			<div class="col-md-6 col-lg-4 mb-5">
-				<div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
-					<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-						<div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-					</div>
-					<img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="..." />
-				</div>
-			</div>
-			<!-- Portfolio Item 2-->
-			<div class="col-md-6 col-lg-4 mb-5">
-				<div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal2">
-					<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-						<div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-					</div>
-					<img class="img-fluid" src="assets/img/portfolio/cake.png" alt="..." />
-				</div>
-			</div>
-			<!-- Portfolio Item 3-->
-			<div class="col-md-6 col-lg-4 mb-5">
-				<div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal3">
-					<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-						<div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-					</div>
-					<img class="img-fluid" src="assets/img/portfolio/circus.png" alt="..." />
-				</div>
-			</div>
-			<!-- Portfolio Item 4-->
-			<div class="col-md-6 col-lg-4 mb-5 mb-lg-0">
-				<div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal4">
-					<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-						<div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-					</div>
-					<img class="img-fluid" src="assets/img/portfolio/game.png" alt="..." />
-				</div>
-			</div>
-			<!-- Portfolio Item 5-->
-			<div class="col-md-6 col-lg-4 mb-5 mb-md-0">
-				<div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal5">
-					<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-						<div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-					</div>
-					<img class="img-fluid" src="assets/img/portfolio/safe.png" alt="..." />
-				</div>
-			</div>
-			<!-- Portfolio Item 6-->
-			<div class="col-md-6 col-lg-4">
-				<div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal6">
-					<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-						<div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-					</div>
-					<img class="img-fluid" src="assets/img/portfolio/submarine.png" alt="..." />
-				</div>
-			</div>
-		</div>
+        <div class="row gx-0 mb-lg-0 justify-content-center">
+            <div class="col-lg-6"><img class="img-fluid" src="assets/img/6-01.jpg" alt="..." /></div>
+            <div class="col-lg-6">
+                <div class="bg-black bg-opacity-50 text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-left p-4">
+                            <h4 class="text-white text-M sr-icon-4">자본금 계정별 인정기준</h4>
+                            <p class="mb-0 text-white-50" style="font-size:1.2rem;">건설업 연말결산 자본금 안내
+건설업체에 대한 자본금 등록기준 부실업체의 상시정검하는 시스템의 강화로 인하여 행정처분을 받는 사례가 빈번하게 발생되고 잇습니다. 하여 수시로 건설업 관리규정에 의한 실질 자본금 인정기준을 확인하여 자본금 미달이 발생하지 않도록 대비하셔야 합니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
 	</div>
 </section>
 
-<!-- About Section-->
+
+
+
+
 <section class="page-section bg-primary text-white mb-0" id="about">
 	<div class="container">
 		<!-- About Section Heading-->
-		<h2 class="page-section-heading text-center text-uppercase text-white sr-icon-1">VISION OF US</h2>
+		<h2 class="project-text text-center text-M text-white sr-icon-1">기업진단이 필요할 때</h2>
 		<!-- Icon Divider-->
 		<div class="divider-custom divider-light">
 			<div class="divider-custom-line"></div>
 			<div class="divider-custom-icon"><i class="fas fa-star"></i></div>
 			<div class="divider-custom-line"></div>
 		</div>
-		<!-- About Section Content-->
-		<div class="row">
-			<div class="col-lg-4 ms-auto">
-				<p class="lead">Freelancer is a free bootstrap theme created by Start Bootstrap. The download includes the complete source files including HTML, CSS, and JavaScript as well as optional SASS stylesheets for easy customization.</p>
-			</div>
-			<div class="col-lg-4 me-auto">
-				<p class="lead">You can create your own custom avatar for the masthead, change the icon in the dividers, and add your email address to the contact form to make it fully functional!</p>
-			</div>
-		</div>
-		<!-- About Section Button-->
-		<div class="text-center mt-4">
-			<a class="btn btn-xl btn-outline-light" href="https://startbootstrap.com/theme/freelancer/">
-				<i class="fas fa-download me-2"></i>
-				Free Download!
-			</a>
-		</div>
-	</div>
+
+		<table class="table table-striped text-L bg-white table-bordered text-center" style="line-height: 2.5rem;">
+			<thead>
+				<tr>
+				    <th scope="col">자산항목</th>
+					<th scope="col">실질자산 인정여부</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>현금</td>
+<td>
+자본 총계의 100분의 1을 초과하는 현금은 부실자산
+</td>
+				</tr>
+				<tr>
+					<td>예금</td>
+					<td>일시조달예금, 허위예금, 사용이 제한된 예금(질권설정, 인출제한 등) 불인정<br>
+- 결산일 기준 잔액증명서와 결산일 포함한 60일간 거래실적증명 확인<br>
+단 경영상 경영자금으로 진행된 사업비는 증빙확인을 통해 차감하지 아니함</td>
+				</tr>
+				<tr>
+					<td>항목</td>
+					<td>내용</td>
+				</tr>
+				<tr>
+					<td>항목</td>
+					<td>내용</td>
+				</tr>
+				<tr>
+					<td>항목</td>
+					<td>내용</td>
+				</tr>
+				<tr>
+					<td>항목</td>
+					<td>내용</td>
+				</tr>
+				<tr>
+					<td>항목</td>
+					<td>내용</td>
+				</tr>
+			</tbody>
+		</table>
+
+		(신설법인과 기존법인의 기업진단발급 구비서류는 다소 차이가 있을 수 있습니다.)
+
+
+
+    </div>
 </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

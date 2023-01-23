@@ -177,14 +177,19 @@
 </footer>
 <!-- Copyright Section-->
 <div class="copyright py-4 text-center text-white">
-	<div class="container">
-		<small>Copyright &copy; 2022 <?= $config['company_en_name'] ?>. ALL RIGHT RESERVED
-			<div class="row justify-content-center mt-2">
-				<div class="col col-lg-2 col-md-4"><a class="footer-link" id="PrivacyPlicy_link" class="footer_link" data-bs-toggle="modal" data-bs-target="#PrivacyPlicy">개인정보처리방침</a></div>
-				|
-				<div class="col col-lg-2 col-md-4"><a class="footer-link" id="emailCollectionReject_link" class="footer_link" data-bs-toggle="modal" data-bs-target="#emailCollectionReject">이메일무단수집거부</a></div>
+	<div class="container text-cetner">
+		<div class="row">
+			<div class="col-12 mb-2">Copyright &copy; 2022 <?= $config['company_en_name'] ?>. ALL RIGHT RESERVED</div>
+			<div class="col-12">
+				<nav style="--bs-breadcrumb-divider: '|';" aria-label="breadcrumb">
+					<ol class="breadcrumb d-flex flex-row justify-content-center">
+						<li class="breadcrumb-item d-flex "><a class="footer-link" id="PrivacyPlicy_link" class="footer_link" data-bs-toggle="modal" data-bs-target="#PrivacyPlicy" style="cursor: pointer">개인정보처리방침</a></li>
+						<li class="breadcrumb-item d-flex "><a class="footer-link" id="emailCollectionReject_link" class="footer_link" data-bs-toggle="modal" data-bs-target="#emailCollectionReject" style="cursor: pointer">이메일무단수집거부</a></li>
+						<li class="breadcrumb-item d-flex "><a class="footer-link" id="singin_link" class="footer_link" data-bs-toggle="modal" data-bs-target="#signinModal" style="cursor: pointer"><?php if(!$userlogin) echo "관리자 로그인"; else echo "관리자 비밀번호 변경";?></a></li>
+					</ol>
+				</nav>
 			</div>
-		</small>
+		</div>
 	</div>
 </div>
 
@@ -223,11 +228,11 @@
 </div>
 
 <!-- 문의하기 modal -->
-<div class="modal fade" id="inquirykModal" tabindex="-1" aria-labelledby="inquirykModalLabel" aria-hidden="true">
+<div class="modal fade" id="inquiryModal" tabindex="-1" aria-labelledby="inquiryModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
-		<div class="modal-content px-md-3 px-lg-5 py-3" id="inquirykModalContent">
+		<div class="modal-content px-md-3 px-lg-5 py-3" id="inquiryModalContent">
 			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="inquirykModalLabel">문의하실 내용을 입력해 보내주시면 연락 드리겠습니다.</h1>
+				<h1 class="modal-title fs-5" id="inquiryModalLabel">문의하실 내용을 입력해 보내주시면 연락 드리겠습니다.</h1>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -248,7 +253,7 @@
 					</div>
 					<!-- Phone number input-->
 					<div class="form-floating mb-3">
-						<input name="" class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" required />
+						<input name="inquiryPhone" class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" required />
 						<label for="phone">전화번호</label>
 					</div>
 					<!-- Email address input-->
@@ -262,7 +267,7 @@
 						<label for="message">문의 내용</label>
 					</div>
 					<!-- Submit Button-->
-					<button class="btn btn-primary" style="display: block; margin-left: auto; margin-right: auto;" id="submitButton" type="submit">문의 내용 보내기</button>
+					<button class="btn btn-primary" style="display: block; margin-left: auto; margin-right: auto;" id="inquirySendButton" type="submit" name="send_inquiry">문의 내용 보내기</button>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -272,11 +277,142 @@
 	</div>
 </div>
 
+<!-- 문의하기 결과 modal -->
+<div class="modal fade" id="inquiryResultModal" tabindex="-1" aria-labelledby="inquiryResultModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content px-md-3 px-lg-5 py-3" id="inquiryResultModalContent">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="inquiryResultModalLabel">상담 문의 전송 결과</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="d-flex align-items-center  justify-content-center">
+					<div>
+						<?php if($send_inquiry_result) {
+							echo "<div class='mb-2'>접수되었습니다.</div><div>빠른 시간내에 연락드리겠습니다.</div>";
+						} else {
+							echo "<div class='mb-2'>죄송합니다. 전송에 실패했습니다.</div><div>잠시 후 다시 이용 부탁드립니다.</div>";
+						}?>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- sign in modal -->
+<div class="modal fade" id="signinModal" tabindex="-1" aria-labelledby="signinModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content px-md-3 px-lg-5 py-3" id="signinModalContent">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="signinModalLabel"><?php if($userlogin) echo "관리자 비밀번호 변경"; else echo "관리자 로그인";?></h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="signinForm" action="loginprocess.php" method="post">
+					<?php if($userlogin):?>
+						<input type="hidden" name="action" value="changepass">
+						<input type="hidden" name="return_page" value="<?php if($thispage_filename == $config['page_other_files']['양도양수정보']) echo $config['page_files']['양도양수']; else echo $thispage_filename;?>">
+						<div class="form-floating mb-3">
+							<input name="username" class="form-control" id="signinname" type="text" placeholder="아이디..." required />
+							<label for="signinname">아이디</label>
+						</div>
+						<div class="form-floating mb-3">
+							<input name="password" class="form-control" id="signinpass" type="password" placeholder="비밀번호..." required />
+							<label for="signinpass">비밀번호</label>
+						</div>
+						<div class="form-floating mb-3">
+							<input name="password1" class="form-control" id="signinpass1" type="password" placeholder="비밀번호..." required />
+							<label for="signinpass">새 비밀번호 입력</label>
+						</div>
+						<div class="form-floating mb-3">
+							<input name="password2" class="form-control" id="signinpass2" type="password" placeholder="비밀번호..." required />
+							<label for="signinpass">새 비밀번호 한번더 입력</label>
+						</div>
+						<!-- Submit Button-->
+						<button class="btn btn-primary" style="display: block; margin-left: auto; margin-right: auto;" id="signinButton" type="submit" name="signin">비밀번호 변경</button>
+					<?php else:?>
+						<input type="hidden" name="action" value="login">
+						<input type="hidden" name="return_page" value="<?php if($thispage_filename == $config['page_other_files']['양도양수정보']) echo $config['page_files']['양도양수']; else echo $thispage_filename;?>">
+						<div class="form-floating mb-3">
+							<input name="username" class="form-control" id="signinname" type="text" placeholder="아이디..." required />
+							<label for="signinname">아이디</label>
+						</div>
+						<div class="form-floating mb-3">
+							<input name="password" class="form-control" id="signinpass" type="password" placeholder="비밀번호..." required />
+							<label for="signinpass">비밀번호</label>
+						</div>
+						<!-- Submit Button-->
+						<button class="btn btn-primary" style="display: block; margin-left: auto; margin-right: auto;" id="signinButton" type="submit" name="signin">로그인</button>
+					<?php endif;?>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Signin 결과 modal -->
+<?php if ($signinresult):?>
+<div class="modal fade" id="singinResultModal" tabindex="-1" aria-labelledby="singinResultModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content px-md-3 px-lg-5 py-3" id="singinResultModalContent">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="singinResultModalLabel"><?php if($signinresult == $singinfail) echo "로그인 결과"; else echo "비밀번호 변경 결과";?></h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="d-flex align-items-center  justify-content-center">
+					<div>
+						<?php 
+						if($signinresult == $singinfail) {
+							echo "<div class='mb-2'>로그인에 실패했습니다.</div>";
+						} else if($signinresult == $passchangefail) {
+							echo "<div class='mb-2'>비밀번호 변경에 실패했습니다.</div><div>죄송합니다. 잠시 후 다시 이용 부탁드립니다.</div>";
+						} else if($signinresult == $passchangefaillogin) {
+							echo "<div class='mb-2'>비밀번호 변경에 실패했습니다.</div><div>기존 로그인 정보가 정확하지 않습니다.</div>";
+						} else if($signinresult == $passchangediff) {
+							echo "<div class='mb-2'>새로 입력한 두개의 비밀번호가 일치하지 않습니다.</div>";
+						} else if($signinresult == $passchangesuccess) {
+							echo "<div class='mb-2'>비밀번호가 성공적으로 변경되었습니다.</div><div>새 비밀번호로 다시 로그인하세요.</div>";
+						}
+						?>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
+<?php endif;?>
+
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>  -->
 <!-- Core theme JS-->
 <script src="js/scripts.js"></script>
+
+<?php if ($now_send_inquiry):?>
+<script language="javaScript">
+let inquiryResultModal = new bootstrap.Modal(document.getElementById('inquiryResultModal'), {})
+inquiryResultModal.toggle()
+</script>
+<?php endif;?>
+
+<?php if ($signinresult):?>
+<script language="javaScript">
+let signinResultModal = new bootstrap.Modal(document.getElementById('singinResultModal'), {})
+signinResultModal.toggle()
+</script>
+<?php endif;?>
+
 
 <!-- 아래 form.js는 필요 없을 듯합니다. -->
 <!-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> -->

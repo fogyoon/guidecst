@@ -62,7 +62,7 @@ include("header.inc");
 		<table class="table table-striped text-L bg-white table-bordered text-center" style="line-height: 2.5rem;">
 			<thead>
 				<tr>
-				    <th scope="col">자산항목</th>
+				    <th scope="col" style="width=100px;">자산항목</th>
 					<th scope="col">실질자산 인정여부</th>
 				</tr>
 			</thead>
@@ -80,8 +80,17 @@ include("header.inc");
 단 경영상 경영자금으로 진행된 사업비는 증빙확인을 통해 차감하지 아니함</td>
 				</tr>
 				<tr>
-					<td>항목</td>
-					<td>내용</td>
+					<td>유가증권</td>
+					<td>실질자산으로 인정되는 유가증권<br>
+1. 사회기반사업 또는 특정건설사업의 시공등에 참여하기 위해 계약상 취득한 특수목적법인(SPC 또는 PFV)의 지분 증권<br>
+2. 건설업과 관련하여 출자한 공제조합 출자금<br>
+3. 한국금융투자협회 회원사(증권사)로부터 발급 받은 잔고증명서를 제출한 경우 
+<br>(사용제한 여부, 60일간 거래실적 확인 평가)<br>
+4. 시공관련 취득한 국·공채<br>
+- 증권회사에 입고 관리하는 경우 증권사 발행 잔액증명서로 인정<br> 
+- 소액의 국·공채, 지방채 등을 증권회사에 입고하지 않고 실물로 보관하고 있는 경우, <br>
+매입증서 원본(매입확인증 아님) 실사 후 예외적으로 인정·무기명 채권(산금채, 중금채, 표지어음 등) 불인정<br>
+ - 단, 금융기관의 잔액증명서가 있으면 인정</td>
 				</tr>
 				<tr>
 					<td>항목</td>

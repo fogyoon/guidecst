@@ -54,27 +54,28 @@ include("header.inc");
 			<button type="button" class="btn btn-warning float-end" onclick="location.href='<?=$config['page_other_files']['양도양수절차']?>'">양도양수 절차 확인</button>
 		</div>
 		<div class="row justify-content-between">
-			<div class="col"><h4><i class="bi bi-file-post"></i> 매물 정보
-			<?php
-			if ($transfer_info['tag']) {
-				if ($transfer_info['tag'] == "추천") {
-					echo "<span class=\"badge bg-info mb-1\">" . $transfer_info['tag'] . "</span>";
-				} else if ($transfer_info['tag'] == "인기") {
-					echo "<span class=\"badge bg-warning mb-1\">" . $transfer_info['tag'] . "</span>";
-				} else if ($transfer_info['tag'] == "긴급") 	{
-					echo "<span class=\"badge bg-danger mb-1\">" . $transfer_info['tag'] . "</span>";
+			<div class="col-auto"><h4><i class="bi bi-file-post"></i> 매물 정보
+				<?php
+				if ($transfer_info['tag']) {
+					if ($transfer_info['tag'] == "추천") {
+						echo "<span class=\"badge bg-info mb-1\">" . $transfer_info['tag'] . "</span>";
+					} else if ($transfer_info['tag'] == "인기") {
+						echo "<span class=\"badge bg-warning mb-1\">" . $transfer_info['tag'] . "</span>";
+					} else if ($transfer_info['tag'] == "긴급") 	{
+						echo "<span class=\"badge bg-danger mb-1\">" . $transfer_info['tag'] . "</span>";
+					}
 				}
-			}
-			?>
-			<?php if($userlogin) echo " 회사명 : ".$transfer_info['company_name']." ";?>
+				?>
+				<?php if($userlogin) echo " 회사명 : ".$transfer_info['company_name']." ";?>
+				<?php if (!$userlogin):?>
+					<button class="btn btn-primary rounded-pill ms-4 py-1" data-bs-toggle="modal" data-bs-target="#inquiryThisModal">이 매물 문의하기</button>
+				<?php endif;?>
 			</h4>
 			</div>
 			<?php if ($userlogin):?>
-			<div class="col-5 col-md-3 col-lg-2 mb-3 mb-md-2 text-center">
-				<button type="button" class="btn btn-info btn-sm px-5" onclick="location.href='<?=$config['page_other_files']['양도양수수정']?>?reg_number=<?=$reg_number?>'">수정</button>
-			</div>
-			<?php else:?>
-			<div class="col-5 col-md-3 col-lg-2 mb-3 mb-md-2"></div>
+				<div class="col col-md-3 col-lg-2 mb-3 mb-md-2 text-center">
+					<button type="button" class="btn btn-info btn-sm px-5" onclick="location.href='<?=$config['page_other_files']['양도양수수정']?>?reg_number=<?=$reg_number?>'">수정</button>
+				</div>
 			<?php endif;?>
 		</div>
 		
@@ -128,7 +129,7 @@ include("header.inc");
 		<div class="row justify-content-between">
 			<div class="col"><h4><i class="bi bi-card-checklist"></i> 매물 개요</h4></div>
 			<div class="col-5 col-md-3 col-lg-2 mb-3 mb-md-2 text-center">
-				<button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#biddingModal">입찰가능금액 보기</button>
+				<button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#biddingModal">입찰가능금액 보기</button>
 			</div>
 		</div>
 		<div class="row text-center transfer-border">
@@ -329,9 +330,66 @@ include("header.inc");
 	</div>
 </section>
 
+<!-- 이 매물 문의하기 modal -->
+<div class="modal fade" id="inquiryThisModal" tabindex="-1" aria-labelledby="inquiryThisModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content px-md-3 px-lg-5 py-3" id="inquiryThisModalContent">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="inquiryThisModalLabel">문의하실 내용을 입력해 보내주시면 연락 드리겠습니다.</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="inquiryForm" action="<?= $thispage_filename ?>" method="post">
+					<!-- Name input-->
+					<div class="row g-3 align-items-center mb-3 p-3">
+						<div class="col-4 col-md-2">
+							<label for="inquiryRegnumber">등록번호</label>
+						</div>
+						<div class="col-auto">
+							<input name="inquiryRegnumber" value="<?=$reg_number?>" class="form-control" id="inquiryRegnumber" type="text" readonly />
+						</div>
+					</div>
+					<div class="mb-3">
+						<select name="inquiryClassfication" class="form-select" id="inquiryClassfication" style="height: calc(3.5rem + 2px);" placeholder="상담 문의 내용 선택" required>
+							<option value="">문의사항 분류를 선택해 주세요.</option>
+							<?php foreach ($config['inquiry_classfication'] as $inqiry_class) : ?>
+								<option value="<?= $inqiry_class ?>"><?= $inqiry_class ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<!-- Name input-->
+					<div class="form-floating mb-3">
+						<input name="inquiryName" class="form-control" id="inquiryname" type="text" placeholder="신청자명..." required />
+						<label for="inquiryname">신청자명 or 회사명</label>
+					</div>
+					<!-- Phone number input-->
+					<div class="form-floating mb-3">
+						<input name="inquiryPhone" class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" required />
+						<label for="phone">전화번호</label>
+					</div>
+					<!-- Email address input-->
+					<div class="form-floating mb-3">
+						<input name="inquiryEmail" class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" required />
+						<label for="email">이메일 주소</label>
+					</div>
+					<!-- Message input-->
+					<div class="form-floating mb-3">
+						<textarea name="inquiryMessage" class="form-control" id="message" type="text" placeholder="문의 내용..." style="height: 10rem" required></textarea>
+						<label for="message">문의 내용</label>
+					</div>
+					<!-- Submit Button-->
+					<button class="btn btn-primary" style="display: block; margin-left: auto; margin-right: auto;" id="inquirySendButton" type="submit" name="send_inquiry">문의 내용 보내기</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 
-<!-- 문의하기 modal -->
+<!-- 입찰 시공경험 평가 modal -->
 <div class="modal fade" id="biddingModal" tabindex="-1" aria-labelledby="biddingModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content" id="biddingModalContent">

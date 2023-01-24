@@ -56,42 +56,6 @@ include("header.inc");
 					<img class="img-fluid" src="assets/img/portfolio/cake.png" alt="..." />
 				</div>
 			</div>
-			<!-- Portfolio Item 3-->
-			<div class="col-md-6 col-lg-4 mb-5">
-				<div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal3">
-					<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-						<div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-					</div>
-					<img class="img-fluid" src="assets/img/portfolio/circus.png" alt="..." />
-				</div>
-			</div>
-			<!-- Portfolio Item 4-->
-			<div class="col-md-6 col-lg-4 mb-5 mb-lg-0">
-				<div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal4">
-					<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-						<div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-					</div>
-					<img class="img-fluid" src="assets/img/portfolio/game.png" alt="..." />
-				</div>
-			</div>
-			<!-- Portfolio Item 5-->
-			<div class="col-md-6 col-lg-4 mb-5 mb-md-0">
-				<div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal5">
-					<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-						<div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-					</div>
-					<img class="img-fluid" src="assets/img/portfolio/safe.png" alt="..." />
-				</div>
-			</div>
-			<!-- Portfolio Item 6-->
-			<div class="col-md-6 col-lg-4">
-				<div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal6">
-					<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-						<div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-					</div>
-					<img class="img-fluid" src="assets/img/portfolio/submarine.png" alt="..." />
-				</div>
-			</div>
 		</div>
 	</div>
 </section>
@@ -108,14 +72,7 @@ include("header.inc");
 			<div class="divider-custom-line"></div>
 		</div>
 		<!-- About Section Content-->
-		<div class="row">
-			<div class="col-lg-4 ms-auto">
-				<p class="lead">Freelancer is a free printdesign theme created by Start printdesign. The download includes the complete source files including HTML, CSS, and JavaScript as well as optional SASS stylesheets for easy customization.</p>
-			</div>
-			<div class="col-lg-4 me-auto">
-				<p class="lead">You can create your own custom avatar for the masthead, change the icon in the dividers, and add your email address to the contact form to make it fully functional!</p>
-			</div>
-		</div>
+		<div class="text-center"><object data="pdf/sample01.pdf" type="application/pdf" width="80%" height="1000"></object></div>
 		<!-- About Section Button-->
 		<div class="text-center mt-4">
 			<a class="btn btn-xl btn-outline-light" href="#">

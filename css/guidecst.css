@@ -351,3 +351,9 @@
 	font-size: 1.1rem;
 	line-height: 2;
 }
+
+.text-s {
+	font-family: var(--bs-font-nanum-gothic-kr);
+	font-size: 0.8rem;
+	line-height: 1.5;
+}

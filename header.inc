@@ -15,12 +15,12 @@ $now_send_inquiry = false;
 $send_inquiry_result= false;
 if (isset($_POST['send_inquiry'])) {
 	$now_send_inquiry = true;
-	if (isset($_POST['transferNo'])) {
-		$transferNo = isset($_POST['transferNo']);
+	if (isset($_POST['inquiryRegnumber'])) {
+		$transferNo = isset($_POST['inquiryRegnumber']);
 	} else {
 		$transferNo = "";
 	}
-	$send_inquiry_result = send_inquiry($_POST['inquiryClassfication'], $_POST['inquiryName'], $_POST['inquiryPhone'], $_POST['inquiryEmail'], $_POST['inquiryMessage'], $transferNo = "");
+	$send_inquiry_result = send_inquiry($_POST['inquiryClassfication'], $_POST['inquiryName'], $_POST['inquiryPhone'], $_POST['inquiryEmail'], $_POST['inquiryMessage'], $transferNo);
 }
 
 ?>

@@ -238,7 +238,7 @@
 			<div class="modal-body">
 				<form id="inquiryForm" action="<?= $thispage_filename ?>" method="post">
 					<div class="mb-3">
-						<select name="inquiryClassfication" class="form-select" id="Select" style="height: calc(3.5rem + 2px);" type="text" placeholder="상담 문의 내용 선택" required>
+						<select name="inquiryClassfication" class="form-select" id="inquiryClassfication" style="height: calc(3.5rem + 2px);" placeholder="상담 문의 내용 선택" required>
 							<option value="">문의사항 분류를 선택해 주세요.</option>
 							<?php foreach ($config['inquiry_classfication'] as $inqiry_class) : ?>
 								<option value="<?= $inqiry_class ?>"><?= $inqiry_class ?></option>

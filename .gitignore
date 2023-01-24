@@ -3,6 +3,7 @@ origin/
 dhnco/
 development_tools/
 image_working/
+pdf/
 *.[oa]
 .vscode/
 phperror.log

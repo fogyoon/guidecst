@@ -6,7 +6,7 @@
 }
 
 .copyright {
-    font-size: 0.9rem;
+	font-size: 0.9rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -233,7 +233,7 @@
 
 .transfer-bg-img2 {
 	background-image: url("../assets/img/transfer_header02.jpg");
-	
+
 }
 
 .transfer-bg-img3 {
@@ -315,24 +315,72 @@
 }
 
 .page-item.active .page-link {
-    z-index: 3;
-    color: #fff;
-    background-color: #7d8d9d;
-    border-color: #7d8d9d;
+	z-index: 3;
+	color: #fff;
+	background-color: #7d8d9d;
+	border-color: #7d8d9d;
 }
 
 .page-link {
-    position: relative;
-    display: block;
-    color: #848f99;
-    text-decoration: none;
-    background-color: #fff;
-    border: 0.125rem solid #dee2e6;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	position: relative;
+	display: block;
+	color: #848f99;
+	text-decoration: none;
+	background-color: #fff;
+	border: 0.125rem solid #dee2e6;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 /* fransfer table END */
 
+
+/* license START */
+.btn-light {
+	background-color: #dddddd;
+	border-color: #dddddd;
+}
+
+.btn-light.active {
+	/* color: #000; */
+	background-color: #f3793d;
+	border-color: #f3793d;
+}
+
+.btn-light.hover {
+	background-color: #eb824d;
+}
+
+.btn-light.focus {
+	background-color: #eb824d;
+}
+
+.license-content {
+	color: #6c6c6c;
+	font-size: 0.97em;
+}
+
+.license-content thead,
+.license-content tbody,
+.license-content tfoot,
+.license-content tr,
+.license-content td,
+.license-content th {
+	background-color: aliceblue;
+	border-color: #c3c3c3;
+	border-style: solid;
+	border-width: 1px;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	text-align: center;
+	font-size: 0.95em;
+}
+
+.license-content th {
+	color: #dee2e6;
+	background-color: #7d8d9d;
+}
+
+/* license END */
 
 .page-section-1 {
 	padding: 0.5rem;

@@ -22,7 +22,7 @@ $page_first_result = ($page-1) * $config['transfer_max_col'];
 $show_filter_array = false; // 테스트 시 $filters_array 확인 용
 $filters_array = array('need_filter' => false, 'new_licensed' => false, 'offset' => $page_first_result);
 $sector_filter = array();
-$other_sectors = array();
+//$other_sectors = array();
 $total_count = 0;
 $transfer_list_array = array();
 $pre_searchType = "sector";
@@ -68,7 +68,6 @@ if (!check_connect_dbserver()) {
 	$db_fail = true;
 } else {
 	$pro_constructor_sectors = get_pro_sectors();
-	$other_sectors = get_other_sectors();
 	$total_count = count_transfer_list($filters_array);
 	$transfer_list_array = get_transfer_list($filters_array);
 	if (!$transfer_list_array) {
@@ -94,7 +93,7 @@ include("header.inc");
 <header class="subhead text-center transfer-bg-img">
 	<div class="container">
 		<h1 class="subhead-heading">양도양수 리스트</h1>
-		<p class="subhead-subheading">양도양수 안내 페이지입니다.</p>
+		<p class="subhead-subheading">관심있는 기업을 찾아 클릭하면 자세한 내용을 확인하고 문의할 수 있습니다.</p>
 	</div>
 </header>
 
@@ -109,7 +108,7 @@ include("header.inc");
 
 <script language="JavaScript">
 function constructor_check(checkAll)  {
-<?php for($i=0;$i<count($config['constructor_type_filter']);$i++):?>
+<?php for($i=0;$i<count($config['종합건설업']);$i++):?>
 	document.getElementById('constructor_<?=$i?>').checked = checkAll.checked;
 <?php endfor;?>
 }
@@ -127,7 +126,7 @@ function pro_constructor_check(checkAll)  {
 }
 
 function other_constructor_check(checkAll)  {
-<?php for($i=0;$i<count($other_sectors);$i++):?>
+<?php for($i=0;$i<count($config['기타공사업']);$i++):?>
 	document.getElementById('other_constructor_<?=$i?>').checked = checkAll.checked;
 <?php endfor;?>
 }
@@ -158,7 +157,7 @@ function other_constructor_check(checkAll)  {
 							<input type="checkbox" class="form-check-input" name="<?=$idname?>checllAll" id="<?=$idname?>checkAll" onclick='<?=$idname?>check(this)'>
 							<label class="form-check-label text-primary" for="<?=$idname?>checllAll">모두 선택</label>
 						</div>
-					<?php $checki = 0; foreach($config['constructor_type_filter'] as $efilter_check):?>
+					<?php $checki = 0; foreach($config['종합건설업'] as $efilter_check):?>
 						<div class="col col-6 col-md-4 col-lg-2 form-check">
 							<input type="checkbox" class="form-check-input" name="checked_sectors[<?=$sector_no?>]]" id="<?=$idname.$checki?>" value="<?=$efilter_check?>" <?php if(isset($pre_checked_sectors[$sector_no])) echo "checked";?>>
 							<label class="form-check-label" for="<?=$idname.$checki?>"><?=$efilter_check?></label>
@@ -168,7 +167,7 @@ function other_constructor_check(checkAll)  {
 				</div>
 			</div>
 			<div class="row border border-top-0">
-				<div class="col-3 col-md-2 p-3 border-end bg-dark-subtle">신규건설</div>
+				<div class="col-3 col-md-2 p-3 border-end bg-dark-subtle">신규면허만</div>
 				<div class="col-9 col-md-10 p-3 select-table">
 					<div class="row d-flex gx-3 justify-content-start">
 					<?php $idname = "new_constructor_";?> 
@@ -194,10 +193,10 @@ function other_constructor_check(checkAll)  {
 							<input type="checkbox" class="form-check-input" name="<?=$idname?>checllAll" id="<?=$idname?>checkAll" onclick='<?=$idname?>check(this)'>
 							<label class="form-check-label text-primary" for="<?=$idname?>checllAll">모두 선택</label>
 						</div>
-					<?php $checki = 0; $keyi = 0; foreach($config['pro_constructor_type_filter'] as $efilter_key => $efilter_value):?>
-						<div class="row col-lg-6 d-flex flex-row">
-							<div class="col-md-6 pe-0 opacity-75"><?=$efilter_key?></div>
-							<div class="col-md-6 ps-0 d-flex flex-row">
+						<?php $checki = 0; $keyi = 0; foreach($config['전문건설업'] as $efilter_key => $efilter_value):?>
+						<div class="row col-lg-6 d-flex flex-column mb-2">
+							<div class="pe-0 opacity-75"><?=$efilter_key?></div>
+							<div class="d-flex flex-row">
 								(
 							<?php foreach($efilter_value as $efilter_check):?>
 								<div class="form-check mx-1">
@@ -208,12 +207,12 @@ function other_constructor_check(checkAll)  {
 								)
 							</div>
 						</div>
-					<?php $keyi++; endforeach;?>
+						<?php $keyi++; endforeach;?>
 					</div>
 				</div>
 			</div>
 			<div class="row border border-top-0">
-				<div class="col-3 col-md-2 p-3 border-end bg-dark-subtle">기타 공사업</div>
+				<div class="col-3 col-md-2 p-3 border-end bg-dark-subtle">기타공사업</div>
 				<div class="col-9 col-md-10 p-3 select-table">
 					<div class="row d-flex gx-3 justify-content-start">
 					<?php $idname = "other_constructor_";?> 
@@ -221,14 +220,12 @@ function other_constructor_check(checkAll)  {
 							<input type="checkbox" class="form-check-input" name="<?=$idname?>checllAll" id="<?=$idname?>checkAll" onclick='<?=$idname?>check(this)'>
 							<label class="form-check-label text-primary" for="<?=$idname?>checllAll">모두 선택</label>
 						</div>
-					<?php if (is_array($other_sectors) && count(($other_sectors)) > 0):?>
-					<?php $checki = 0; foreach($other_sectors as $efilter_check):?>
+						<?php $checki = 0; foreach($config['기타공사업'] as $efilter_check):?>
 						<div class="col col-6 col-md-4 col-lg-2 form-check">
 							<input type="checkbox" class="form-check-input" name="checked_sectors[<?=$sector_no?>]]" id="<?=$idname.$checki?>" value="<?=$efilter_check?>" <?php if(isset($pre_checked_sectors[$sector_no])) echo "checked";?>>
 							<label class="form-check-label" for="<?=$idname.$checki?>"><?=$efilter_check?></label>
 						</div>
-					<?php $checki++; $sector_no++; endforeach;?>
-					<?php endif;?>
+						<?php $checki++; $sector_no++; endforeach;?>
 					</div>
 				</div>
 			</div>

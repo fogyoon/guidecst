@@ -37,7 +37,7 @@ if (isset($_POST['send_inquiry'])) {
 	<meta property="og:type" content="website">
 	<meta property="og:title" content="<?= $title ?>">
 	<meta property="og:description" content="<?= $description ?>">
-	<meta property="og:image" content="http://www.guideconsulting.co.kr/assets/img/G_Logo.svg">
+	<meta property="og:image" content="http://www.guideconsulting.co.kr/assets/img/Logo_u1.svg">
 	<meta property="og:url" content="<?= $config['full_url'] ?><?php echo $_SERVER['PHP_SELF']; ?>">
 	<meta name="naver-site-verification" content="" />
 	<meta name="msvalidate.01" content="" />
@@ -59,15 +59,20 @@ if (isset($_POST['send_inquiry'])) {
 	<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
 	<!-- Gmarketsans fonts-->
 	<link href="https://webfontworld.github.io/gmarket/GmarketSans.css" rel="stylesheet">
+
 	<!-- Core theme CSS (includes Bootstrap)-->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/styles.css" rel="stylesheet" />
 	<link href="css/guidecst.css" rel="stylesheet" />
 
-	<!-- We may no need jquery
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"> </script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-	-->
+	<!-- We may no need jquery	-->
+	<!-- <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"> </script> -->
+	<!-- Bootstrap core JS-->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>  -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core theme JS-->
+	<script src="js/scripts.js"></script>
 
 	<link rel="stylesheet" href="css/Full_Division_iconSlide.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
@@ -80,7 +85,7 @@ if (isset($_POST['send_inquiry'])) {
 	<!-- Navigation-->
 	<nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
 		<div class="container">
-			<a href="index.php"> <img src="assets/img/G_Logo.svg" alt="..." /></a>
+			<a class="navbar-brand" href="index.php"> <img src="assets/img/Logo-u1.svg" alt="..." /></a>
 			<button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				Menu
 				<i class="fas fa-bars"></i>
@@ -88,15 +93,31 @@ if (isset($_POST['send_inquiry'])) {
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ms-auto">
 					<?php foreach ($config['page_files'] as $page_name => $page_file) : ?>
-						<li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == $page_file || (($thispage_filename == $config['page_other_files']['양도양수정보'] || $thispage_filename == $config['page_other_files']['양도양수수정'] || $thispage_filename == $config['page_other_files']['양도양수절차']) && $page_file == $config['page_files']['양도양수'])) echo "active"; ?>" href="<?= $page_file ?>"><?= $page_name ?></a></li>
+						<?php if($page_name == "신규건설업등록"):?>
+							<li class="nav-item dropdown mx-0 mx-lg-1">
+								<a class="nav-link dropdown-toggle py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == $page_file || ($thispage_filename == $config['page_other_files']['신규건설업등록수정'])) echo "active"; ?>" href="#" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false"><?= $page_name ?></a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<li><a class="dropdown-item" href="<?= $page_file ?>?general">종합건설업</a></li>
+									<li><a class="dropdown-item" href="<?= $page_file ?>?pro">전문건설업</a></li>
+									<li><a class="dropdown-item" href="<?= $page_file ?>?others">기타공사업</a></li>
+								</ul>
+							</li>
+						<?php else:?>
+							<li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded <?php if ($thispage_filename == $page_file || (($thispage_filename == $config['page_other_files']['양도양수정보'] || $thispage_filename == $config['page_other_files']['양도양수수정'] || $thispage_filename == $config['page_other_files']['양도양수절차']) && $page_file == $config['page_files']['양도양수'])) echo "active"; ?>" href="<?= $page_file ?>"><?= $page_name ?></a></li>
+						<?php endif;?>
 					<?php endforeach; ?>
+					<li class="nav-item mx-0 mx-lg-1">
+						<button class="btn btn-primary rounded-pill  my-2" data-bs-toggle="modal" data-bs-target="#inquiryModal">
+							<span class="d-flex align-items-center"><i class="bi-chat-text-fill me-2"></i>상담문의</span>
+						</button>
+					</li>
+					<?php if ($userlogin):?>
+						<li class="nav-item mx-0 mx-lg-1">
+							<button class="btn btn-warning my-2" onclick="location.href='loginprocess.php?signout&retpage=<?=$thispage_filename?>'">로그아웃</button>
+						</li>
+					<?php endif;?>
+
 				</ul>
-				<button class="btn btn-primary rounded-pill px-3 ms-lg-3 mt-3 mt-md-0 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#inquiryModal">
-					<span class="d-flex align-items-center"><i class="bi-chat-text-fill me-2"></i>상담문의</span>
-				</button>
-				<?php if ($userlogin):?>
-					<button class="btn btn-warning btn-sm ms-2" onclick="location.href='loginprocess.php?signout&retpage=<?=$thispage_filename?>'">로그아웃</button>
-				<?php endif;?>
 			</div>
 		</div>
 	</nav>

@@ -44,7 +44,7 @@ include("header.inc");
 				<!-- Masthead Avatar Image-->
 				<div class="row justify-content-md-center gy-3 mt-md-5">
 					<div class="col"><a href="<?= $config['page_files']['양도양수'] ?>"><img class="my_img" src="assets/img/go1.svg"></a></div>
-					<div class="col"><a href="<?= $config['page_files']['면허등록기준'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
+					<div class="col"><a href="<?= $config['page_files']['신규건설업등록'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
 					<div class="col d-none d-md-block" data-bs-toggle="modal" data-bs-target="#inquiryModal"><img class="my_img" src="assets/img/go3.svg"></div> 
 					<?php //<div class="col d-none d-md-block"><a href="/contact.php"><img class="my_img" src="assets/img/go3.svg"></a></div>?>
 				</div>
@@ -70,7 +70,7 @@ include("header.inc");
 				<!-- Masthead Avatar Image-->
 				<div class="row justify-content-md-center gy-3 mt-md-5">
 					<div class="col"><a href="<?= $config['page_files']['양도양수'] ?>"><img class="my_img" src="assets/img/go1.svg"></a></div>
-					<div class="col"><a href="<?= $config['page_files']['면허등록기준'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
+					<div class="col"><a href="<?= $config['page_files']['신규건설업등록'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
 					<div class="col d-none d-md-block" data-bs-toggle="modal" data-bs-target="#inquiryModal"><img class="my_img" src="assets/img/go3.svg"></div> 
 				</div>
 				<!-- </div> -->
@@ -95,7 +95,7 @@ include("header.inc");
 				<!-- Masthead Avatar Image-->
 				<div class="row justify-content-md-center gy-3 mt-md-5">
 					<div class="col"><a href="<?= $config['page_files']['양도양수'] ?>"><img class="my_img" src="assets/img/go1.svg"></a></div>
-					<div class="col"><a href="<?= $config['page_files']['면허등록기준'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
+					<div class="col"><a href="<?= $config['page_files']['신규건설업등록'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
 					<div class="col d-none d-md-block" data-bs-toggle="modal" data-bs-target="#inquiryModal"><img class="my_img" src="assets/img/go3.svg"></div> 
 				</div>
 				<!-- </div> -->
@@ -138,9 +138,9 @@ include("header.inc");
 			<div class="card px-0" style="width: 25rem;">
 				<a href="#" class="img-hover-zoom"><img src="/assets/img/what01.jpg" class="card-img-top" alt="..."></a>
 				<div class="card-body">
-					<h5 class="card-title sr-icon-1">면허등록기준 안내</h5>
-					<p class="card-text font-nanumgothic">다양한 공사의 업무내용에 따라 면허등록기준이 상이하여 자본금, 공제조합, 기술인력, 등을 안내합니다. </p>
-					<a href="<?= $config['page_files']['면허등록기준'] ?>" class="btn btn-primary"><i class="fas fa-magnifying-glass  me-2"></i>자세히 알아보기</a>
+					<h5 class="card-title sr-icon-1">신규건설업등록 안내</h5>
+					<p class="card-text font-nanumgothic">다양한 공사의 업무내용에 따라 신규건설업등록이 상이하여 자본금, 공제조합, 기술인력, 등을 안내합니다. </p>
+					<a href="<?= $config['page_files']['신규건설업등록'] ?>" class="btn btn-primary"><i class="fas fa-magnifying-glass  me-2"></i>자세히 알아보기</a>
 				</div>
 			</div>
 			<!-- Portfolio Item 3-->
@@ -167,7 +167,7 @@ include("header.inc");
 				<div class="card-body">
 					<h5 class="card-title sr-icon-2">연말정산 / 잔고증명</h5>
 					<p class="card-text font-nanumgothic">건설업 관리규정에 의한 실질 자본금 인정기준을 확인해서 자본금 미달이 발생하지 않도록 대비해야합니다.</p>
-					<a href="<?= $config['page_files']['연말결산/잔고증명'] ?>" class="btn btn-primary"><i class="fas fa-magnifying-glass  me-2"></i>자세히 알아보기</a>
+					<a href="<?= $config['page_files']['연말정산'] ?>" class="btn btn-primary"><i class="fas fa-magnifying-glass  me-2"></i>자세히 알아보기</a>
 				</div>
 			</div>
 			<!-- Portfolio Item 6-->
@@ -197,7 +197,7 @@ include("header.inc");
 		<div class="row">
 			<div class="col-lg-11 ms-auto font-nanumgothic">
 				<p class="lead">가이드컨설팅은 빠르게 변화하는 건설업에서 다년간의 경험과 축적된 노하우을 가지고 각각의 기업상황에 맞는 정보를 제공하고있습니다.<br>
-					양도양수, 기업진단, 면허등록기준, 경영운영의 전반에 걸친 정확하고 믿을수 있는 맞춤형정보로 앞선 컨설팅을 해드립니다.</p>
+					양도양수, 기업진단, 신규건설업등록, 경영운영의 전반에 걸친 정확하고 믿을수 있는 맞춤형정보로 앞선 컨설팅을 해드립니다.</p>
 			</div>
 
 		</div>

@@ -190,6 +190,7 @@ include("header.inc"); // header에서 로그인 상태 확인합니다.
 <section class="page-section pb-4 pt-5" id="transferPrint">
 	<div class="container mb-5">
 		<form id="treanferForm" action="<?= $thispage_filename ?>" method="post">
+			<input type="hidden" name="mode" value="<?=$mode?>">
 			<?php if ($errro_message):?>
 				<div class="alert alert-danger" role="alert"><?=$errro_message?></div>
 			<?php endif;?>
@@ -198,7 +199,6 @@ include("header.inc"); // header에서 로그인 상태 확인합니다.
 				<button type="submit" class="btn btn-danger float-end" onclick="return confirm('삭제하면 다시 복원할 수 없습니다. 삭제하시겠습니까?')" name="delete">이 양도 매물 삭제</button>
 			</div>
 			<?php endif;?>
-			<input type="hidden" name="mode" value="<?=$mode?>">
 			<!-- 회사 정보 -->
 			<div class="d-flex flex-row bg-dark-subtle p-3 mb-3">
 				<div class="d-inline-flex align-items-center me-3"><span style="font-size: 1.2rem"><i class="bi bi-file-post"></i> 등록번호</span></div>
@@ -303,6 +303,7 @@ include("header.inc"); // header에서 로그인 상태 확인합니다.
 			<table class="table table-hover table-bordered align-middle text-center">
 				<thead class="table-light">
 					<tr class="align-middle text-center">
+						<th scope="col">업종분류</th>
 						<th scope="col">업종</th>
 						<th scope="col">등록년도</th>
 						<th scope="col">시공능력</th>
@@ -319,7 +320,12 @@ include("header.inc"); // header에서 로그인 상태 확인합니다.
 					<?php foreach ($transfer_sector_array as $eachsector) : ?>
 						<tr>
 							<td>
-								<input type="text" name="sector[<?=$sectori?>]" value="<?=$eachsector['sector']?>" class="form-control" id="sector[<?=$sectori?>]">
+								<select class="form-select" name="category<?=$sectori?>" id="category<?=$sectori?>">
+								</select>
+							</td>
+							<td>
+								<select class="form-select" name="sector[<?=$sectori?>]" id="sector<?=$sectori?>">
+								</select>
 							</td>
 							<td>
 								<input type="text" name="year_licensed[<?=$sectori?>]" value="<?=$eachsector['year_licensed']?>" class="form-control" id="year_licensed[<?=$sectori?>]">
@@ -355,7 +361,12 @@ include("header.inc"); // header에서 로그인 상태 확인합니다.
 					<?php for($i=$sectori; $i < $config['max_sectors_per_company']; $i++):?>
 						<tr>
 							<td>
-								<input type="text" name="sector[<?=$sectori?>]" value="" class="form-control" id="sector[<?=$sectori?>]">
+								<select class="form-select" name="category<?=$sectori?>" id="category<?=$sectori?>">
+								</select>
+							</td>
+							<td>
+								<select class="form-select" name="sector[<?=$sectori?>]" id="sector<?=$sectori?>">
+								</select>
 							</td>
 							<td>
 								<input type="text" name="year_licensed[<?=$sectori?>]" value="" class="form-control" id="year_licensed[<?=$sectori?>]">
@@ -386,7 +397,7 @@ include("header.inc"); // header에서 로그인 상태 확인합니다.
 				</div>
 				<div class="col">
 					<label for="fixed_debt" class="form-label">고정부채</label>
-					<input type="text" name="fixed_debt" value="<?php if(isset($finstatements_info['fixed_debt'])) echo $finstatements_info['fixed_debt'];?>" class="form-control" id="debt_ratio">
+					<input type="text" name="fixed_debt" value="<?php if(isset($finstatements_info['fixed_debt'])) echo $finstatements_info['fixed_debt'];?>" class="form-control" id="fixed_debt">
 				</div>
 				<div class="col">
 					<label for="current_ratio" class="form-label">유동비율 (%)</label>
@@ -427,6 +438,59 @@ include("header.inc"); // header에서 로그인 상태 확인합니다.
 		</form>
 	</div>
 </section>
+
+<!-- cascading selection -->
+<script>
+	var sectorObject = {
+		"종합건설업": [<?php for($i=0; $i<count($config['종합건설업']); $i++) {
+				echo "\"".$config['종합건설업'][$i]."\"";
+				if ($i < (count($config['종합건설업']) - 1)) echo ",";
+			}?>],
+		"전문건설업": [<?php $pro_constructor_sectors = get_pro_sectors();
+			for($i=0; $i<count($pro_constructor_sectors); $i++) {
+				echo "\"".$pro_constructor_sectors[$i]."\"";
+				if ($i < (count($pro_constructor_sectors) - 1)) echo ",";
+			}?>],
+		"기타공사업": [<?php for($i=0; $i<count($config['기타공사업']); $i++) {
+				echo "\"".$config['기타공사업'][$i]."\"";
+				if ($i < (count($config['기타공사업']) - 1)) echo ",";
+			}?>],
+	}
+	window.onload = function () {
+	<?php for($i=0; $i < $config['max_sectors_per_company']; $i++):?>
+		<?php if(isset($transfer_sector_array[$i]['sector'])):?>
+			let selectedcategory<?=$i?> = '<?=get_category($transfer_sector_array[$i]['sector'])?>';
+			let selectedsector<?=$i?> = '<?=$transfer_sector_array[$i]['sector']?>';
+		<?php else:?>
+			let selectedcategory<?=$i?> = '';
+			let selectedsector<?=$i?> = '';
+		<?php endif;?>
+		let category<?=$i?> = document.getElementById("category<?=$i?>");
+		let sector<?=$i?> = document.getElementById("sector<?=$i?>");
+		for (let category in sectorObject) {
+			let catselected<?=$i?> = false;
+			if (category == selectedcategory<?=$i?>) {
+				catselected<?=$i?> = true;
+			}
+			category<?=$i?>.options[category<?=$i?>.options.length] = new Option(category, category, false, catselected<?=$i?>);
+		}
+		category<?=$i?>.onchange = function () {
+			sector<?=$i?>.length = 1; // remove all options bar first
+			//if (this.selectedIndex < 1) return; // done
+			let sectors<?=$i?> = sectorObject[this.value];
+			for (let seci = 0; seci < sectors<?=$i?>.length; seci++) {
+				let selected<?=$i?> = false;
+				if (sectors<?=$i?>[seci] == selectedsector<?=$i?>) {
+					selected<?=$i?> = true;
+				}
+				sector<?=$i?>.options[sector<?=$i?>.options.length] = new Option(sectors<?=$i?>[seci], sectors<?=$i?>[seci], false, selected<?=$i?>);
+			}
+		}
+		category<?=$i?>.onchange(); // reset in case page is reloaded
+	<?php endfor;?>
+	}
+</script>
+
 
 <?php
 

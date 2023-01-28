@@ -159,7 +159,7 @@ function create_tables($test = false)
 
 	// drop the existed tales to make test environments
 	if ($test) {
-		$tables = array("transfer", "performance", "finstatements", "users", "loginlog");
+		$tables = array("transfer", "performance", "finstatements", "users", "loginlog", "license");
 		foreach ($tables as $table_name) {
 			if (!drop_table($table_name))
 				return $retval;
@@ -266,6 +266,33 @@ PRIMARY KEY (sn),
 KEY (username)
 )";
 
+// license
+$qly_license = "
+CREATE TABLE license (
+sn int(32) unsigned NOT NULL auto_increment,
+sector varchar(32),
+fund_private int(12),
+fund_corporation int(12),
+fund_explain text,
+cooperative_name varchar(32),
+cooperative_private varchar(32),
+cooperative_corporation varchar(32),
+cooperative_explain text,
+detail_head text,
+detail text,
+example_head text,
+example text,
+facility text,
+ability_head text,
+ability text,
+technician text,
+modfied_date datetime,
+homeip varchar(32),
+PRIMARY KEY (sn),
+KEY (sector)
+)";
+
+
 	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
 	try {
 		$pdo = new PDO($dsn, $dbuser, $dbpassword);
@@ -281,6 +308,8 @@ KEY (username)
 		$stmt = $pdo->prepare($qly_users);
 		$stmt->execute();
 		$stmt = $pdo->prepare($qly_loginlog);
+		$stmt->execute();
+		$stmt = $pdo->prepare($qly_license);
 		$stmt->execute();
 	} catch (PDOException $e) {
 		$error_message = $e->getMessage();
@@ -637,17 +666,18 @@ function add_login_log($username)
 	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $homeip;
 	$retval = false;
 	$error_message = false;
+	$username = trim($username);
 	try {
 		$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
 		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
 		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sql = "INSERT INTO users VALUES (0
+		$sql = "INSERT INTO loginlog VALUES (0
 ,now()
 ,'" . $username . "'
 ,'" . $homeip . "'
 )";
-		//write_log("sql.inc: add_user_info() , query:".$sql);
+		write_log("sql.inc: add_user_info() , query:".$sql);
 		$stmt = $pdo->prepare($sql);
 		$stmt->execute();
 	} catch (PDOException $e) {
@@ -1354,7 +1384,7 @@ WHERE username = '" . $username . "'";
 function get_pro_sectors() {
 	global $config;
 	$pro_constructor = array();
-	foreach($config['pro_constructor_type_filter'] as $key => $values) {
+	foreach($config['전문건설업'] as $key => $values) {
 		foreach($values as $esector) {
 			$pro_constructor[] = $esector;
 		}
@@ -1362,75 +1392,25 @@ function get_pro_sectors() {
 	return $pro_constructor;
 }
 
-// config에 기제된 업종 이외의 업종 리스트 가져오기 
-function get_other_sectors() {
-	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $config;
-	$retval = false;
-	$error_message = false;
-	$pro_constructor = get_pro_sectors();
+function get_all_sectors() {
+	global $config;
 	$all_sectors_array = array();
-	$sectori = 0;
-	foreach($config['constructor_type_filter'] as $esector) {
-		$all_sectors_array[$sectori] = $esector;
-		$sectori++;
+	$i = 0;
+	foreach($config['종합건설업'] as $esector) {
+		$all_sectors_array[$i] = $esector;
+		$i++;
 	}
-	foreach($pro_constructor as $esector) {
-		$all_sectors_array[$sectori] = $esector;
-		$sectori++;
+	$pro_sectors = get_pro_sectors();
+	foreach($pro_sectors as $esector) {
+		$all_sectors_array[$i] = $esector;
+		$i++;
 	}
-	//$all_sectors_array = array_unique($all_sectors_array);
-	$exits_sectors = "(";
-	for ($i = 0; $i < count($all_sectors_array); $i++) {
-		$exits_sectors .= "'" . $all_sectors_array[$i] . "'";
-		if ($i < (count($all_sectors_array) - 1)) {
-			$exits_sectors .= ", ";
-		}
+	foreach($config['기타공사업'] as $esector) {
+		$all_sectors_array[$i] = $esector;
+		$i++;
 	}
-	$exits_sectors .= ")";
-
-	$sql = "SELECT DISTINCT sector FROM performance WHERE sector NOT IN ".$exits_sectors;
-	if ($need_logging)
-		write_log("sql.inc - get_other_sectors() - sql: " . $sql);
-
-	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
-	try {
-		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
-		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$stmt = $pdo->prepare($sql);
-		$stmt->execute();
-		$other_sectors = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-	} catch (PDOException $e) {
-		$error_message = $e->getMessage();
-		if ($need_logging)
-			write_log("sql.inc: get_other_sectors(), " . $error_message);
-	}
-	$pdo = null;
-	if (!$error_message)
-		$retval = $other_sectors;
-
-	return $retval;
+	return $all_sectors_array;
 }
-
-/* 
-+----+------------+--------+---------------+----------------------+--------------+------+---------------------+---------------------+
-| sn | reg_number | sector | year_licensed | construction_ability | annual_sales | year | created_date        | modfied_date        |
-+----+------------+--------+---------------+----------------------+--------------+------+---------------------+---------------------+
-|  1 |      10001 | 건축   |          2006 |                 4500 |          456 | 2022 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-|  2 |      10001 | 건축   |          2006 |                 4500 |          300 | 2021 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-|  3 |      10001 | 건축   |          2006 |                 4500 |          250 | 2020 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-|  4 |      10001 | 건축   |          2006 |                 4500 |          200 | 2019 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-|  5 |      10001 | 건축   |          2006 |                 4500 |          150 | 2018 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-|  6 |      10001 | 건축   |          2006 |                 4500 |          200 | 2017 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-| 12 |      10001 | 토목   |          2007 |                 6500 |          240 | 2017 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-| 11 |      10001 | 토목   |          2007 |                 6500 |          300 | 2018 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-| 10 |      10001 | 토목   |          2007 |                 6500 |          110 | 2019 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-|  9 |      10001 | 토목   |          2007 |                 6500 |          400 | 2020 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-|  8 |      10001 | 토목   |          2007 |                 6500 |          300 | 2021 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-|  7 |      10001 | 토목   |          2007 |                 6500 |          256 | 2022 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-| 13 |      10001 | 토목   |          2007 |                 6500 |          190 | 2016 | 2023-01-17 16:07:05 | 2023-01-17 16:07:05 |
-+----+------------+--------+---------------+----------------------+--------------+------+---------------------+---------------------+
-*/
 
 function transfer_info_per_sector($performance_info_array)
 {
@@ -1505,6 +1485,225 @@ function get_new_regnumber() {
 	$pdo = null;
 	return $retval;
 }
+
+/* license */
+function get_category($sector) {
+	global $config;
+	$pro_constructor_sectors = get_pro_sectors();
+	if (in_array($sector, $config['종합건설업'])) {
+		$category = "종합건설업";
+	} else if (in_array($sector, $pro_constructor_sectors)) {
+		$category = "전문건설업";
+	} else {
+		$category = "기타공사업";
+	}
+	return $category;
+}
+
+function get_pro_subcategory($sector) {
+	global $config;
+	$pro_constructor_array = $config['전문건설업'];
+	$subcategory = "";
+	foreach($pro_constructor_array as $key => $value) {
+		if(in_array($sector, $value)){
+			$subcategory = $key;
+			break;
+		}
+	}
+	return $subcategory;
+}
+
+function get_license($sector)
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	$retval = false;
+	$error_message = false;
+	$license_array = array();
+
+	if ($sector == "") {
+		if ($need_logging)
+			write_log("sql.inc: get_license({$sector}), Need sector");
+		return $retval;
+	}
+
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "SELECT * FROM license WHERE sector = ?";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(array($sector));
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: get_license({$sector}), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message) {
+		foreach($result as $key => $value) {
+			if($key == "fund_explain") {
+				$license_array[$key] = get_textarea($value);
+			} elseif($key == "cooperative_explain") {
+				$license_array[$key] = get_textarea($value);
+			} elseif($key == "detail_head") {
+				$license_array[$key] = get_textarea($value);
+			} elseif($key == "detail") {
+				$license_array[$key] = get_textarea($value);
+			} elseif($key == "example_head") {
+				$license_array[$key] = get_textarea($value);
+			} elseif($key == "example") {
+				$license_array[$key] = get_textarea($value);
+			} elseif($key == "facility") {
+				$license_array[$key] = get_textarea($value);
+			} elseif($key == "ability_head") {
+				$license_array[$key] = get_textarea($value);
+			} elseif($key == "ability") {
+				$license_array[$key] = get_textarea($value);
+			} else {
+				$license_array[$key] = $value;
+			}
+			
+		}
+		$retval = $license_array;
+	}
+
+	return $retval;
+}
+
+function get_license_html($sector)
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	$retval = false;
+	$error_message = false;
+
+	if ($sector == "") {
+		if ($need_logging)
+			write_log("sql.inc: get_license({$sector}), Need sector");
+		return $retval;
+	}
+
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "SELECT * FROM license WHERE sector = ?";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(array($sector));
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: get_license({$sector}), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message) {
+		$retval = $result;
+	}
+
+	return $retval;
+}
+
+function write_license($sector, $fund_private, $fund_corporation, $fund_explain, $cooperative_name, $cooperative_private, $cooperative_corporation, $cooperative_explain, $detail_head, $detail, $example_head, $example, $facility, $ability_head, $ability, $technician)
+{
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging, $homeip, $config;
+	$retval = false;
+	$error_message = false;
+
+	if ($sector == "") {
+		if ($need_logging)
+			write_log("sql.inc: write_license({$sector}), Need sector");
+		return $retval;
+	}
+
+	$fund_explain = trim($fund_explain);
+	$cooperative_name = trim($cooperative_name);
+	$cooperative_explain = save_textarea($cooperative_explain);
+	$cooperative_private = trim($cooperative_private);
+	$cooperative_corporation = trim($cooperative_corporation);
+	$detail_head = save_textarea($detail_head);
+	$detail = save_textarea($detail);
+	$example_head = save_textarea($example_head);
+	$example = save_textarea($example);
+	$facility = save_textarea($facility);
+	$ability_head = save_textarea($ability_head);
+	$ability = save_textarea($ability);
+	//technician은 table tag 포함되어 오기 때문에 변형 필요하지않다. 
+	$remove_sql = "DELETE FROM license WHERE sector = ?";
+	$add_sql = "INSERT INTO license VALUES (0
+,'" . $sector . "'
+," . $fund_private . "
+," . $fund_corporation . "
+,'" . $fund_explain . "'
+,'" . $cooperative_name . "'
+,'" . $cooperative_private . "'
+,'" . $cooperative_corporation . "'
+,'" . $cooperative_explain . "'
+,'" . $detail_head . "'
+,'" . $detail . "'
+,'" . $example_head . "'
+,'" . $example . "'
+,'" . $facility . "'
+,'" . $ability_head . "'
+,'" . $ability . "'
+,'" . $technician . "'
+,'" . $homeip . "'
+,now()
+)";
+
+	if ($need_logging)
+		write_log("write_license({$sector})-query: " . $add_sql);
+
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		/* remove */
+		$stmt = $pdo->prepare($remove_sql);
+		$stmt->execute(array($sector));
+		/* add */
+		$stmt = $pdo->prepare($add_sql);
+		$stmt->execute();
+	} catch (PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: write_license({$sector}), " . $error_message);
+	}
+	$pdo = null;
+	if (!$error_message)
+		$retval = true;
+
+	return $retval;
+}
+
+function is_license_exist($sector) {
+	global $charset, $dbserver, $dbname, $dbuser, $dbpassword, $need_logging;
+	$retval = false;
+	$error_message = false;
+	$dsn = "mysql:host={$dbserver};port=3306;dbname={$dbname}{$charset}";
+	try {
+		$pdo = new PDO($dsn, $dbuser, $dbpassword, array(PDO::ATTR_TIMEOUT => 7));
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "SELECT count(sector) FROM license WHERE sector = ?";
+		$stmt = $pdo->prepare($sql);
+		$stmt->execute(array($sector));
+		$result = $stmt->fetchColumn();
+		if ($result > 0)
+			$retval = true;
+	} catch(PDOException $e) {
+		$error_message = $e->getMessage();
+		if ($need_logging)
+			write_log("sql.inc: is_license_exist(), " . $error_message);
+	}
+	$pdo = null;
+	return $retval;
+}
+
+
 
 ?>
 <!-- sql functions loaded -->

@@ -36,9 +36,11 @@ window.addEventListener('DOMContentLoaded', event => {
 			target: '#mainNav',
 			offset: 72,
 		});
-	}; */
+	}; 
+	*/
 
 	// Collapse responsive navbar when toggler is visible
+	/* 
 	const navbarToggler = document.body.querySelector('.navbar-toggler');
 	const responsiveNavItems = [].slice.call(
 		document.querySelectorAll('#navbarResponsive .nav-link')
@@ -50,5 +52,6 @@ window.addEventListener('DOMContentLoaded', event => {
 			}
 		});
 	});
+	*/
 
 });

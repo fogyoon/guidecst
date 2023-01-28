@@ -105,51 +105,6 @@
 	});
 </script>
 
-<script src="js/scripts.js"></script>
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-<script src="js/scrollreveal.min.js"></script>
-<script>
-	(function($) {
-		"use strict"; // Start of use strict
-
-		// Scroll reveal calls
-		window.sr = ScrollReveal();
-
-		sr.reveal('.sr-icon-1', {
-			delay: 200,
-			scale: 0
-		});
-		sr.reveal('.sr-icon-2', {
-			delay: 300,
-			scale: 0
-		});
-		sr.reveal('.sr-icon-3', {
-			delay: 400,
-			scale: 0
-		});
-		sr.reveal('.sr-icon-4', {
-			delay: 500,
-			scale: 0
-		});
-		sr.reveal('.sr-button', {
-			delay: 200,
-			distance: '15px',
-			origin: 'bottom',
-			scale: 0.8
-		});
-		sr.reveal('.sr-contact-1', {
-			delay: 200,
-			scale: 0
-		});
-		sr.reveal('.sr-contact-2', {
-			delay: 400,
-			scale: 0
-		});
-
-	})(jQuery); // End of use strict
-</script>
-
-
 <!-- Footer-->
 <footer class="footer text-center">
 	<div class="container">
@@ -253,8 +208,8 @@
 					</div>
 					<!-- Phone number input-->
 					<div class="form-floating mb-3">
-						<input name="inquiryPhone" class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" required />
-						<label for="phone">전화번호</label>
+						<input name="inquiryPhone" class="form-control" id="inquiryPhone" type="tel" placeholder="(123) 456-7890" required />
+						<label for="inquiryPhone">전화번호</label>
 					</div>
 					<!-- Email address input-->
 					<div class="form-floating mb-3">
@@ -392,12 +347,6 @@
 	</div>
 </div>
 <?php endif;?>
-
-<!-- Bootstrap core JS-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>  -->
-<!-- Core theme JS-->
-<script src="js/scripts.js"></script>
 
 <?php if ($now_send_inquiry):?>
 <script language="javaScript">

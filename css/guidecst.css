@@ -74,7 +74,7 @@
 .masthead-heading {
 	font-family: var(--bs-font-gmarket-sans-kr);
 	font-size: 3.3rem;
-	line-height: 2.75rem;
+	line-height: 3.5rem;
 	color: #2c3e50;
 }
 
@@ -96,7 +96,7 @@
 
 	.masthead-heading {
 		font-size: 4.5rem;
-		line-height: 3.5rem;
+		line-height: 4rem;
 	}
 
 	.masthead-subheading {
@@ -195,6 +195,35 @@
 	background-position: center;
 	background-size: cover;
 	background-color: #000;
+	/* color: #ffffff; */
+	z-index: 1;
+}
+
+.subhead-bright::before {
+	content: "";
+	opacity: 0.5;
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #fff;
+}
+
+.subhead-dart::before {
+	content: "";
+	opacity: 0.5;
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #000;
+}
+
+.subhead-white {
 	color: #ffffff;
 }
 
@@ -215,6 +244,30 @@
 	.subhead {
 		padding-top: calc(4rem + 104px);
 		padding-bottom: 2rem;
+	}
+
+	.subhead-bright::before {
+		content: "";
+		opacity: 0.5;
+		position: absolute;
+		z-index: -1;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: #fff;
+	}
+
+	.subhead-dark::before {
+		content: "";
+		opacity: 0.5;
+		position: absolute;
+		z-index: -1;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: #000;
 	}
 
 	.subhead .subhead-heading {
@@ -382,6 +435,28 @@
 
 /* license END */
 
+/* tranfer-proc START */
+.card-proc {
+	border: 0.5rem solid rgba(0, 0, 0, 0.125);
+}
+
+.tranferproc .card-title {
+	font-size: 1.3rem;
+}
+
+.card-title-step {
+	margin-top: -2.5rem;
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: aliceblue;
+	background: #5f8ed0;
+	width: fit-content;
+	padding-inline: 1rem;
+	padding-block: 0.3rem;
+}
+
+/* tranfer-proc END */
+
 .page-section-1 {
 	padding: 0.5rem;
 	padding-bottom: 4rem;
@@ -393,6 +468,17 @@
 	font-weight: 600;
 }
 
+.text-logo {
+	font-family: var(--bs-font-gmarket-sans-kr);
+	font-size: 1.4rem;
+	font-weight: 600;
+	color: #fff;
+	padding-top: 0.3125rem;
+	padding-bottom: 0.3125rem;
+	margin-right: 1rem;
+	text-decoration: none;
+	white-space: nowrap;
+}
 
 .text-L {
 	font-family: var(--bs-font-nanum-gothic-kr);

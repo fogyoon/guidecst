@@ -37,7 +37,7 @@ if (isset($_POST['send_inquiry'])) {
 	<meta property="og:type" content="website">
 	<meta property="og:title" content="<?= $title ?>">
 	<meta property="og:description" content="<?= $description ?>">
-	<meta property="og:image" content="http://www.guideconsulting.co.kr/assets/img/Logo_u1.svg">
+	<meta property="og:image" content="http://<?=$config['home_url']?>/assets/img/Logo_u2.svg">
 	<meta property="og:url" content="<?= $config['full_url'] ?><?php echo $_SERVER['PHP_SELF']; ?>">
 	<meta name="naver-site-verification" content="" />
 	<meta name="msvalidate.01" content="" />
@@ -85,7 +85,8 @@ if (isset($_POST['send_inquiry'])) {
 	<!-- Navigation-->
 	<nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
 		<div class="container">
-			<a class="navbar-brand" href="index.php"> <img src="assets/img/Logo-u1.svg" alt="..." /></a>
+			<!-- <a class="navbar-brand" href="index.php"> <img src="assets/img/Logo-u1.svg" alt="..." /></a> -->
+			<a class="text-logo" href="index.php"><img class="my_img" src="/assets/img/Logo_u2.svg"></a>
 			<button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				Menu
 				<i class="fas fa-bars"></i>

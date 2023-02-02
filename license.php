@@ -92,7 +92,7 @@ include("header.inc");
 ?>
 
 <!-- Masthead-->
-<header class="subhead text-center transfer-bg-img2 text-secondary">
+<header class="subhead text-center transfer-bg-img2 text-secondary subhead-bright">
 	<div class="container">
 		<h1 class="subhead-heading"><?=$category?> 면허 등록 기준</h1>
 		<p class="subhead-subheading">면허 등록 기준을 업종별로 확인하세요.</p>
@@ -147,12 +147,12 @@ include("header.inc");
 			</form>
 		<?php endif;?>
 		
-		<!-- 자금 및 공제조합 출자 -->
-		<div class="col-auto mt-3"><h5><i class="bi bi-tag-fill"></i> 자금 및 공제조합 출자</h5></div>
+		<!-- 자본금 및 공제조합 출자 -->
+		<div class="col-auto mt-3"><h5><i class="bi bi-tag-fill"></i> 자본금 및 공제조합 출자</h5></div>
 		<div class="row row-cols-1 row-cols-md-2 g-3">
 			<div class="col">
 				<div class="row mx-md-2 mx-lg-3">
-					<div class="col-5 d-flex align-items-center justify-content-center bg-primary-subtle">자금</div>
+					<div class="col-5 d-flex align-items-center justify-content-center bg-primary-subtle">자본금</div>
 					<div class="col-7">
 						<div class="row transfer-border">
 							<div class="col d-flex align-items-center justify-content-center p-2 border-end"><i class="bi bi-building-fill"></i> 법인</div>

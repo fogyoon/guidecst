@@ -50,10 +50,10 @@ if (isset($_SESSION['username']) && $_SESSION['username']) {
 }
 
 // 로그 파일
-if ($for_test)
-	$error_log_file = "../phperror".$homeip.".log";
-else
-	$error_log_file = "../phperror.log";
+//if ($for_test)
+//	$error_log_file = "../phperror".$homeip.".log";
+//else
+$error_log_file = "../phperror.log";
 
 // 로그인 결과
 $singinfail = "signinfail";
@@ -72,17 +72,18 @@ if ($thisMonth > 3) {
 	$performance_from_year = $thisYear - 2;
 	$performance_last_yesr = $thisYear - 1;
 }
-$performance_yesrs = array($performance_from_year - 4, $performance_from_year - 3, $performance_from_year - 2, $performance_from_year - 1, $performance_from_year); 
+$performance_yesrs = array($performance_from_year - 4, $performance_from_year - 3, $performance_from_year - 2, $performance_from_year - 1, $performance_from_year);
 
 $config = array(
-	'home_url' => "guideconsulting.co.kr",
-	'full_url' => "http://guideconsulting.co.kr",
+	'home_url' => "u1info.co.kr",
+	'full_url' => "http://u1info.co.kr",
 	'home_ip' => "183.111.199.212",
 	'db_server' => "127.0.0.1",
 	'db_user' => "guidecst",
 	'db_password' => "dbstjdqh6551~",
 	'db_name' => "guidecst",
-	'company_kr_name' => "주식회사 유원건설정보",
+	'company_kr_name' => "(주)유원건설정보",
+	'company_kr_name_short' => "유원건설정보",
 	'company_en_name' => "U1",
 	'company_address' => "인천시 부평구 갈산동 94 C동 1807호 인천테크노벨리U1센터",
 	'company_tel' => "032-209-1422",
@@ -91,9 +92,9 @@ $config = array(
 	'company_fax' => "032-209-1423",
 	'company_email' => "mp885@naver.com",  // 문의하기 이메일을 받을 담당자의 이메일 주소. utiles.inc에서 send_inquiry()에 사용
 	'company_privacy_manager' => "현숙",
-	'admin_email' => "admin@guideconsulting.co.kr",  // cafe24에 발송 용으로 등록한 이메일 주소. utiles.inc에서 send_inquiry()에 사용
+	'admin_email' => "admin@u1info.co.kr",  // cafe24에 발송 용으로 등록한 이메일 주소. utiles.inc에서 send_inquiry()에 사용
 	'kakao_key' => "c089c8172def97eb00c07217cae17495", // 카카오에 등록하고 변경해주자
-	'inquiry_classfication' => array('면허등록', '양도양수', '기업진단'. '실태조사', '잔고증명', '기타'), // 문의 구분
+	'inquiry_classfication' => array('신규건설업등록', '양도양수', '기업진단' . '실태조사', '분할합병', '연말결산', '기타'), // 문의 구분
 	'new_constructor_type_filter' => array('건축', '토목', '전문'), //신규면허 필터링
 	'main_category' => array('종합건설업', '전문건설업', '기타공사업'),
 	'종합건설업' => array("건축공사업", "토목공사업", "토목건축공사업", "산업·환경설비공사업", "조경공사업"),
@@ -127,14 +128,18 @@ $config = array(
 		'양도양수' => "transfer.php",
 		'기업진단' => "diagnosis.php",
 		'분할합병 및 법인전환' => "merger.php",
-		'연말정산' => "settlement.php"
+		'연말결산' => "settlement.php"
 	),
 	'page_other_files' => array(
 		'양도양수정보' => "transfer_info.php",
 		'양도양수수정' => "transfer_edit.php",
 		'양도양수절차' => "transfer_proc.php",
 		'신규건설업등록수정' => "license_edit.php"
-	)
+	),
+	'facebook_link' => '',
+	'insta_link' => '',
+	'twitter_link' => '',
+	'blog_link' => ''
 );
 
 

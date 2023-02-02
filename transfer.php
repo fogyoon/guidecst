@@ -90,7 +90,7 @@ include("header.inc");
 ?>
 
 <!-- Masthead-->
-<header class="subhead text-center transfer-bg-img">
+<header class="subhead text-center transfer-bg-img3  text-secondary">
 	<div class="container">
 		<h1 class="subhead-heading">양도양수 리스트</h1>
 		<p class="subhead-subheading">관심있는 기업을 찾아 클릭하면 자세한 내용을 확인하고 문의할 수 있습니다.</p>
@@ -278,17 +278,18 @@ function other_constructor_check(checkAll)  {
 					<?php endif;?>
 					<th scope="col" rowspan="2">상태</th>
 					<th scope="col" rowspan="2">업종</th>
-					<th scope="col" rowspan="2">법인년도</th>
-					<th scope="col" rowspan="2">면허년도</th>
-					<th scope="col" rowspan="2">자본금</th>
-					<th scope="col" colspan="2">실적</th>
 					<th scope="col" rowspan="2">시공능력</th>
+					<th scope="col" colspan="3">실적</th>
+					<th scope="col" rowspan="2">설립연도<br>자본금</th>
+					<th scope="col" rowspan="2">출자좌수<br>공제잔액</th>
+					<th scope="col" rowspan="2">회사형태</th>
+					<th scope="col" rowspan="2">지역</th>
 					<th scope="col" rowspan="2">양도가</th>
-					<th scope="col" rowspan="2">수정일</th>
 				</tr>
 				<tr class="align-middle text-center">
 					<th scope="col">3년실적</th>
 					<th scope="col">5년실적</th>
+					<th scope="col"><?=$performance_last_yesr?></th>
 				</tr>
 			</thead>
 		<?php if (count($transfer_list_array) > 0):?>
@@ -296,6 +297,7 @@ function other_constructor_check(checkAll)  {
 				<?php $sn = 0;
 				foreach ($transfer_list_array as $eachtransfer) : ?>
 					<tr onClick="location.href='transfer_info.php?reg_number=<?= $eachtransfer['reg_number'] ?>'" style="cursor:pointer;" data-bs-container="body" data-bs-toggle="popover" data-bs-custom-class="custom-popover" data-bs-trigger="hover focus" data-bs-html="true" data-bs-content="<?= $eachtransfer['note'] ?>" data-bs-placement="<?php if ($sn < 1) echo "bottom"; else echo "top"; ?>">
+						<!-- 등록번호 -->
 						<td><?= $eachtransfer['reg_number'] ?>
 							<?php
 							if ($eachtransfer['sales_five_ar'] == 0) echo "<br><span class=\"text-primary\">신규</span>";
@@ -310,12 +312,15 @@ function other_constructor_check(checkAll)  {
 							}
 							?>
 						</td>
+						<!-- 회사명 -->
 						<?php if ($userlogin):?>
 							<td><?=$eachtransfer['company_name']?></td>
 						<?php endif;?>
+						<!-- 상태 -->
 						<td><?php if ($eachtransfer['status']) echo "계약가능";
 							else echo "계약불능"; ?>
 						</td>
+						<!-- 업종 -->
 						<td class="text-success">
 							<?php $sector_array = explode("|", $eachtransfer['sector_ar']);
 							$numberofar = count($sector_array);
@@ -326,44 +331,7 @@ function other_constructor_check(checkAll)  {
 							}
 							?>
 						</td>
-						<td><?= $eachtransfer['year_founded'] ?></td>
-						<td>
-							<?php $licensed_array = explode("|", $eachtransfer['licensed_ar']);
-							$numberofar = count($licensed_array);
-							for ($i = 0; $i < $numberofar; $i++) {
-								echo $licensed_array[$i];
-								if ($i < $numberofar - 1)
-									echo "<br>";
-							}
-							?>
-						</td>
-						<td><?php echo print_money($eachtransfer['capital']); ?></td>
-						<td class="text-info">
-							<?php
-							if ($eachtransfer['sales_three_ar'] != "") {
-								$sales_three_array = explode("|", $eachtransfer['sales_three_ar']);
-								$numberofar = count($sales_three_array);
-								for ($i = 0; $i < $numberofar; $i++) {
-									echo print_money(intval($sales_three_array[$i]));
-									if ($i < $numberofar - 1)
-										echo "<br>";
-								}
-							}
-							?>
-						</td>
-						<td class="text-info">
-							<?php
-							if ($eachtransfer['sales_five_ar'] != "") {
-								$sales_five_array = explode("|", $eachtransfer['sales_five_ar']);
-								$numberofar = count($sales_five_array);
-								for ($i = 0; $i < $numberofar; $i++) {
-									echo print_money(intval($sales_five_array[$i]));
-									if ($i < $numberofar - 1)
-										echo "<br>";
-								}
-							}
-							?>
-						</td>
+						<!-- 시공능력 -->
 						<td>
 							<?php
 							if ($eachtransfer['ablility_ar'] != "") {
@@ -377,8 +345,58 @@ function other_constructor_check(checkAll)  {
 							}
 							?>
 						</td>
+						<!-- 3년 실적 -->
+						<td class="text-info">
+							<?php
+							if ($eachtransfer['sales_three_ar'] != "") {
+								$sales_three_array = explode("|", $eachtransfer['sales_three_ar']);
+								$numberofar = count($sales_three_array);
+								for ($i = 0; $i < $numberofar; $i++) {
+									echo print_money(intval($sales_three_array[$i]));
+									if ($i < $numberofar - 1)
+										echo "<br>";
+								}
+							}
+							?>
+						</td>
+						<!-- 5년실적 -->
+						<td class="text-info">
+							<?php
+							if ($eachtransfer['sales_five_ar'] != "") {
+								$sales_five_array = explode("|", $eachtransfer['sales_five_ar']);
+								$numberofar = count($sales_five_array);
+								for ($i = 0; $i < $numberofar; $i++) {
+									echo print_money(intval($sales_five_array[$i]));
+									if ($i < $numberofar - 1)
+										echo "<br>";
+								}
+							}
+							?>
+						</td>
+						<!-- 최근실적 -->
+						<td class="text-info">
+							<?php
+							if ($eachtransfer['sales_last_ar'] != "") {
+								$sales_last_array = explode("|", $eachtransfer['sales_last_ar']);
+								$numberofar = count($sales_last_array);
+								for ($i = 0; $i < $numberofar; $i++) {
+									echo print_money(intval($sales_last_array[$i]));
+									if ($i < $numberofar - 1)
+										echo "<br>";
+								}
+							}
+							?>
+						</td>
+						<!-- 설립연도 / 자본금 -->
+						<td><?= $eachtransfer['year_founded'] ?><br><?php echo print_money($eachtransfer['capital']); ?></td>
+						<!-- 출자좌수 / 공제잔액 -->
+						<td><?= $eachtransfer['deposit_bill'] ?>좌<br><?php echo print_money($eachtransfer['remaining_amount']); ?></td>
+						<!-- 회사형태 -->
+						<td><?= $eachtransfer['company_type'] ?></td>
+						<!-- 지역 -->
+						<td><?= $eachtransfer['region'] ?></td>
+						<!-- 양도가 -->
 						<td class="text-danger"><?php if($eachtransfer['transfer_price'] == 0) echo "협의"; else echo print_money($eachtransfer['transfer_price']); ?></td>
-						<td><?php echo date2ymd($eachtransfer['modfied_date']); ?></td>
 					</tr>
 				<?php $sn++;
 				endforeach; ?>

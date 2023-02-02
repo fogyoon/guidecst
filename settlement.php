@@ -7,9 +7,9 @@ include("inc/text.inc");
 //include("inc/utils.inc"); //그외 functions 
 //include("inc/sql.inc"); //mysql 관련 functions
 
-$title = "연말 정산 / 잔고 증명";
-$description = "건설업 연말 정산 잔고 증명";
-$keywords = "건설업, 연말정산, 잔고증명, 건설연말정산, 건설잔고증명";
+$title = "연말 결산 / 잔고 증명";
+$description = "건설업 연말결산 잔고 증명";
+$keywords = "건설업, 연말결산, 잔고증명, 건설연말결산, 건설잔고증명, 연말결산";
 
 //head와 로고, navbar는 아래 파일에서 수정하세요.
 include("header.inc");
@@ -20,8 +20,8 @@ include("header.inc");
 <!-- Masthead-->
 <header class="subhead text-center transfer-bg-img6">
 	<div class="container">
-		<h1 class="subhead-heading">연말 정산 / 잔고 증명</h1>
-		<p class="subhead-subheading">연말 정산 / 잔고 증명 페이지입니다.</p>
+		<h1 class="subhead-heading">연말 결산</h1>
+		<p class="subhead-subheading">연말 결산 / 잔고 증명 페이지입니다.</p>
 	</div>
 </header>
 <!-- Portfolio Section-->
@@ -35,7 +35,7 @@ include("header.inc");
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-left p-4">
                             <h4 class="text-white text-M sr-icon-4">자본금 계정별 인정기준</h4>
-                            <p class="mb-0 text-white-50" style="font-size:1.2rem;">건설업 연말정산 자본금 안내
+                            <p class="mb-0 text-white-50" style="font-size:1.2rem;">건설업 연말 결산 자본금 안내
 건설업체에 대한 자본금 등록기준 부실업체의 상시정검하는 시스템의 강화로 인하여 행정처분을 받는 사례가 빈번하게 발생되고 잇습니다. 하여 수시로 건설업 관리규정에 의한 실질 자본금 인정기준을 확인하여 자본금 미달이 발생하지 않도록 대비하셔야 합니다.
                         </div>
                     </div>
@@ -190,9 +190,9 @@ include("header.inc");
 
 		<!-- About Section Button-->
 		<div class="text-center mt-4">
-			<a class="btn btn-xl btn-outline-light" href="#">
+			<a class="btn btn-xl btn-outline-light" data-bs-toggle="modal" data-bs-target="#inquiryThisModal" href="#">
 				<i class="fas fa-download me-2"></i>
-				잔고증명 문의하기
+				연말결산 문의하기
 			</a>
 		</div>
 
@@ -203,26 +203,55 @@ include("header.inc");
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!-- 이 매물 문의하기 modal -->
+<div class="modal fade" id="inquiryThisModal" tabindex="-1" aria-labelledby="inquiryThisModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content px-md-3 px-lg-5 py-3" id="inquiryThisModalContent">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="inquiryThisModalLabel">문의하실 내용을 입력해 보내주시면 연락 드리겠습니다.</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="inquiryForm" action="<?= $thispage_filename ?>" method="post">
+					<!-- Name input-->
+					<div class="mb-3">
+						<select name="inquiryClassfication" class="form-select" id="inquiryClassfication" style="height: calc(3.5rem + 2px);" placeholder="상담 문의 내용 선택" required>
+							<option value="">문의사항 분류를 선택해 주세요.</option>
+							<?php foreach ($config['inquiry_classfication'] as $inqiry_class) : ?>
+								<option value="<?= $inqiry_class ?>" <?php if($inqiry_class == "연말결산") echo "selected";?>><?= $inqiry_class ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<!-- Name input-->
+					<div class="form-floating mb-3">
+						<input name="inquiryName" class="form-control" id="inquiryname" type="text" placeholder="신청자명..." required />
+						<label for="inquiryname">신청자명 or 회사명</label>
+					</div>
+					<!-- Phone number input-->
+					<div class="form-floating mb-3">
+						<input name="inquiryPhone" class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" required />
+						<label for="phone">전화번호</label>
+					</div>
+					<!-- Email address input-->
+					<div class="form-floating mb-3">
+						<input name="inquiryEmail" class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" required />
+						<label for="email">이메일 주소</label>
+					</div>
+					<!-- Message input-->
+					<div class="form-floating mb-3">
+						<textarea name="inquiryMessage" class="form-control" id="message" type="text" placeholder="문의 내용..." style="height: 10rem" required></textarea>
+						<label for="message">문의 내용</label>
+					</div>
+					<!-- Submit Button-->
+					<button class="btn btn-primary" style="display: block; margin-left: auto; margin-right: auto;" id="inquirySendButton" type="submit" name="send_inquiry">문의 내용 보내기</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 <?php

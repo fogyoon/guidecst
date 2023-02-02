@@ -41,7 +41,7 @@ include("header.inc");
 
 
 <!-- Masthead-->
-<header class="subhead text-center transfer-bg-img">
+<header class="subhead text-center transfer-bg-img subhead-bright">
 	<div class="container">
 		<h1 class="subhead-heading">양도양수 물건 정보</h1>
 		<p class="subhead-subheading">양도양수 안내 페이지입니다.</p>
@@ -353,7 +353,7 @@ include("header.inc");
 						<select name="inquiryClassfication" class="form-select" id="inquiryClassfication" style="height: calc(3.5rem + 2px);" placeholder="상담 문의 내용 선택" required>
 							<option value="">문의사항 분류를 선택해 주세요.</option>
 							<?php foreach ($config['inquiry_classfication'] as $inqiry_class) : ?>
-								<option value="<?= $inqiry_class ?>"><?= $inqiry_class ?></option>
+								<option value="<?= $inqiry_class ?>" <?php if($inqiry_class == "양도양수") echo "selected";?>><?= $inqiry_class ?></option>
 							<?php endforeach; ?>
 						</select>
 					</div>

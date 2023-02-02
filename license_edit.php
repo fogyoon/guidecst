@@ -137,7 +137,7 @@ include("header.inc");
 ?>
 
 <!-- Masthead-->
-<header class="subhead text-center transfer-bg-img2 text-secondary">
+<header class="subhead text-center transfer-bg-img2 text-secondary subhead-bright">
 	<div class="container">
 		<h1 class="subhead-heading">면허 등록 기준 수정</h1>
 		<p class="subhead-subheading"><?php if($sector != "") echo $sector."의 ";?>면허 등록 기준을 수정합니다.</p>

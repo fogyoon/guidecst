@@ -111,10 +111,10 @@
 		<div class="row justify-content-center mb-3">
 			<!-- Footer Social Icons-->
 			<div class="col-lg-4">
-				<a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-facebook-f"></i></a>
-				<a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-twitter"></i></a>
-				<a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-linkedin-in"></i></a>
-				<a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-dribbble"></i></a>
+				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['blog_link']?>" title="<?=$config['company_kr_name_short']?> 블로그"><img src="assets/img/naver_blog.png" alt="u1info 네이버 블로그"></img></a>
+				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['facebook_link']?>" title="<?=$config['company_kr_name_short']?> 페이스북"><i class="fab fa-fw fa-facebook-f"></i></a>
+				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['twitter_link']?>" title="<?=$config['company_kr_name_short']?> 트위터"><i class="fab fa-fw fa-twitter"></i></a>
+				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['insta_link']?>" title="<?=$config['company_kr_name_short']?> 인스타그램"><i class="bi bi-instagram" style="font-size:1.1em"></i></a>
 			</div>
 		</div>
 		<nav style="--bs-breadcrumb-divider: '|';" aria-label="breadcrumb">
@@ -124,7 +124,6 @@
 				<li class="breadcrumb-item footer-info"><span class="fw-bolder">전화</span>: <?= $config['company_tel'] ?></li>
 				<li class="breadcrumb-item footer-info"><span class="fw-bolder">사업자등록번호</span>: <?= $config['company_license'] ?></li>
 				<li class="breadcrumb-item footer-info"><span class="fw-bolder">팩스</span>: <?= $config['company_fax'] ?></li>
-				<li class="breadcrumb-item footer-info"><span class="fw-bolder">이메일</span>: <?= $config['company_email'] ?></li>
 				<li class="breadcrumb-item footer-info"><span class="fw-bolder">개인정보처리담당자</span>: <?= $config['company_privacy_manager'] ?></li>
 			</ol>
 		</nav>

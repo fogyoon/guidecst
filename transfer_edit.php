@@ -180,7 +180,7 @@ include("header.inc"); // header에서 로그인 상태 확인합니다.
 ?>
 
 <!-- Masthead-->
-<header class="subhead text-center transfer-bg-img2">
+<header class="subhead text-center transfer-bg-img2 subhead-bright">
 	<div class="container">
 		<h1 class="subhead-heading">양도양수 매물 수정</h1>
 		<p class="subhead-subheading">양도양수 매물을 추가 또는 수정합니다.</p>

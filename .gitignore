@@ -4,6 +4,7 @@ dhnco/
 development_tools/
 image_working/
 pdf/
+backup/
 *.[oa]
 .vscode/
 phperror.log

@@ -27,10 +27,11 @@ if (!check_connect_dbserver()) {
 	 */
 	//$filters_array = array('need_filter' => false, 'sectors' => array("토목","건축"), 'new_licensed' => false, 'offset' => 1);
 	//$reg_number = "10001";
-	$no_col = count_transfer_list($filters_array);
+	//$no_col = count_transfer_list($filters_array);
 	//$result_array = get_transfer_list($filters_array);
 	//$error_log = read_log();
-	add_user_info("uoneinfo", "u8rt*gn30", "admin");
+	//add_user_info("uoneinfo", "u8rt*gn30", "admin");
+	create_my_function();
 
 }
 

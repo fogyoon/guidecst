@@ -18,7 +18,7 @@ include("header.inc");
 ?>
 
 <!-- Masthead-->
-<header class="subhead text-center transfer-bg-img4">
+<header class="subhead text-center transfer-bg-img4 subhead-bright">
 	<div class="container">
 		<h1 class="subhead-heading">기업 진단</h1>
 		<p class="subhead-subheading">기업회계 기준 또는 관할관청에서 정한 규정</p>
@@ -36,7 +36,13 @@ include("header.inc");
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-left p-4">
                             <h4 class="text-white text-M sr-icon-4">기업진단</h4>
-                            <p class="mb-0 text-white-50" style="font-size:1.2rem;">기업경영의 불합리성을 시정하고 건전한 기업의 유지 · 발전을 위해서 전문가인 제3자에게 의뢰하여, 기업경영실태를 조사 · 분석케 하여 그 결과에 따라 결함을 개선하기 위한 적절한 대책을 마련하고 권고 · 지도를 행하게 하는 것을 말한다.
+                            <p class="mb-0 text-white-50" style="font-size:1.2rem;">
+관할관청에 등록을 필요로 하는 업종에 한하여<br>
+재무제표를 기업회계기준 또는 관할관청에서 정한 규정에 의하여<br>
+진단 대상 사업 실질자본금을 산출하는 과정의 결과입니다.<br>
+적격·부적격·진단불능 등으로 구분하며 정량적으로 분석됩니다.<br>
+회사의 종합적인 경영상태를 파악하기 위하여 수행하는<br>
+정량적·정성적 분석의 과정인 경영진단과는 의미가 다릅니다.
                             <hr class="d-none d-lg-primary mb-0 ms-0" />
                         </div>
                     </div>
@@ -59,11 +65,11 @@ include("header.inc");
 		<div class="row">
 			<div class="col-lg-11 ms-auto font-nanumgothic">
 				<div class="lead">
-                    - 건설업(공사업) 신규 등록
-                    - 실질자본금 확인 (실태조사, 입찰 등)
-                    - 등록기준신고 (전기공사업)
-                    - 건설업(공사업) 업종 추가 등록
-                    - 법인양도양수 (분할합병, 법인전환)
+                    - 건설업(공사업) 신규등록시   
+					- 건설업(공사업) 업종 추가 등록시   
+                    - 주기적신고 또는 실태조사시   
+                    - 법인 등록자본금 변경시   
+                    - 법인 양도양수(분할합병시)
                 </div>
 			</div>
 		</div>
@@ -106,7 +112,12 @@ include("header.inc");
 				<tr>
 					<td><i class="fa-sharp fa-solid fa-clipboard"></i> </td>
 					<td><b>증빙서류 제출</b></td>
-					<td>재무제표, 부속명세서, 관련증빙 등</td>
+					<td>비교재무제표, 부속명세서, 관련증빙 등</td>
+				</tr>
+				<tr>
+					<td><i class="fa-sharp fa-solid fa-calendar-days"></i> </td>
+					<td><b>진단기준일 확인</b></td>
+					<td>업종별 진단기준일  검토  확인</td>
 				</tr>
 				<tr>
 					<td><i class="fa-sharp fa-solid fa-gears"></i> </td>
@@ -125,6 +136,105 @@ include("header.inc");
 					<td><b> 기업진단 제출</b></td>
 					<td>허가관청 또는 협회 1부 제출</td>
 				</tr>
+
+				
+			</tbody>
+		</table>
+
+</div>
+</section>
+
+
+
+<section class="page-section portfolio mb-0 bg-primary"  id="portfolio">
+	<div class="container">
+
+		<!-- Portfolio Section Heading-->
+		<h2 class="project-text text-center  text-white mb-0 text-M sr-icon-3">건설업(공사업)기업진단 기준일
+
+</h2>
+		<!-- Icon Divider-->
+		<div class="divider-custom divider-light">
+			<div class="divider-custom-line"></div>
+			<div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+			<div class="divider-custom-line"></div>
+		</div>
+
+
+		<!-- Section Heading-->
+
+		<!-- Section 건설업(공사업)기업진단 기준일-->
+
+		<table class="table table-striped text-L bg-white table-bordered" style="line-height: 4rem;">
+			<thead>
+				<tr>
+					<th scope="col">업종</th>
+					<th scope="col" style="line-height: 2rem;">신규신청<br>(추가등록포함)</th>
+					<th scope="col">양도양수</th>
+					<th scope="col">분할합병</th>
+					<th scope="col" style="line-height: 2rem;">자본금변경<br>(기존, 신설법인)</th>
+					<th scope="col" style="line-height: 2rem;">등록기준신고<br>(실태조사)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td style="line-height: 2rem;">건설업<br>(종합, 전문)</td>
+					<td style="line-height: 2rem;">기존법인 - 직전월말일<br>신규법인 - 설립등기일</td>
+					<td>양도양수 계약일</td>
+					<td>분할, 분할합병, 합병 등기일</td>
+					<td>지본금 변경 등기일</td>
+					<td style="line-height: 2rem;">법인 - 연차결산일<br>개인 - 12월 31일</td>
+				</tr>
+
+				<tr>
+					<td style="line-height: 2rem;">전기공사업</td>
+					<td style="line-height: 2rem;">등록신청전일부터 역산하여<br>30일 이내의 기간</td>
+					<td>양도양수 계약일</td>
+					<td>분할, 분할합병, 합병 등기일</td>
+					<td>지본금 변경 등기일</td>
+					<td style="line-height: 2rem;">공사업을 등록한 날부터<br>
+3년이 되는 날이 속하는<br>
+월의 직전월 말일</td>
+				</tr>
+				<tr>
+					<td>정보통신 공사업</td>
+					<td style="line-height: 2rem;">등록신청전일부터 역산하여<br>45일 이내의 시간</td>
+					<td>양도양수 계약일</td>
+					<td>분할, 분할합병, 합병 등기일</td>
+					<td>지본금 변경 등기일</td>
+					<td style="line-height: 2rem;">관할 시·도지사가<br>지정하는 날</td>
+				</tr>
+				<tr>
+					<td>소방시설 공사업</td>
+					<td style="line-height: 2rem;">기존법인 - 등록신청전일부터<br>역산하여 90일 이내의 기간<br>신규법인 - 설립등기일</td>
+					<td>양도양수 계약일</td>
+					<td>분할, 분할합병, 합병 등기일</td>
+					<td>지본금 변경 등기일</td>
+					<td style="line-height: 2rem;">-</td>
+				</tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 				
 			</tbody>

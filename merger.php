@@ -18,7 +18,7 @@ include("header.inc");
 ?>
 
 <!-- Masthead-->
-<header class="subhead text-center transfer-bg-img5">
+<header class="subhead text-center transfer-bg-img5 subhead-bright">
 	<div class="container">
 		<h1 class="subhead-heading">분할합병 및 법인전환</h1>
 		<p class="subhead-subheading">건설업 분할합병 및 법인전환 관련 정보입니다.</p>

@@ -14,10 +14,12 @@ if (file_exists($error_log_file)) {
 function write_log($error_message)
 {
 	global $error_log_file;
-	$fp = fopen($error_log_file, "a") or die("Unable to open file!");
-	$error_message = date("Y-m-d H:i:s") . "|" . $error_message . "\n";
-	fwrite($fp, $error_message);
-	fclose($fp);
+	$fp = fopen($error_log_file, "a");
+	if ($fp) {
+		$error_message = date("Y-m-d H:i:s") . "|" . $error_message . "\n";
+		fwrite($fp, $error_message);
+		fclose($fp);
+	}
 }
 
 function read_log()
@@ -35,11 +37,13 @@ function read_log()
 	}
 }
 
-function print_money($money)
+function print_money($money = 0)
 {
 	$retval = $money;
 	if (is_int($money)) {
-		if($money < 100) {
+		if($money < 1) {
+			$retval = "";
+		} else if($money < 100) {
 			$converted = $money * 100;
 			$retval = $converted . "만";
 		} else {
@@ -83,6 +87,7 @@ function send_inquiry($type, $name, $phone, $email, $message, $transferNo = "") 
 <p>전화번호: {$phone}</p>
 <p>이메일주소: {$email}</p>
 <p>매물 등록번호: {$transferNo}</p>
+<br>
 <p>문의내용:</p>
 <p>
 {$message}

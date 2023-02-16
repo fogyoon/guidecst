@@ -29,7 +29,7 @@ include("header.inc");
 			<div class="carousel-caption d-flex align-items-center flex-column">
 				<!-- <div class="d-flex align-items-center flex-column"> -->
 				<!-- Icon Divider-->
-				<div class="divider-custom-icon" style="color:#00a0e9; margin-top:5%; margin-bottom:3vh;">
+				<div class="divider-custom-icon" style="color:#00a0e9; margin-top:18%; margin-bottom:3vh;">
 					<i class="fas fa-star"></i>
 					<i class="fas fa-star"></i>
 					<i class="fas fa-star"></i>
@@ -39,8 +39,9 @@ include("header.inc");
 				<h1 class="masthead-heading text-uppercase mb-2 sr-icon-1">Best of the Best</h1>
 
 				<!-- Masthead Subheading-->
-				<p class="masthead-subheading font-weight-light sr-icon-4" style="margin-top:1vh; margin-bottom:20vh;"><b>유원건설정보</b>에서는 <b>가능성의 문</b>을 열어갑니다.</p>
-
+				<div class="masthead-subheading font-weight-light sr-icon-4" style="margin-top:1vh; margin-bottom:15vh;"><b>유원건설정보</b>에서는 <b>가능성의 문</b>을 열어갑니다.<br>
+				<div class="mb-2 mt-3"><i class="fas fa-phone"></i> <b>032-209-1422</b></div>
+				</div>
 				<!-- Masthead Avatar Image-->
 				<div class="row justify-content-md-center gy-3 mt-md-4 mb-2">
 					<div class="col"><a href="<?= $config['page_files']['양도양수'] ?>"><img class="my_img" src="assets/img/go1.svg"></a></div>
@@ -51,56 +52,66 @@ include("header.inc");
 				<!-- </div> -->
 			</div>
 		</header>
-		<header class="carousel-item mastheadcarousel back-img02" data-bs-interval="6000">
+
+		<header class="carousel-item active mastheadcarousel back-img02" data-bs-interval="6000">
 			<div class="carousel-caption d-flex align-items-center flex-column">
 				<!-- <div class="d-flex align-items-center flex-column"> -->
 				<!-- Icon Divider-->
-				<div class="divider-custom-icon" style="color:#00a0e9; margin-top:5%; margin-bottom:3vh;">
+				<div class="divider-custom-icon" style="color:#00a0e9; margin-top:18%; margin-bottom:3vh;">
 					<i class="fas fa-star"></i>
 					<i class="fas fa-star"></i>
 					<i class="fas fa-star"></i>
 					<i class="fas fa-star"></i>
 					<i class="fas fa-star"></i>
 				</div>
-				<h1 class="masthead-heading text-uppercase mb-2">open mind</h1>
+				<h1 class="masthead-heading text-uppercase mb-2 sr-icon-1">open mind</h1>
 
 				<!-- Masthead Subheading-->
-				<p class="masthead-subheading font-weight-light" style="margin-top:1%; margin-bottom:20vh;"><b>보다나은 세상</b>을 위한 새로운 <b>미래창조</b></p>
-
+				<div class="masthead-subheading font-weight-light sr-icon-4" style="margin-top:1vh; margin-bottom:15vh;"><b>보다나은 세상</b>을 위한 새로운 <b>미래창조</b><br>
+				<div class="mb-2 mt-3"><i class="fas fa-phone"></i> <b>032-209-1422</b></div>
+				</div>
 				<!-- Masthead Avatar Image-->
 				<div class="row justify-content-md-center gy-3 mt-md-4 mb-2">
 					<div class="col"><a href="<?= $config['page_files']['양도양수'] ?>"><img class="my_img" src="assets/img/go1.svg"></a></div>
 					<div class="col"><a href="<?= $config['page_files']['신규건설업등록'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
 					<div class="col d-none d-md-block" data-bs-toggle="modal" data-bs-target="#inquiryModal"><img class="my_img" src="assets/img/go3.svg"></div> 
+					<?php //<div class="col d-none d-md-block"><a href="/contact.php"><img class="my_img" src="assets/img/go3.svg"></a></div>?>
 				</div>
 				<!-- </div> -->
 			</div>
 		</header>
-		<header class="carousel-item mastheadcarousel back-img03" data-bs-interval="6000">
+
+
+		<header class="carousel-item active mastheadcarousel back-img03" data-bs-interval="6000">
 			<div class="carousel-caption d-flex align-items-center flex-column">
 				<!-- <div class="d-flex align-items-center flex-column"> -->
 				<!-- Icon Divider-->
-				<div class="divider-custom-icon" style="color:#00a0e9; margin-top:5%; margin-bottom:3vh;">
+				<div class="divider-custom-icon" style="color:#00a0e9; margin-top:18%; margin-bottom:3vh;">
 					<i class="fas fa-star"></i>
 					<i class="fas fa-star"></i>
 					<i class="fas fa-star"></i>
 					<i class="fas fa-star"></i>
 					<i class="fas fa-star"></i>
 				</div>
-				<h1 class="masthead-heading text-uppercase mb-2">fly to the sky</h1>
+				<h1 class="masthead-heading text-uppercase mb-2 sr-icon-1">fly to the sky</h1>
 
 				<!-- Masthead Subheading-->
-				<p class="masthead-subheading font-weight-light" style="margin-top:1%; margin-bottom:20vh;"><b>유원건설정보</b>에서 <b>날개</b>를 달아드립니다.</p>
-
+				<div class="masthead-subheading font-weight-light sr-icon-4" style="margin-top:1vh; margin-bottom:15vh;"><b>유원건설정보</b>에서 <b>날개</b>를 달아드립니다.<br>
+				<div class="mb-2 mt-3"><i class="fas fa-phone"></i> <b>032-209-1422</b></div>
+				</div>
 				<!-- Masthead Avatar Image-->
 				<div class="row justify-content-md-center gy-3 mt-md-4 mb-2">
 					<div class="col"><a href="<?= $config['page_files']['양도양수'] ?>"><img class="my_img" src="assets/img/go1.svg"></a></div>
 					<div class="col"><a href="<?= $config['page_files']['신규건설업등록'] ?>"><img class="my_img" src="assets/img/go2.svg"></a></div>
 					<div class="col d-none d-md-block" data-bs-toggle="modal" data-bs-target="#inquiryModal"><img class="my_img" src="assets/img/go3.svg"></div> 
+					<?php //<div class="col d-none d-md-block"><a href="/contact.php"><img class="my_img" src="assets/img/go3.svg"></a></div>?>
 				</div>
 				<!-- </div> -->
 			</div>
 		</header>
+
+
+
 	</div>
 	<button class="carousel-control-prev" type="button" data-bs-target="#carouselMasthead" data-bs-slide="prev">
 		<span class="carousel-control-prev-icon" aria-hidden="true"></span>

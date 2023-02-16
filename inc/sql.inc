@@ -363,7 +363,7 @@ BEGIN
 END
 ";
 
-	//qly_getPerformances
+	//qly_getPerformanceSum
 	$qly_getPerformanceSum1 = "DROP FUNCTION IF EXISTS getPerformanceSum";
 	$qly_getPerformanceSum2 = "
 CREATE FUNCTION getPerformanceSum(
@@ -392,7 +392,7 @@ BEGIN
 END
 ";
 
-	//qly_getPerformances
+	//qly_getPerformanceConcat
 	$qly_getPerformanceConcat1 = "DROP FUNCTION IF EXISTS getPerformanceConcat";
 	$qly_getPerformanceConcat2 = "
 CREATE FUNCTION getPerformanceConcat(
@@ -413,7 +413,7 @@ CREATE FUNCTION getPerformance(
 	thisYear INT
 ) RETURNS VARCHAR(32)
 BEGIN
-	RETURN (SELECT GROUP_CONCAT(annual_sales SEPARATOR '|') FROM performance WHERE reg_number = InputRegnum AND year = thisYear);
+	RETURN (SELECT GROUP_CONCAT(IFNULL(annual_sales, 0) SEPARATOR '|') FROM performance WHERE reg_number = InputRegnum AND year = thisYear);
 END
 ";
 

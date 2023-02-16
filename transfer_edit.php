@@ -115,30 +115,18 @@ if(isset($_GET['reg_number']) && $_GET['reg_number']) {
 				continue;
 			$year_licensed = $_POST['year_licensed'][$sector_key];
 			$construction_ability = $_POST['construction_ability'][$sector_key];
-			$has_slaes = false;
 			foreach($performance_yesrs as $forEachYear) {
 				if (isset($_POST['sales'][$sector_key][$forEachYear])) {
 					$year = $forEachYear;
 					$annual_sales = $_POST['sales'][$sector_key][$forEachYear];
 					if ($annual_sales > 0) {
-						$has_slaes = true;
 						add_performance_list($reg_number, $sector, $year_licensed, $construction_ability, $annual_sales, $year);
 					}
 				}
 			}
-			if (isset($_POST['sales'][$sector_key][$performance_last_yesr])) {
-				$year = $performance_last_yesr;
-				$annual_sales = $_POST['sales'][$sector_key][$performance_last_yesr];
-				if ($annual_sales > 0) {
-					$has_slaes = true;
-					add_performance_list($reg_number, $sector, $year_licensed, $construction_ability, $annual_sales, $year);
-				}
-			}
-			if (!$has_slaes) {
-				$annual_sales = "";
-				$year = $performance_last_yesr;
-				add_performance_list($reg_number, $sector, $year_licensed, $construction_ability, $annual_sales, $year);
-			}
+			$year = $performance_last_yesr;
+			$annual_sales = $_POST['sales'][$sector_key][$performance_last_yesr];
+			add_performance_list($reg_number, $sector, $year_licensed, $construction_ability, $annual_sales, $year);
 		}
 
 
@@ -261,7 +249,7 @@ include("header.inc"); // header에서 로그인 상태 확인합니다.
 				</div>
 				<div class="col">
 					<label for="construction_in_progress" class="form-label">진행중인 공사유무</label>
-					<select class="form-select" name="construction_in_progress id="construction_in_progress">
+					<select class="form-select" name="construction_in_progress" id="construction_in_progress">
 						<option value="1" <?php if($transfer_info['construction_in_progress'] == 1) echo "selected";?>>유</option>
 						<option value="0" <?php if($transfer_info['construction_in_progress'] == 0) echo "selected";?>>무</option>
 					</select>

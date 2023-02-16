@@ -318,10 +318,10 @@ function other_constructor_check(checkAll)  {
 						<?php endif;?>
 						<!-- 상태 -->
 						<td><?php if ($eachtransfer['status']) echo "계약가능";
-							else echo "계약불능"; ?>
+							else echo "<span style='color:#a1a2a2'>계약완료</span>"; ?>
 						</td>
 						<!-- 업종 -->
-						<td class="text-success">
+						<td class="text-success text-nowrap">
 							<?php $sector_array = explode("|", $eachtransfer['sector_ar']);
 							$numberofar = count($sector_array);
 							for ($i = 0; $i < $numberofar; $i++) {
@@ -332,7 +332,7 @@ function other_constructor_check(checkAll)  {
 							?>
 						</td>
 						<!-- 시공능력 -->
-						<td>
+						<td class="text-nowrap">
 							<?php
 							if ($eachtransfer['ablility_ar'] != "") {
 								$ablility_array = explode("|", $eachtransfer['ablility_ar']);
@@ -346,7 +346,7 @@ function other_constructor_check(checkAll)  {
 							?>
 						</td>
 						<!-- 3년 실적 -->
-						<td class="text-info">
+						<td class="text-info text-nowrap">
 							<?php
 							if ($eachtransfer['sales_three_ar'] != "") {
 								$sales_three_array = explode("|", $eachtransfer['sales_three_ar']);
@@ -360,7 +360,7 @@ function other_constructor_check(checkAll)  {
 							?>
 						</td>
 						<!-- 5년실적 -->
-						<td class="text-info">
+						<td class="text-info text-nowrap">
 							<?php
 							if ($eachtransfer['sales_five_ar'] != "") {
 								$sales_five_array = explode("|", $eachtransfer['sales_five_ar']);
@@ -374,7 +374,7 @@ function other_constructor_check(checkAll)  {
 							?>
 						</td>
 						<!-- 최근실적 -->
-						<td class="text-info">
+						<td class="text-info text-nowrap">
 							<?php
 							if ($eachtransfer['sales_last_ar'] != "") {
 								$sales_last_array = explode("|", $eachtransfer['sales_last_ar']);
@@ -388,15 +388,15 @@ function other_constructor_check(checkAll)  {
 							?>
 						</td>
 						<!-- 설립연도 / 자본금 -->
-						<td><?= $eachtransfer['year_founded'] ?><br><?php echo print_money($eachtransfer['capital']); ?></td>
+						<td class="text-nowrap"><?= $eachtransfer['year_founded'] ?><br><?php echo print_money($eachtransfer['capital']); ?></td>
 						<!-- 출자좌수 / 공제잔액 -->
-						<td><?= $eachtransfer['deposit_bill'] ?>좌<br><?php echo print_money($eachtransfer['remaining_amount']); ?></td>
+						<td class="text-nowrap"><?= $eachtransfer['deposit_bill'] ?>좌<br><?php echo print_money($eachtransfer['remaining_amount']); ?></td>
 						<!-- 회사형태 -->
 						<td><?= $eachtransfer['company_type'] ?></td>
 						<!-- 지역 -->
 						<td><?= $eachtransfer['region'] ?></td>
 						<!-- 양도가 -->
-						<td class="text-danger"><?php if($eachtransfer['transfer_price'] == 0) echo "협의"; else echo print_money($eachtransfer['transfer_price']); ?></td>
+						<td class="text-danger text-nowrap"><?php if($eachtransfer['transfer_price'] == 0) echo "협의"; else echo print_money($eachtransfer['transfer_price']); ?></td>
 					</tr>
 				<?php $sn++;
 				endforeach; ?>

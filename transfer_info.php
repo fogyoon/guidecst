@@ -210,8 +210,8 @@ include("header.inc");
 					<?php foreach($performance_yesrs as $forEachYear):?>
 					<th scope="col"><?=$forEachYear?>년</th>
 					<?php endforeach;?>
-					<th scope="col">최근3년실적<br><span style="font-size: 0.8em">(<?=$performance_from_year?>기준)</th>
-					<th scope="col">최근5년실적<br><span style="font-size: 0.8em">(<?=$performance_from_year?>기준)</th>
+					<th scope="col">최근3년실적</th>
+					<th scope="col">최근5년실적</th>
 					<th scope="col"><?=$performance_last_yesr?>년</th>
 				</tr>
 			</thead>

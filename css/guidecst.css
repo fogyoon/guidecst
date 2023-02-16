@@ -305,8 +305,17 @@
 	background-image: url("../assets/img/transfer_header06.jpg");
 }
 
-
+.my-bg-5-1 {
+	background-image: url("../assets/img/bg-line1.jpg");
+}
+.my-bg-5-2 {
+	background-image: url("../assets/img/bg-line2.jpg");
+}
 /* subhead for subpages END */
+.divider-custom2.divider-light2 .divider-custom-icon2 {
+	background-color: #198754;
+}
+
 
 /* plainhead for subpages START */
 .plainhead {

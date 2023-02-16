@@ -21,7 +21,7 @@ include("header.inc");
 <header class="subhead text-center transfer-bg-img6">
 	<div class="container">
 		<h1 class="subhead-heading">연말 결산</h1>
-		<p class="subhead-subheading">연말 결산 / 잔고 증명 페이지입니다.</p>
+		<p class="subhead-subheading">연말 결산 페이지입니다.</p>
 	</div>
 </header>
 <!-- Portfolio Section-->

@@ -111,10 +111,10 @@
 		<div class="row justify-content-center mb-3">
 			<!-- Footer Social Icons-->
 			<div class="col-lg-4">
-				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['blog_link']?>" title="<?=$config['company_kr_name_short']?> 블로그"><img src="assets/img/naver_blog.png" alt="u1info 네이버 블로그"></img></a>
-				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['facebook_link']?>" title="<?=$config['company_kr_name_short']?> 페이스북"><i class="fab fa-fw fa-facebook-f"></i></a>
-				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['twitter_link']?>" title="<?=$config['company_kr_name_short']?> 트위터"><i class="fab fa-fw fa-twitter"></i></a>
-				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['insta_link']?>" title="<?=$config['company_kr_name_short']?> 인스타그램"><i class="bi bi-instagram" style="font-size:1.1em"></i></a>
+				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['blog_link']?>" target="blank" title="<?=$config['company_kr_name_short']?> 블로그"><img src="assets/img/naver_blog.png" alt="u1info 네이버 블로그"></img></a>
+				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['facebook_link']?>" target="blank" title="<?=$config['company_kr_name_short']?> 페이스북"><i class="fab fa-fw fa-facebook-f"></i></a>
+				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['twitter_link']?>" target="blank" title="<?=$config['company_kr_name_short']?> 트위터"><i class="fab fa-fw fa-twitter"></i></a>
+				<a class="btn btn-outline-light btn-social mx-1" href="<?=$config['insta_link']?>" target="blank" title="<?=$config['company_kr_name_short']?> 인스타그램"><i class="bi bi-instagram" style="font-size:1.1em"></i></a>
 			</div>
 		</div>
 		<nav style="--bs-breadcrumb-divider: '|';" aria-label="breadcrumb">

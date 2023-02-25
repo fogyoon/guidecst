@@ -11,7 +11,7 @@ https://techblog-history-younghunjo1.tistory.com/149
 
 */
 
-$need_logging = true;
+$need_logging = false;
 
 $dbserver = $config['db_server'];
 $dbuser = $config['db_user'];
@@ -382,7 +382,7 @@ BEGIN
 	SET i = 0;
 	SET byYear = StandardYear;
 	WHILE (i < InputDuring) DO
-		SELECT annual_sales INTO SalebyYear FROM performance WHERE reg_number = InputRegnum AND sector = InputSector AND year = byYear;
+		SELECT IFNULL(annual_sales, 0) INTO SalebyYear FROM performance WHERE reg_number = InputRegnum AND sector = InputSector AND year = byYear;
 		SET SaleSum = SaleSum + SalebyYear;
 		SET byYear = byYear - 1;
 		SET i = i + 1;
@@ -810,15 +810,15 @@ function get_transfer_list($filters_array)
 		$limit = $config['transfer_max_col'];
 
 		if (!$filters_array['need_filter']) { // 필터링 없이 모두
-			$sql = "SELECT *, getSectors(reg_number) as sector_ar, getLicensedYears(reg_number) as licensed_ar, getPerformanceConcat(reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(reg_number, 5, {$performance_from_year}) as sales_five_ar, getPerformance(reg_number, {$performance_last_yesr}) as sales_last_ar, getAbility(reg_number) as ablility_ar FROM transfer GROUP BY reg_number ORDER BY reg_number DESC LIMIT {$offset}, {$limit}";
+			$sql = "SELECT *, getSectors(reg_number) as sector_ar, getLicensedYears(reg_number) as licensed_ar, getPerformanceConcat(reg_number, 3, {$performance_last_yesr}) as sales_three_ar, getPerformanceConcat(reg_number, 5, {$performance_last_yesr}) as sales_five_ar, getPerformance(reg_number, {$performance_last_yesr}) as sales_last_ar, getAbility(reg_number) as ablility_ar FROM transfer GROUP BY reg_number ORDER BY reg_number DESC LIMIT {$offset}, {$limit}";
 			if ($need_logging)
 				write_log("sql.inc - get_transfer_list() - query: " . $sql);
 		} else if ($filters_array['searchType'] == "reg_number" && isset($filters_array['reg_number']) && $filters_array['reg_number']) { // reg_number 필터링
-			$sql = "SELECT *, getSectors(reg_number) as sector_ar, getLicensedYears(reg_number) as licensed_ar, getPerformanceConcat(reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(reg_number, 5, {$performance_from_year}) as sales_five_ar, getPerformance(reg_number, {$performance_last_yesr}) as sales_last_ar, getAbility(reg_number) as ablility_ar FROM transfer WHERE reg_number = '{$filters_array['reg_number']}' GROUP BY reg_number ORDER BY reg_number DESC LIMIT {$offset}, {$limit}";
+			$sql = "SELECT *, getSectors(reg_number) as sector_ar, getLicensedYears(reg_number) as licensed_ar, getPerformanceConcat(reg_number, 3, {$performance_last_yesr}) as sales_three_ar, getPerformanceConcat(reg_number, 5, {$performance_last_yesr}) as sales_five_ar, getPerformance(reg_number, {$performance_last_yesr}) as sales_last_ar, getAbility(reg_number) as ablility_ar FROM transfer WHERE reg_number = '{$filters_array['reg_number']}' GROUP BY reg_number ORDER BY reg_number DESC LIMIT {$offset}, {$limit}";
 			if ($need_logging)
 				write_log("sql.inc - get_transfer_list() - query: " . $sql);
 		} else if ($filters_array['searchType'] == "company_name" && isset($filters_array['company_name']) && $filters_array['company_name']) { // reg_number 필터링
-			$sql = "SELECT *, getSectors(reg_number) as sector_ar, getLicensedYears(reg_number) as licensed_ar, getPerformanceConcat(reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(reg_number, 5, {$performance_from_year}) as sales_five_ar, getPerformance(reg_number, {$performance_last_yesr}) as sales_last_ar, getAbility(reg_number) as ablility_ar FROM transfer WHERE company_name LIKE '%{$filters_array['company_name']}%' GROUP BY reg_number ORDER BY reg_number DESC LIMIT {$offset}, {$limit}";
+			$sql = "SELECT *, getSectors(reg_number) as sector_ar, getLicensedYears(reg_number) as licensed_ar, getPerformanceConcat(reg_number, 3, {$performance_last_yesr}) as sales_three_ar, getPerformanceConcat(reg_number, 5, {$performance_last_yesr}) as sales_five_ar, getPerformance(reg_number, {$performance_last_yesr}) as sales_last_ar, getAbility(reg_number) as ablility_ar FROM transfer WHERE company_name LIKE '%{$filters_array['company_name']}%' GROUP BY reg_number ORDER BY reg_number DESC LIMIT {$offset}, {$limit}";
 			if ($need_logging)
 				write_log("sql.inc - get_transfer_list() - query: " . $sql);
 		} else if (is_array($filters_array['sectors']) && count($filters_array['sectors']) > 0) { // Sector 필터링
@@ -848,12 +848,12 @@ function get_transfer_list($filters_array)
 			}
 			$sql_filter .= ")";
 			if ($filters_array['new_licensed']) {  // 신규만 검색하는 경우 (신규는 5년간 실적이 없는 경우)
-				$sql = "SELECT t1.*, getSectors(t1.reg_number) as sector_ar, getLicensedYears(t1.reg_number) as licensed_ar, getPerformanceConcat(t1.reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) as sales_five_ar, getPerformance(t1.reg_number, {$performance_last_yesr}) as sales_last_ar, getAbility(t1.reg_number) as ablility_ar FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) AND getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) = 0 GROUP BY t1.reg_number ORDER BY t1.reg_number DESC LIMIT {$offset}, {$limit}";
+				$sql = "SELECT t1.*, getSectors(t1.reg_number) as sector_ar, getLicensedYears(t1.reg_number) as licensed_ar, getPerformanceConcat(t1.reg_number, 3, {$performance_last_yesr}) as sales_three_ar, getPerformanceConcat(t1.reg_number, 5, {$performance_last_yesr}) as sales_five_ar, getPerformance(t1.reg_number, {$performance_last_yesr}) as sales_last_ar, getAbility(t1.reg_number) as ablility_ar FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) AND getPerformanceConcat(t1.reg_number, 5, {$performance_last_yesr}) = 0 GROUP BY t1.reg_number ORDER BY t1.reg_number DESC LIMIT {$offset}, {$limit}";
 				// sector를 제외한 다른 것들은 모두 t1 으로 해야한다. 
 				if ($need_logging)
 					write_log("sql.inc - get_transfer_list() - query: " . $sql);
 			} else { // 신규와 실적이 있는 것 모두
-				$sql = "SELECT t1.*, getSectors(t1.reg_number) as sector_ar, getLicensedYears(t1.reg_number) as licensed_ar, getPerformanceConcat(t1.reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) as sales_five_ar, getPerformance(t1.reg_number, {$performance_last_yesr}) as sales_last_ar, getAbility(t1.reg_number) as ablility_ar FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) GROUP BY t1.reg_number ORDER BY t1.reg_number DESC LIMIT {$offset}, {$limit}";
+				$sql = "SELECT t1.*, getSectors(t1.reg_number) as sector_ar, getLicensedYears(t1.reg_number) as licensed_ar, getPerformanceConcat(t1.reg_number, 3, {$performance_last_yesr}) as sales_three_ar, getPerformanceConcat(t1.reg_number, 5, {$performance_last_yesr}) as sales_five_ar, getPerformance(t1.reg_number, {$performance_last_yesr}) as sales_last_ar, getAbility(t1.reg_number) as ablility_ar FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) GROUP BY t1.reg_number ORDER BY t1.reg_number DESC LIMIT {$offset}, {$limit}";
 				// sector를 제외한 다른 것들은 모두 t1 으로 해야한다. 
 	
 				/* 
@@ -862,7 +862,7 @@ function get_transfer_list($filters_array)
 				이것이 실수로 performance에는 입력이되지않은 업체는 보이지 않게해 오류를 줄여줄 수 있을 듯하다. 
 				아래 쿼리는 삭제한 경우의 예
 				*/
-				//$sql = "SELECT t1.*, getSectors(t1.reg_number) as sector_ar, getLicensedYears(t1.reg_number) as licensed_ar, getPerformanceConcat(t1.reg_number, 3, {$performance_from_year}) as sales_three_ar, getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) as sales_five_ar, getAbility(t1.reg_number) as ablility_ar FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} GROUP BY t1.reg_number ORDER BY t1.reg_number";
+				//$sql = "SELECT t1.*, getSectors(t1.reg_number) as sector_ar, getLicensedYears(t1.reg_number) as licensed_ar, getPerformanceConcat(t1.reg_number, 3, {$performance_last_yesr}) as sales_three_ar, getPerformanceConcat(t1.reg_number, 5, {$performance_last_yesr}) as sales_five_ar, getAbility(t1.reg_number) as ablility_ar FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} GROUP BY t1.reg_number ORDER BY t1.reg_number";
 				if ($need_logging)
 					write_log("sql.inc - get_transfer_list() - query: " . $sql);
 			}
@@ -937,7 +937,7 @@ function count_transfer_list($filters_array)
 		}
 		$sql_filter .= ")";
 		if ($filters_array['new_licensed']) {  // 신규만 검색하는 경우 (신규는 5년간 실적이 없는 경우)
-			$sql = "SELECT COUNT(DISTINCT t1.sn) FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) AND getPerformanceConcat(t1.reg_number, 5, {$performance_from_year}) = 0";
+			$sql = "SELECT COUNT(DISTINCT t1.sn) FROM transfer t1 INNER JOIN performance t2 ON t1.reg_number = t2.reg_number WHERE (1) {$sql_filter} AND t1.reg_number IN (SELECT DISTINCT reg_number FROM performance) AND getPerformanceConcat(t1.reg_number, 5, {$performance_last_yesr}) = 0";
 			if ($need_logging)
 				write_log("sql.inc - count_transfer_list() - query: " . $sql);
 		} else { // 신규와 실적이 있는 것 모두
@@ -1429,7 +1429,7 @@ function get_all_sectors() {
 
 function transfer_info_per_sector($performance_info_array)
 {
-	global $performance_from_year, $need_logging;
+	global $performance_from_year, $need_logging, $performance_last_yesr;
 	$retval = false;
 	if (!is_array($performance_info_array)) {
 		if ($need_logging)
@@ -1451,21 +1451,21 @@ function transfer_info_per_sector($performance_info_array)
 			$transfer_sector_array[$sectori]['year_licensed'] = $eperformance['year_licensed'];
 			$transfer_sector_array[$sectori]['construction_ability'] = $eperformance['construction_ability'];
 			$transfer_sector_array[$sectori]['sales'][$eperformance['year']] = $eperformance['annual_sales'];
-			if ($eperformance['year'] <= $performance_from_year && $eperformance['year'] > $performance_from_year - 5) {
+			if ($eperformance['year'] <= $performance_last_yesr && $eperformance['year'] > $performance_last_yesr - 5) {
 				$for_five_year_sum = $for_five_year_sum + $eperformance['annual_sales'];
 				$transfer_sector_array[$sectori]['five_year'] = $for_five_year_sum;
 			}
-			if ($eperformance['year'] <= $performance_from_year && $eperformance['year'] > $performance_from_year - 3) {
+			if ($eperformance['year'] <= $performance_last_yesr && $eperformance['year'] > $performance_last_yesr - 3) {
 				$for_three_year_sum = $for_three_year_sum + $eperformance['annual_sales'];
 				$transfer_sector_array[$sectori]['three_year'] = $for_three_year_sum;
 			}
 		} else {
 			$transfer_sector_array[$sectori]['sales'][$eperformance['year']] = $eperformance['annual_sales'];
-			if ($eperformance['year'] <= $performance_from_year && $eperformance['year'] > $performance_from_year - 5) {
+			if ($eperformance['year'] <= $performance_last_yesr && $eperformance['year'] > $performance_last_yesr - 5) {
 				$for_five_year_sum = $for_five_year_sum + $eperformance['annual_sales'];
 				$transfer_sector_array[$sectori]['five_year'] = $for_five_year_sum;
 			}
-			if ($eperformance['year'] <= $performance_from_year && $eperformance['year'] > $performance_from_year - 3) {
+			if ($eperformance['year'] <= $performance_last_yesr && $eperformance['year'] > $performance_last_yesr - 3) {
 				$for_three_year_sum = $for_three_year_sum + $eperformance['annual_sales'];
 				$transfer_sector_array[$sectori]['three_year'] = $for_three_year_sum;
 			}

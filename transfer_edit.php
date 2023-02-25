@@ -334,7 +334,7 @@ include("header.inc"); // header에서 로그인 상태 확인합니다.
 								if (isset($eachsector['sales'][$performance_last_yesr])) {
 									echo "<td><input type=\"text\" name=\"sales[{$sectori}][{$performance_last_yesr}]\" value=\"{$eachsector['sales'][$performance_last_yesr]}\" class=\"form-control\" id=\"sales[{$sectori}][{$performance_last_yesr}]\"></td>";
 								} else {
-									echo "<td><input type=\"text\" name=\"sales[{$sectori}][{$sectori}][{$performance_last_yesr}]\" value=\"\" class=\"form-control\" id=\"sales[{$sectori}][{$performance_last_yesr}]\"></td>";
+									echo "<td><input type=\"text\" name=\"sales[{$sectori}][{$performance_last_yesr}]\" value=\"\" class=\"form-control\" id=\"sales[{$sectori}][{$performance_last_yesr}]\"></td>";
 								}
 							} else {
 								foreach($performance_yesrs as $forEachYear){

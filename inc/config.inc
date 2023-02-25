@@ -139,7 +139,7 @@ $config = array(
 	'facebook_link' => '',
 	'insta_link' => '',
 	'twitter_link' => '',
-	'blog_link' => ''
+	'blog_link' => 'https://blog.naver.com/mp885'
 );
 
 
